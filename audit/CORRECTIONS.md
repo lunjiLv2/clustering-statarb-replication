@@ -6440,3 +6440,82 @@ and `make paper-sync` run after this entry; Code Branch to commit the paper/ sna
 gained `\hypersetup{pdftitle={Quantifying the Contributions of Clustering in Statistical Arbitrage},pdfauthor={Lunji Zhu,
 Yixuan He, Mihai Cucuringu}}` (PDF metadata; title and author order match main.tex lines 37–39 and the rendered
 metadata of build n112b). Kept under the same ruling; synced to paper/preamble-oup.tex.
+
+### N114 (2026-09-01, Code Branch; ledgered by Refine at the Code Branch's request) — Figure 1 legibility at printed size
+**Change, in `JFEC_OUP/figures/fig_pipeline.tex` only** (no section file, no caption, no number): the figure's body text
+moves from `\scriptsize` (6.5bp in source, 5.1pt after the `\resizebox` to `\textwidth`) to a new `\figfs` macro at
+7.5bp (5.9pt final; subscripts 3.6pt → 4.1pt), and the 14-row arm table gets its own `\figts` at 7.0bp so no glyph
+crowds a rule (commit 93ea73a). The estimand box at the foot keeps `\scriptsize`, its rule box being drawn at fixed
+coordinates. Two coordinate nudges keep the clearances positive: the correlation band's top rule −38 → −39, the market
+band's text −20.5 → −20.0; measured clearances at the three tight rules are 1.0 to 2.1pt.
+**Verification (Code Branch).** 0 errors, 0 undefined, 46 pages, all 12 float positions unchanged, only page 7 differs
+in the text layer; the `main.log:1038` overfull hbox and the 45 "Overfull \vbox 3.0pt" lines predate the change
+(confirmed by building the previous figure in a scratch copy of the whole tree). Nine gates rerun, 0 FAIL.
+**Verification (Refine).** `declare.sh` shows the expected fig_pipeline.tex token deltas (6.5/7.0/7.5/8.1/8.6 added,
+−38 → −39, −20.5 → −20.0) and nothing else in that file; page 7 read at 150 dpi — every band, inset and label legible,
+no glyph touching a rule. Committed as 3d0c710 together with a repo fix unrelated to the manuscript: `paper/` was
+missing fig_pipeline.tex, its four insets and the class/style/bst files, so the snapshot could not build; it now
+compiles to a 46-page PDF whose text layer matches the manuscript's on every page.
+**Also recorded (Code Branch, for the file):** Figure 3's single black line is the intended encoding — `fig_rank_shift_v3.py`
+draws an arm black at lw 1.8 when it moves three or more places between the two components and gray at 0.9 otherwise,
+and Sharpe (fixed) is the only such arm (5th rule-based, 10th under the head, a shift of five). The caption states the rule.
+
+### N115 (2026-09-01) — title changed: "…of Clustering **in** Statistical Arbitrage" → "…of Clustering **to** Statistical Arbitrage" (user instruction)
+**Eight sites, all live copies.** `main.tex:35` `\title[short]{full}` (both occurrences); `preamble-oup.tex:27`
+`\hypersetup{pdftitle=…}`; `refs.bib` `zhu2026replicationdata` dataset title ("…contributions of clustering to
+statistical arbitrage: Replication data"); `replication_repo/README.md:1`; `replication_repo/CITATION.cff:3` (package
+title) and `:25` (`preferred-citation`); `Cover_Letter/cover_letter.tex` header comment and the submission sentence at
+:153. Superseded cover-letter drafts (v1–v4, pre_v2, `_body_syntaxcheck`) and the historical CORRECTIONS entries were
+left as written; `PROJECT_RECORD/audit_tools/main.tex` is the declare baseline and was refreshed by the script.
+**Why it is the better title.** §1's own first paragraph already reads "the contribution of clustering **to**
+statistical arbitrage"; the preposition now matches the sentence the paper opens with.
+**Verification.** Build n115: 0 `^!`, 0 undefined, 46 pages, float pages unchanged, PDF metadata title updated, page 1
+read at 150 dpi (title sets on two lines, no bad break). New string ×1 in the render, old string ×0 anywhere live.
+**Still owed by the user:** the Zenodo record's own title (DOI 10.5281/zenodo.22241254) still says "in" — edit it there,
+or the bib entry will not match the deposit. Same visit as the pending `creators[0]` → "Zhu, Lunji" fix.
+
+### N116 (2026-09-01) — Mihai's six revisions applied (five verbatim, one with the house frame removed)
+The coauthor sent six edits marked with an `\mc{…}` tracking macro. `\mc` is defined nowhere in this manuscript and had
+no prior uses, so the wording was applied and the markup dropped (a review copy can restore the marks with one line,
+`\newcommand{\mc}[1]{#1}`, plus the braces). Sites and text:
+1. §7:24 "None of these books survives **realistic costs** at daily rebalancing:" → "**a five-basis-point one-way cost**
+   at daily rebalancing:". Accepted verbatim — replaces a judgment ("realistic") with the cost level actually charged,
+   and matches §1, which already says "no daily-rebalanced book is net positive at five basis points one-way".
+2. §7:22 (last sentence) "Holding all 12 books at equal weight is as good as selecting among them on their past
+   performance." → "Ex ante selection on past performance does not outperform a simple equal-weight combination of the
+   12 books." Accepted verbatim. More accurate: the bootstrap interval covers zero, which is failure to separate, not
+   the equivalence "is as good as" asserts; "ex ante" also rules out a look-ahead reading.
+3. §7:22 (opening) "Whether a partition is used matters far more than which one." → "More broadly, informative
+   clustering is much easier to distinguish from the controls than competing clustering algorithms are from one
+   another. Whether an **informative** partition is used matters far more than which one." Accepted with one deviation:
+   the frame "the results show that" was dropped from the new sentence (house rule: no interpretive lead-in in front of
+   the claim); "More broadly" and every content word are Mihai's. The "informative" insertion is a real precision fix —
+   the random control is also a partition, so the unqualified sentence was loose.
+4. §6.4:389 "Turnover is therefore close to a constant of the design rather than a property of the partition." →
+   "Turnover is therefore much less dispersed across partitions than gross Sharpe ratios." Accepted verbatim; the
+   preceding sentence's own numbers support it (turnover 38.2–46.9%, a 23% spread, against a 101% spread in gross
+   Sharpe ratio) and "close to a constant" overstated a 23% spread.
+5. §6.1:41 "If a partition can be replaced by a latent factor estimation, a few components should absorb what the
+   partition explains." → "If a low-dimensional latent factor representation captures the same cross-sectional
+   structure as the partition, projecting out a few leading components should substantially reduce the variance share
+   the partition subsequently explains." Accepted verbatim.
+6. §5.4:453 "Because the 12 books are this similar, holding all of them at equal weight is as good as selecting among
+   them." → "Because the 12 books are this similar, ex ante selection among individual clusterizers does not improve
+   upon a simple diversified combination of their books." Accepted with the causal opener kept: Mihai's replacement
+   dropped "Because the 12 books are this similar", which is this paragraph's only link to the similarity result that
+   precedes it.
+**Numbers behind the accepted claims, recomputed from `turnover_v3_mean_cal6913.csv`.** Break-even across the 14 arms
+2.66–3.79 bp (printed "2.7 to 3.8"; the harness band 3.17–3.79 is the 12 clusterizers, the controls are 2.90 and 2.66,
+so both statements are right at their own scope); max net Sharpe at 5 bp is −0.665, so "no configuration is net
+positive at five" and "no book is net positive" hold; turnover spread 23% against gross-Sharpe spread 101%.
+**Verification.** Build n116: 0 `^!`, 0 undefined, 46 pages, Overfull unchanged (1 hbox at main.log:1038, 45 vbox);
+all six new strings present in the render and all six old strings absent (checked with the running heads stripped, since
+two of the sentences now straddle a page break). Two appendix floats shift by one page under the added text —
+tab:head p40 → p41, tab:costs p45 → p46 — every other float and all 26 labels unchanged, and page 46 still ends on the
+five limitations. Nine gates PASS. check_prose: 661 sentences (was 660), §7 mean 27.2 words (was 27.5).
+**Open, not acted on.** Edit 1 leaves "at five no book is net positive" restating the new main clause; the trim is one
+line if the user wants it. "Informative" is a second adjective for what the paper elsewhere calls "a real partition" —
+one paragraph only, left as the coauthor wrote it.
+**Repo note for the Code Branch.** `make paper-sync` now exits 2: the fig_pipeline block added in 3d0c710 is a separate
+recipe line, so `$SRC` is unset there and it tries `/figures/fig_pipeline.tex`. The manuscript files still copy (that
+block is line-continued); the figure copies do not. paper/figures/fig_pipeline.tex happens to be current already.

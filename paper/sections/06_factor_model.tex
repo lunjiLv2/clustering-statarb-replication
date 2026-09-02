@@ -38,9 +38,10 @@ A partition is a special case of a factor model, and clustering a special case o
 
 We ask how much of the cross-sectional variance of a day's residuals a partition can explain, and how much of that it still explains after the leading principal components are projected out. For each of the $6{,}913$ out-of-sample days, we take the day's cross-section of market residuals (\secref{sec:resid}), apply the partition's same-day labels, and record the share of cross-sectional variance that demeaning within groups removes, the quantity measured in \secref{sec:mechanism}. The names used here are those with a complete $252$-day residual history, the window on which the principal components are estimated: $479$ to $500$ a day for the 11 clusterizers other than the sector taxonomy, and $322$ for \textsc{gics}. The traded book of \secref{sec:mechanism} has $494$ names a day and is not the same set, which is why its numbers differ slightly from those here. We then project out the leading $m$ principal components, estimated on the trailing $252$ days and
 strictly before the day, and record what share the partition explains
-of what is left. If a partition can be replaced by a latent factor
-estimation, a few components should absorb what the partition
-explains.
+of what is left. If a low-dimensional latent factor representation captures the
+same cross-sectional structure as the partition, projecting out a few
+leading components should substantially reduce the variance share the
+partition subsequently explains.
 
 Projecting out the five leading components removes only about half of what a real partition explains (\figref{fig:lens_curve}a). The $k$-means partition
 explains $0.265$ of the day's cross-sectional residual variance;
@@ -386,8 +387,8 @@ in this section. Newey--West($21$) $t$-statistics.
 \subsection{Transaction Costs}
 \label{sec:costs}
 The last question is whether the books' returns survive trading costs.
-The books turn over about two fifths of their notional every day: $38.2\%$ to $46.9\%$ one-way across the 14, a spread of $23\%$ against a spread of $101\%$ in gross Sharpe ratio, both as the top relative to the bottom of the 14. Turnover is therefore close to a constant of the design rather
-than a property of the partition. Break-even sits at $2.7$ to $3.8$ basis points one-way, and at daily rebalancing no configuration is net positive at five.
+The books turn over about two fifths of their notional every day: $38.2\%$ to $46.9\%$ one-way across the 14, a spread of $23\%$ against a spread of $101\%$ in gross Sharpe ratio, both as the top relative to the bottom of the 14. Turnover is therefore much less dispersed across
+partitions than gross Sharpe ratios. Break-even sits at $2.7$ to $3.8$ basis points one-way, and at daily rebalancing no configuration is net positive at five.
 
 At costs below break-even, the net Sharpe ranking follows the gross ranking; at costs above break-even, it follows turnover. At one and two basis points every one of the 12 clusterizers
 holds a higher net Sharpe ratio than either control, the two controls

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this code or data, please cite the paper and the Zenodo record."
-title: "Quantifying the Contributions of Clustering in Statistical Arbitrage — replication package"
+title: "Quantifying the Contributions of Clustering to Statistical Arbitrage — replication package"
 type: software
 authors:
   - family-names: Zhu
@@ -22,7 +22,7 @@ identifiers:
 repository-code: "https://github.com/lzwbh/clustering-statarb-replication"
 preferred-citation:
   type: article
-  title: "Quantifying the Contributions of Clustering in Statistical Arbitrage"
+  title: "Quantifying the Contributions of Clustering to Statistical Arbitrage"
   authors:
     - family-names: Zhu
       given-names: Lunji
