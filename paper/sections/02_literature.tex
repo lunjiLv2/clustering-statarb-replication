@@ -37,7 +37,7 @@ criterion; the other three perform similarly to one another, and the
 \textsc{gics} advantage is sharpest among large firms.
 \citet{chan2007industry} likewise find that within-industry comovement
 is strongest among large caps, and that finer \textsc{gics} levels separate
-comovement further. They further report that industry partitions are more homogeneous out of sample than groups obtained by statistical cluster analysis. Peers can also be
+comovement further. They also report that industry partitions are more homogeneous out of sample than groups obtained by statistical cluster analysis. Peers can also be
 chosen firm by firm rather than read from a shared classification
 \citep{bhojraj2002peer}, a construction we return to in \secref{sec:peer}.
 
@@ -53,10 +53,7 @@ model with grouped loadings \citep{ando2017clustering}, which is the form in whi
 %%  $k$-means on returns reading $\widetilde{\Rmat}$ DIRECTLY -- it forms no
 %%  correlation matrix at all (same for the random control). Widening the subject to
 %%  "the clusterizers" or "all methods" turns this into a false statement.
-it redundant. A partition of the cross-section is used as a restriction in covariance estimation, where it is normally read from a taxonomy: \citet{alves2024forecasting} restrict the residual covariance of the S\&P~500 to ten \textsc{sic} sectors. The linkage, spectral, and signed-graph methods all start from the same correlation matrix; whether they recover different information from it, and
-whether what they recover survives a factor model or a per-stock peer
-regression, are the questions of \secref{sec:invariance} and
-\secref{sec:factor}. We study what a clusterizer contributes to
+it redundant. A partition of the cross-section is used as a restriction in covariance estimation, where it is normally read from a taxonomy: \citet{alves2024forecasting} restrict the residual covariance of the S\&P~500 to ten \textsc{sic} sectors. The linkage, spectral, and signed-graph methods all start from the same correlation matrix; \secref{sec:invariance} and \secref{sec:factor} ask whether they recover different information from it, and whether what they recover survives a factor model or a per-stock peer regression. We study what a clusterizer contributes to
 trading, holding the trading model fixed at each of two models in turn,
 while 12 clusterizers and two controls read the same panel.
 

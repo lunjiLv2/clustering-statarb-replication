@@ -205,7 +205,7 @@ stage removes, so the number of groups actually traded is about 20.
 \subsection{The Trading Head}
 \label{app:head}
 
-The head maps the 30-day path of running sums of \eqnref{eq:relsig} to a weight through the chain displayed in \secref{sec:components}, with clamp constant $c = 0.05$. The stages are as follows. Stock $i$ enters the head on day $t$ as the 30-day path of running
+The head maps the cluster-relative residual of \eqnref{eq:relsig} to a weight through the chain displayed in \secref{sec:components}, with clamp constant $c = 0.05$. The stages are as follows. Stock $i$ enters the head on day $t$ as the 30-day path of running
 sums of the cluster-relative residual \eqnref{eq:relsig},
 %
 \begin{equation}\label{eq:headinput}
@@ -387,9 +387,8 @@ into alpha: misalignment hides exposure rather than creating it.
 The offset changes no internal statistic: Sharpe ratios, volatilities,
 turnover, and everything in \secref{sec:lens} relabels uniformly. The
 only affected objects are regressions against external data, so it went unnoticed until one
-was inconsistent. Whether the labels
-were shifted by the data vendor or by a lag convention in the panel's
-construction we have not determined. The offset is recorded and corrected.
+was inconsistent. We have not determined whether the labels were shifted by the data
+vendor or by a lag convention in the panel's construction. The offset is recorded and corrected.
 
 \subsection{Degrading One Partition toward a Random One}
 \label{app:dose}
@@ -432,7 +431,7 @@ generator that cannot read the window; the observed gain is $-0.11$, negative in
 and the two arms that use no eigenvector do not move. The account misses the sign of the interaction with $\K$: for PCA loadings the same 60-to-$252$-day move is worth
 $+0.27$ at $\K=30$ against $+0.33$ at $\K=50$, so the window effect strengthens as the partition is refined. We have no account of that.
 
-Average linkage peaks at 120 days, mid-sweep; \figref{fig:window_twin} shows the $60$-to-$21$-day step of the same sweep against seed noise. That step shows the account's one exception: complete linkage, which reads the same correlation matrix as average linkage and no eigenvector, loses $0.31$, outside its across-seed band. No $p$-value is quoted for the window responses: a paired test across five fits rests on four degrees of freedom, so each step is judged against its arm's own across-seed band instead.
+\figref{fig:window_twin} shows the $60$-to-$21$-day step of the same sweep against seed noise. That step shows the account's one exception: complete linkage, which reads the same correlation matrix as average linkage and no eigenvector, loses $0.31$, outside its across-seed band. No $p$-value is quoted for the window responses: a paired test across five fits rests on four degrees of freedom, so each step is judged against its arm's own across-seed band instead. Average linkage, which moves $-0.00$ over the whole sweep (\secref{sec:window}), peaks at 120 days, mid-sweep.
 
 \begin{figure}[tb]
 \centering
@@ -504,4 +503,4 @@ The reordering reported in \secref{sec:costs} is not an artifact of the trading 
 
 The nearest published comparison runs the other way, and we cannot reconcile the two. \citet{brutti2026orthogonal} report that clustering cuts turnover sharply in their setup, from $87.9\%$ to between $24.2\%$ and $24.4\%$, and charge no costs; our configurations show a far smaller gap, the $\K=1$ control turning over $44.6\%$ against a clustered range of $38.2\%$ to $43.8\%$. Rebalancing frequency is the likely cause (our books are rebuilt every day), but we have not measured it, and we record the divergence as an open question rather than a finding.
 
-Four limitations apply. The cost model is a proportional one-way charge with no market-impact term, and a book rebuilt daily on 500 names is where market impact would be largest. Borrow costs on the short side are not modeled. The panel is US large capitalizations, the most liquid case available, so the break-even here is an upper bound for the same design on a broader universe. Finally, the cost figures are at $\K=30$ only; whether the ordering above survives the sweep of \appref{app:ksweep} is unmeasured.
+Five limitations apply. The cost model is a proportional one-way charge with no market-impact term, and a book rebuilt daily on 500 names is where market impact would be largest. Borrow costs on the short side are not modeled. The panel is US large capitalizations, the most liquid case available, so the break-even here is an upper bound for the same design on a broader universe. The cost figures are at $\K=30$ only; whether the ordering above survives the sweep of \appref{app:ksweep} is unmeasured. Finally, the books are rebuilt daily, and a longer holding period would lower turnover roughly in proportion; its effect on the break-even is left to future work.

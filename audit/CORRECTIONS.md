@@ -6126,3 +6126,66 @@ Tokens: refs.bib − the removed ISSN/URL/month digits only (declare.sh list); f
 0 errors/undefined; all eight rendered sentences located in the PDF. Nine gates pass (verify_printed 112 PASS / 0 SKIP;
 check_seed_language green after the Code Branch's 5889916 rewording). paper-sync: refs.bib + sections 01/02/04/05/A modified;
 Code Branch to commit.
+
+### N106 (2026-09-01) — the 5 bp net-positive claim qualified to daily rebalancing at its three sites; holding period named as a fifth cost limitation (user, accepting the Code Branch's two-step proposal: "我的建议(两小步,不引入新数字):接受CB的建议")
+Context: the Code Branch's exploratory holding-period sweep (N76: three seeds, two arms, fails the NE screen from H=3) shows H=3–5
+lifting break-even to about 6 bp and 5 bp net Sharpe to +0.2–0.3. None of those numbers is printed; the claim is narrowed instead.
+Applied (wording only, no digit changed): (1a) §6.4 "Break-even sits at $2.7$ to $3.8$ basis points one-way, and no configuration
+is net positive at five." → "…, and at daily rebalancing no configuration is net positive at five." (1b) §7 "None of these books
+survives realistic costs: break-even sits below four basis points one-way, and at five no book is net positive." → "None of these
+books survives realistic costs at daily rebalancing: …". (1c) §1 roadmap "under which no book is net positive at five basis points
+one-way" → "under which no daily-rebalanced book is net positive at five basis points one-way". (2) A.13 limitations paragraph:
+"Four limitations apply." → "Five limitations apply."; the "Finally," moved off the $\K=30$ sentence onto a new closing sentence
+"Finally, the books are rebuilt daily, and a longer holding period would lower turnover roughly in proportion; its effect on the
+break-even is left to future work." (the Code Branch's "obvious lever" wording replaced by plain wording; its "Fourth," ordinal
+not used because the paragraph carries no First/Second/Third). Grep confirmed no other site states the net-positive-at-five claim
+(§6.4:397 and A.13:503 are ranking statements at five basis points, unchanged).
+Tokens: none (the four sentences carry words only); §1/§6/§7/A XREF-only in declare.sh. Built and gated together with N107 below.
+
+### N107 (2026-09-01) — final sentence-by-sentence prose pass, 20 wording edits across 01/02/04/05/06/07/A (user: "我们来最后过一遍整体的consistency、coherence和学术写作标准…请一句一句检查…"); one user edit (§6.1 opener) built in
+Method: every section, caption, table note and footnote read in order; JFEC register calibrated on Corsi (2009) paragraph openers
+(claim-first results paragraphs, procedure-first data/method paragraphs, sentence-initial connectives at low density);
+PROJECT_RECORD/language_audit_prompt.md screens; check_prose.py / check_structure.py run before the read (sentence mean 25.1,
+no procedure-first topic sentence, no near-duplicate paragraph, one harmless orphan paragraph in §3).
+Applied (wording only; every old string asserted unique before replacement; numeric multiset of every section file unchanged
+except A: −1 "30", +1 "0.00", both explained below): §1 (A1) P2 opener "How the cross-section ought to be grouped has been
+studied…" → "The grouping of the cross-section has been studied…"; (A2) "Their goal is to study the performance of alternative
+spectral clusterizers; ours is…" → "Their object is the performance of…; ours is…"; (A3) P3 split before "To the best of our
+knowledge" (literature → gap); (A4) P10 split before "Because clustering is a special case of peer-based trading" (factors → peers).
+§2 (B1) "They further report" → "They also report" ("further" in two adjacent sentences); (A5) "…start from the same correlation
+matrix; whether they recover different information from it, and whether what they recover survives…, are the questions of §4 and
+§6." → "…; §4 and §6 ask whether they recover different information from it, and whether what they recover survives a factor
+model or a per-stock peer regression." §4 (A6) "both controls fall outside that band in both directions" → "both controls fall
+outside both bands, below in alpha and above in volatility" (tab:moments: controls' alpha 5.44/5.33 below 5.89–7.02, volatility
+above); (A7) "That the random control earns less alpha than $\K=1$ under the head (…) plausibly reflects" → "The random control
+earns less alpha than $\K=1$ under the head (…), which plausibly reflects"; (A8) "the random control keeps only $0.04$ of that
+edge on the seed-averaged book, $1.50$ against $1.46$" → "on the seed-averaged book the random control's edge is only $0.04$,
+$1.50$ against $1.46$" (fraction/amount ambiguity). §5 (A9) "so what training changes is the size of the movement rather than
+its presence" → "so training changes the size of the movement rather than its presence"; (A10) "are no more similar to each other
+than to the other clusterizers ($0.604$ within, $0.604$ against the others)" → "are as similar to each other as to the other
+clusterizers (…)"; (A11) "so its Sharpe ratio moves as much" → "so the random control's Sharpe ratio moves as much" (two subjects
+precede the pronoun); (A12) "That equal weights match selection is the forecast-combination result" → "The match between equal
+weights and selection is the forecast-combination result"; (A13) "How much of the gain is finer structure and how much is the
+finer demeaning of §4.2 cannot be separated without a random control at each $\K$" → "The gain from more groups cannot be split
+between finer structure and the finer demeaning of §4.2 without a random control at each $\K$". §6 (B2) second "The random
+control again stays at its floor" (§6.3) → "remains at its floor"; (A14) "How closely a clusterizer tracks the peer books is not
+significantly related to its Sharpe ratio at the $5\%$ level (A.12). What separates the clusterizers is the volatility of their
+books (§4.1)." → "A clusterizer's closeness to the peer books is not significantly related to its Sharpe ratio at the $5\%$ level
+(A.12); the volatility of the books separates the clusterizers (§4.1)." §7 (B3) "and its books are not spanned" → "and the
+partition's books are not spanned". A (A15) A.4 "The head maps the 30-day path of running sums of eq:relsig to a weight" → "The
+head maps the cluster-relative residual of eq:relsig to a weight" (the 30-day path is defined two sentences later at eq:headinput;
+this is the −1 "30"); (A16) A.7 "Whether the labels were shifted by the data vendor or by a lag convention in the panel's
+construction we have not determined." → "We have not determined whether the labels were shifted by the data vendor or by a lag
+convention in the panel's construction."; (A17) A.9 second paragraph: the figure sentence now opens it and "Average linkage,
+which moves $-0.00$ over the whole sweep (§5.5), peaks at 120 days, mid-sweep." closes it (the +1 "0.00" restates §5.5:491's
+$-0.00$, covered by check_field_window_5seed).
+User's own edit built in: §6.1 opener "Projecting out five components removes only about half of what a real partition explains"
+→ "Projecting out the five leading components removes only about half of what a real partition explains".
+Held for the user (not applied): §1 P2 recap closer and §1 P3 sentence repeating P1; §2:85 "absorbs far more of the controls'
+alpha than of the clusterizers'" (§6.2: about two fifths against about a quarter; §1:105 says "more"; kept); §6.2's three
+"This is the X of §4 in Y form" closers (kept); "The largest range across the five draws" ×3 in §5.2 (kept); the split §1 P10
+leaves "Neither a factor model nor per-stock peer regressions…" heading the factor half only.
+Build 46 pages (main text to p.33, references pp.33–36, appendix pp.36–46), 0 errors/undefined, Overfull only at main.log:1038;
+all 23 edited/qualified sentences located in the PDF text. declare.sh: A_supplementary number tokens −1 "30" +1 "0.00", every
+other file XREF-only. Nine gates pass (verify_printed 112 PASS). paper-sync: sections 01/02/04/05/06/07/A modified; Code Branch
+to commit.

@@ -132,7 +132,7 @@ Alpha      & Rule-based & $8.05$--$8.81$ & $7.27$ & $7.43$ & $+15.6\%$ & $+13.1\
 \end{threeparttable}
 \end{table}
 
-Every clusterizer produces a reduction in volatility. The 12 trained books span $2.88\%$ ($k$-means on returns) to $3.80\%$ (spectral clustering), a band of $0.9$ points, while either control sits about a point above the band's top. Across the 12 trained books the highest volatility is $32\%$ above the lowest, the highest alpha only $19\%$ above (\tabref{tab:moments}), so their Sharpe ratios differ mainly through volatility. \figref{fig:alpha_vol} puts the two moments on one plot: the 12 clusterizers form a narrow band in alpha and a wide one in volatility, and both controls fall outside that band in both directions. The rule-based books, at twice the gross exposure, take the same shape. The
+Every clusterizer produces a reduction in volatility. The 12 trained books span $2.88\%$ ($k$-means on returns) to $3.80\%$ (spectral clustering), a band of $0.9$ points, while either control sits about a point above the band's top. Across the 12 trained books the highest volatility is $32\%$ above the lowest, the highest alpha only $19\%$ above (\tabref{tab:moments}), so their Sharpe ratios differ mainly through volatility. \figref{fig:alpha_vol} puts the two moments on one plot: the 12 clusterizers form a narrow band in alpha and a wide one in volatility, and both controls fall outside both bands, below in alpha and above in volatility. The rule-based books, at twice the gross exposure, take the same shape. The
 volatility reduction is a property of clustering, not of a well-chosen partition,
 and \secref{sec:invariance} returns to how little the choice of clusterizer
 matters downstream.
@@ -188,7 +188,7 @@ all-market control the advantage rises from $15.6\%$ to $20.0\%$; against the ra
 %%  v3 and is now in the text above: 5 of 12 against K=1, 12 of 12
 %%  against random, positive at all twelve arms against both. Source:
 %%  server_package/e2e_plan/perrule_count_v3.csv.
-That the random control earns less alpha than $\K=1$ under the head ($5.33$ against $5.44$) plausibly reflects what the two signals contain. Demeaning within a random group subtracts the average of roughly 16 unrelated stocks, so the random signal
+The random control earns less alpha than $\K=1$ under the head ($5.33$ against $5.44$), which plausibly reflects what the two signals contain. Demeaning within a random group subtracts the average of roughly 16 unrelated stocks, so the random signal
 is the $\K=1$ signal perturbed by a component that carries little systematic peer information, and the trained component
 reads a corrupted copy of the signal it reads under $\K=1$.
 
@@ -755,7 +755,7 @@ lowest.
 \label{fig:rank_shift}
 \end{figure}
 
-The random control's edge over the $\K=1$ control does not survive training. At the rule-based component, where the book is a deterministic function of the partition, the random control earns a higher Sharpe ratio than the $\K=1$ control, $0.89$ against $0.83$. At the trained component the two are level on the mean-of-per-seed convention, $1.28$ against $1.28$, and the random control keeps only $0.04$ of that edge on the seed-averaged book, $1.50$ against $1.46$, so under the head they are indistinguishable rather than ranked. Paired by seed, the difference is
+The random control's edge over the $\K=1$ control does not survive training. At the rule-based component, where the book is a deterministic function of the partition, the random control earns a higher Sharpe ratio than the $\K=1$ control, $0.89$ against $0.83$. At the trained component the two are level on the mean-of-per-seed convention, $1.28$ against $1.28$, and on the seed-averaged book the random control's edge is only $0.04$, $1.50$ against $1.46$, so under the head they are indistinguishable rather than ranked. Paired by seed, the difference is
 $0.00$ with a standard deviation of $0.08$ across five fits ($t = 0.00$), and its sign changes from fit to fit. One explanation, consistent with \secref{sec:hedge}, is that the fixed rule bets small, equal amounts everywhere, so the noise a random partition adds largely cancels, whereas a trained model fits whatever structure the labels imply, even when there is none or it is wrong. Training therefore makes a wrong partition more expensive.
 
 %%---------------------------------------------------------------------
