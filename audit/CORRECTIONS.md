@@ -5825,3 +5825,17 @@ GitHub-generated README/.gitignore/licence). `git init -b main` inside replicati
 does not track it), remote origin set, first commit 4c31022: 235 files, 19 MB .git; data/derived, results_5seed, results_3seed_archive,
 runs/, slurm logs, *.bak and TODO.md (text lives in RELEASE_CHECKLIST.md) are git-ignored, nothing deleted. CITATION.cff
 repository-code and README status line carry the URL. Push left to the user (`git push -u origin main`).
+
+### N96 (2026-09-01) — author list set; four approved deletions; one deletion followed a symlink and was recovered
+Authors (user, 2026-09-01): Lunji Zhu (UCLA); Yixuan He (Arizona State University); Mihai Cucuringu (UCLA, Oxford) — written into
+CITATION.cff (both lists) and the LICENSE copyright line. Deleted on the user's explicit word ("删 删 删 删"), paths printed first:
+analysis/results_5seed/ (identical to results/ since N85), TODO.md (text in RELEASE_CHECKLIST.md), audit/verify_printed.py.bak_5seed_k1span,
+figures/scripts/fig_ff_curve_v3.py + paper/figures/fig_ff_curve.pdf + figures/previews/fig_ff_curve.png (superseded by fig:lens_curve (b));
+README/figures README/check_figures_text updated to 10 figures, verify_lens docstring no longer names fig:ff_curve.
+**Incident.** analysis/results_5seed/size5 was a symlink to ../results/size5/ (created 11:32 when the side directory was set up), so
+`rm analysis/results_5seed/size5/*.csv` deleted the four SHIPPED five-seed size files (size_crit_5seed_s{42,7,101,2024}.csv) that A.11
+prints from; verify_printed failed on the next run ("five-seed size files present"). Restored within minutes with `git checkout HEAD --
+analysis/results/size5/` from commit 4c31022 (made 30 min earlier); tools/checksums.py check shows 0 size5 mismatches against the
+manifest written before the incident; verify_printed 0 FAIL. Rule added to my own practice: before deleting inside a directory, run
+`find <dir> -type l` — a symlink turns a scoped delete into an unscoped one. data/checksums/manifest.csv rewritten (the only other
+mismatches were the N91 renames peer_spanning_v3 / turnover_v3_mean). The user's questions on licences and Zenodo answered in chat.

@@ -11,12 +11,12 @@ Updated 2026-09-01 (CORRECTIONS N91). Everything below the line is the build-sit
 - [x] `.gitignore` (derived data, scratch, logs), `README.md`, `LICENSE` (draft), `data/LICENSE-DATA.md` (draft), `CITATION.cff` (draft), CI workflow.
 
 ## Owed before the repository goes public
-- [ ] **Author list and order** in `CITATION.cff` and the copyright line of `LICENSE` (author-order decision pending; see meeting agenda).
+- [x] Author list and order: Lunji Zhu (UCLA); Yixuan He (Arizona State University); Mihai Cucuringu (UCLA, Oxford) — in `CITATION.cff` and the `LICENSE` copyright line (2026-09-01).
 - [ ] **Licences confirmed**: code MIT, data CC BY 4.0 (proposed 2026-08-30; not yet approved). GICS shareability via Mihai — the `gics` partition cache ships in place of the classification.
 - [x] Repository `lzwbh/clustering-statarb-replication` created 2026-09-01; `git init` inside `replication_repo/` (nested in the parent `GNN_for_Trading` tree, which does not track it); first commit made, push by the user.
 - [ ] **Zenodo record**: `python tools/package_zenodo.py --out <dir>` (weights = the main runs + the two peer books, user decision 2026-08-30); paste the DOI into `README.md` and `CITATION.cff`.
 - [ ] **paper/ re-snapshot at the submitted tag** (`make paper-sync`), then rerun `make audit`.
-- [ ] Optional: delete `analysis/results_5seed/` (byte-identical to `analysis/results/` since N85) — needs the user's word; it is git-ignored either way.
+- [x] Deleted on the user's word (2026-09-01): `analysis/results_5seed/`, `TODO.md`, `audit/verify_printed.py.bak_5seed_k1span`, the superseded `fig_ff_curve` script/PDF/preview.
 
 ---
 # Build-site TODO (replication_repo)

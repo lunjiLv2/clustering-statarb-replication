@@ -15,7 +15,7 @@ import paths
 from pypdf import PdfReader
 
 HEAVY = {"fig_bet_corr"}
-SUPERSEDED = {"fig_ff_curve": "superseded 2026-08-31 by fig:lens_curve panel (b); not in the manuscript, kept while it reproduces"}
+SUPERSEDED: dict[str, str] = {}   # scripts kept after their figure left the manuscript, with the reason
 TOK = re.compile(r"[A-Za-z]+|[-+]?\d+\.?\d*")
 def tokens(pdf: pathlib.Path) -> collections.Counter:
     return collections.Counter(TOK.findall(" ".join((pg.extract_text() or "") for pg in PdfReader(str(pdf)).pages)))

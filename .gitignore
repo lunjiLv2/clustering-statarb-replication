@@ -2,7 +2,6 @@
 data/derived/
 # Local build-site scratch
 runs/
-analysis/results_5seed/
 analysis/results_3seed_archive/
 slurm/*.log
 # Python / editor
@@ -22,5 +21,3 @@ data/factors/*.csv
 # editor / harness backups
 *.bak
 *.bak_*
-# superseded by RELEASE_CHECKLIST.md (its text is appended there); deletion pending the user
-TODO.md

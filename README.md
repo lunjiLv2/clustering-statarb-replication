@@ -41,7 +41,7 @@ With the Zenodo data unpacked into `data/derived/` (or `CSA_DATA_ROOT` pointing 
 
 ```bash
 make analysis                            # rebuild analysis/results/ from the daily books
-make figures                             # redraw the 10 manuscript figures (+ the superseded fig_ff_curve) into paper/figures/
+make figures                             # redraw the 10 figures into paper/figures/
 make audit                               # every gate in audit/ (see below)
 ```
 
@@ -52,8 +52,8 @@ make audit                               # every gate in audit/ (see below)
 | `paths.py` | the only place that knows where data lives; every script imports it |
 | `analysis/` | one producer per result CSV (`*_v3.py`), the shared loader `books.py` (calendar, Sharpe, positions), `factors.py` (Newey–West spanning), `print_tables.py`, `run_all.py`; `results/` holds the shipped CSVs |
 | `audit/` | the gates (next section) and the error ledger `CORRECTIONS.md` (N1–N89), a copy of the authors' ledger |
-| `figures/scripts/` | `fig_*_v3.py`, one per figure (10 in the manuscript; `fig_ff_curve` is superseded by panel (b) of fig:lens_curve and kept because it still reproduces), all through `books.py` and `style.py`; PNG previews in `figures/previews/` |
-| `paper/` | snapshot of the manuscript sources (sections, bibliography, the 10 figures, plus the superseded `fig_ff_curve.pdf`) that the gates read; `make paper-sync` refreshes it from the working manuscript |
+| `figures/scripts/` | `fig_*_v3.py`, one per figure, all through `books.py` and `style.py`; PNG previews in `figures/previews/` |
+| `paper/` | snapshot of the manuscript sources (sections, bibliography, the 10 figures) that the gates read; `make paper-sync` refreshes it from the working manuscript |
 | `rule_engine/` | the rule-based trading component (`run_naive_routeA.py`, kernel `p1_inversion/p1_lib.py`), layer L2 |
 | `partitions/` | the daily partition generators (`gen_daily_partitions_v3.py`, `gen_sssnet_partitions_w60.py`), layer L2 |
 | `head/` | the neural trading head (`run_head.py`) and the validity gate `ne_gate.py`, layer L3 |

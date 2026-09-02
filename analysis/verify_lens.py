@@ -1,4 +1,4 @@
-"""The factor lens (§6.1; fig:lens_curve, fig:ff_curve): what share of a day's cross-sectional
+"""The factor lens (§6.1; fig:lens_curve): what share of a day's cross-sectional
 residual variance demeaning within a partition's groups removes, and how much of that share survives
 projecting out a benchmark span.
 
