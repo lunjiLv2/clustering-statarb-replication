@@ -6189,3 +6189,7 @@ Build 46 pages (main text to p.33, references pp.33–36, appendix pp.36–46), 
 all 23 edited/qualified sentences located in the PDF text. declare.sh: A_supplementary number tokens −1 "30" +1 "0.00", every
 other file XREF-only. Nine gates pass (verify_printed 112 PASS). paper-sync: sections 01/02/04/05/06/07/A modified; Code Branch
 to commit.
+N107 addendum (same day): item A14 had left §6.3's closing sentence as a one-sentence paragraph (check_prose.py orphan list);
+merged into the preceding "Regressed the other way…" paragraph, whose last clause ("rather than to the choice within a class")
+it continues. Words and numbers unchanged; rebuilt (46 pages, 0 errors/undefined), declare.sh XREF-only for 06, paper-sync
+rerun, nine gates rerun and pass (verify_printed 112 PASS).
