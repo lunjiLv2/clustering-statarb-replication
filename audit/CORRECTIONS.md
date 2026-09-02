@@ -5820,3 +5820,8 @@ All ten new phrases found in the PDF text layer and all five retired ones absent
 search for "pre-speci"). Nine repo gates 9/9 (check_pseed_5ps, verify_printed 0 FAIL, check_pseed_flip_literals, check_seed_language,
 check_printed_5seed, check_field_window_5seed, check_note_maxw, check_calendar_bypass, check_figures_text 10/10). `make paper-sync`
 run; all eight sections, main.tex, refs.bib, preamble-oup.tex byte-identical between JFEC_OUP and paper/.
+N91 addendum 2 (2026-09-01) — repository created by the user as github.com/lzwbh/clustering-statarb-replication (empty; no
+GitHub-generated README/.gitignore/licence). `git init -b main` inside replication_repo/ (nested in the GNN_for_Trading tree, which
+does not track it), remote origin set, first commit 4c31022: 235 files, 19 MB .git; data/derived, results_5seed, results_3seed_archive,
+runs/, slurm logs, *.bak and TODO.md (text lives in RELEASE_CHECKLIST.md) are git-ignored, nothing deleted. CITATION.cff
+repository-code and README status line carry the URL. Push left to the user (`git push -u origin main`).
