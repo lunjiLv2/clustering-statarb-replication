@@ -5843,3 +5843,36 @@ N96 addendum — licences confirmed by the user ("按你的想法办"): code MIT
 Zenodo packaging approved ("可以打包"): slurm job 62472868 (slurm/zenodo_package.sh) writes runs/zenodo_out/{rule_books,head_logs,
 weights,partitions,results}.tar.gz + MANIFEST.csv + SHA256SUMS; dry run 6.28 GB (116 rule books, 397 head logs, 72 weight files =
 70 main + 2 peer, 103 partition caches incl. MANIFEST.json, 65 result files incl. size5/). Commit c46785b.
+
+### N97 (2026-09-01) — reversal thread tied together: §2 forward pointer, §6.2 Hameed–Mian sentence, tab:ksweep note clause; no printed number changed
+User: "1.我们literature都加了一整段reverse，是不是section6突出reverse突出得不够啊，都没有出现在图里" and, on the report, "B都做". Three guarded
+replacements (each asserted to match exactly once), backups in the Refine scratchpad (b_backup/):
+(B1) §2 sec:lit, end of the reversal paragraph, after "…the two controls and the mean--volatility split of this paper supply that
+  comparison." added: "\secref{sec:spanning} then adds a market-wide reversal factor to the spanning regressions and finds that it
+  absorbs far more of the controls' alpha than of the clusterizers'." — the only forward pointer from the reversal literature to the
+  reversal result; the claim restates §6.2 (controls −41.9%/−38.5% vs clusterizers −19.7% to −25.1% at the rule-based component,
+  recomputed from strev_spanning_v3_cal6913.csv) without printing a number. Renders one new cross-reference token ("Section 6.2").
+(B2) §6.2 sec:spanning, reversal paragraph, after "…keeps the part that is relative to the group." added: "This is the intra- and
+  inter-industry decomposition of \citet{hameed2015industries} in spanning form, with a statistical partition in place of the
+  industry and with the two controls that the industry studies lack." — ties the result to the paper cited for exactly this
+  decomposition in §2 (Hameed and Mian 2015, already in refs.bib; §2 credits them with "decompose the unconditional reversal into
+  intra- and inter-industry parts"). Renders one new citation year token ("2015"); declare.sh reports exactly that token and nothing else.
+(B3) A.7 tab:ksweep note, after "…across-seed standard deviations run $0.09$ to $0.25$." added: "Differences quoted in the text are
+  computed on unrounded means." — the text's 0.09/0.14 (§5.5, A.6) come from unrounded per-cell means (0.1359 → "0.14"), and the
+  table's two-decimal cells do not reproduce them by subtraction; the clause states the convention where a reader would try the
+  subtraction. Same clause as the other notes that carry text-quoted differences.
+A2 (the §4.4 30-day rerun sentence) was NOT changed: the user asked instead for the rerun's provenance, answered in chat from the
+ledger (N8 head_lift_sigw30 2026-08-11 Sharpe lifts only; N77 UNTRACED 2026-08-27; rerun job 62284473 18:34–18:43 the same evening;
++38.7%/+35.8% entered in N77 addendum 1).
+Verification: comment-stripped numeric multisets per file vs backup — 02 (5 tokens), 06 (455), A (417): removed {} added {}.
+Rebuilt (pdflatex/bibtex/pdflatex×2, logs in scratchpad build_n97_*.log): 0 errors, 0 undefined refs, 45 pages, only the pre-existing
+title-block hbox (log line 1038), no Float too large; the 3-pt vbox warnings are the class's per-page ones, unchanged at 44. All three
+new sentences found in the PDF text layer ("ﬁnds" and "Diﬀerences" render with ligatures — search "market-wide reversal factor",
+"in spanning form, with a statistical partition", "computed on unrounded means"). Nine repo gates 9/9 (check_pseed_5ps,
+verify_printed 0 FAIL, check_pseed_flip_literals, check_seed_language, check_printed_5seed, check_field_window_5seed, check_note_maxw,
+check_calendar_bypass, check_figures_text 10/10 — the gate already picks up the Code Branch's uncommitted fig_reversal_v3.py, PASS).
+paper/ synced by the paper-sync copy commands run by hand (make paper-sync would try to copy the not-yet-adopted fig_reversal.pdf
+from JFEC_OUP/figures and print an error): eight sections, main.tex, refs.bib, preamble-oup.tex byte-identical; ten shipped figure
+PDFs byte-identical; fig_reversal.pdf is in paper/figures only, pending the user's decision on the figure (evaluated in chat: values
+reproduce the CSV and tab:spanning; trial build in the scratchpad puts it on p. 28 as Figure 10, 46 pages, fig:dose/fig:window_twin
+→ 11/12, no hard-coded figure number anywhere in sections/).

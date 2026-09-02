@@ -27,4 +27,4 @@ checksums:         ## record SHA-256 / row counts / date ranges of every data fi
 paper-sync:        ## authors: refresh paper/ from the working manuscript (CSA_MANUSCRIPT_SRC, default ../JFEC_OUP)
 	SRC=$${CSA_MANUSCRIPT_SRC:-../JFEC_OUP}; cp $$SRC/sections/0*.tex $$SRC/sections/A_supplementary.tex paper/sections/; \
 	cp $$SRC/main.tex $$SRC/refs.bib $$SRC/preamble-oup.tex paper/; \
-	for f in paper/figures/*.pdf; do cp $$SRC/figures/$$(basename $$f) paper/figures/; done
+	for f in paper/figures/*.pdf; do s=$$SRC/figures/$$(basename $$f); [ -f $$s ] && cp $$s paper/figures/ || echo "paper-sync: $$s not in the manuscript yet, kept the repo copy"; done
