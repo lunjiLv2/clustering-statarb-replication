@@ -5876,3 +5876,18 @@ from JFEC_OUP/figures and print an error): eight sections, main.tex, refs.bib, p
 PDFs byte-identical; fig_reversal.pdf is in paper/figures only, pending the user's decision on the figure (evaluated in chat: values
 reproduce the CSV and tab:spanning; trial build in the scratchpad puts it on p. 28 as Figure 10, 46 pages, fig:dose/fig:window_twin
 → 11/12, no hard-coded figure number anywhere in sections/).
+
+### N98 (2026-09-01) — full-draft read (user: "再认真检查一下当前draft有什么需要修改的地方"): one stale pair in A.13, everything else reproduces
+A.13 printed "the head trades 1.46 times as much per unit of exposure and earns 1.63 times as much"; at five seeds the ratios of the
+14-arm means (head one-way turnover / rule one-way per unit gross; head annual return / rule return per unit gross) are 1.472 / 1.624
+→ **1.47 / 1.62**. No convention reproduces the printed pair (12-arm means 1.42/1.62, mean of per-arm ratios 1.48/1.63, medians
+1.41/1.63), so it was a leftover of the retired seed set; neither number had a checker. Fixed in A_supplementary.tex:505, three
+A.13 checks added to verify_printed (the ratios, the rule return band 3.9–4.6% and break-evens 2.75–3.74 vs 2.66–3.79; the rule
+position autocorrelation 0.46 / 27% sign flips; the 5 bp control ranks 1st/3rd on the rule side). Recomputed and confirmed while
+reading: §4.1 32%/19%, "about a point" (1.1–1.3), §4.2 5.88% floor and 42%/35% market-beta reductions (0.0605 vs 0.105/0.093),
+Table 3 note 67.8% / no other below 69% (69.4), §4.4 9–24%, §5.3 329 blocks, §5.5 0.36 = kmeans 2.57−2.21, 0.20–0.36 and −0.09–
++0.22, A.6 floors 1.8/5.9/9.9%, A.9 thresholds 5.9/2.4, PCA +0.27 at K=30, average linkage peak at 120 days (2.407), A.13 gross
+returns 6.3–7.6%, 5 bp cost 9.6–11.8%, rule loadings 0.05–0.06 vs 0.07. Prose/disclosure items handed to Refine (not numbers):
+§5.2 does not say that the five partition draws {1..5} exclude the main partition (seed 42); main.tex still carries the Data
+Availability placeholder (line 87) — GitHub URL known, Zenodo DOI pending; A.4's reproducibility trio names no arm/seed;
+corresponding e-mail lunji@math.ucla.edu vs the author's g.ucla.edu address needs the user's confirmation.

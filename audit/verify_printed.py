@@ -266,6 +266,15 @@ chk("Spearman effK vs mps Sharpe -0.15, p 0.63 (12 clusterizers)", (round(_r.sta
 print("== §6.1 characteristics lens (lens_extras_v3) [N88] ==")
 _lx = pd.read_csv(E+"lens_extras_v3_cal6913.csv").set_index("arm"); _lc = [a for a in _lx.index if a not in ("k1","random")]
 chk("characteristics span: real partitions keep 77-85% of their share; Z alone explains 0.13; random at its floor", (round(100*_lx.loc[_lc,"ret_spanZ"].min()), round(100*_lx.loc[_lc,"ret_spanZ"].max()), round(_lx.R2_expl_spanZ.mean(),2)) == (77, 85, 0.13) and abs(_lx.loc["random","ret_spanZ"]-1) < 0.01)
+print("== app:costs (A.13) head vs rule per unit of gross (turnover_v3_mean, naive_turnover_v3) [N98] ==")
+_tv = pd.read_csv(E+"turnover_v3_mean_cal6913.csv").set_index("arm"); _nv3 = pd.read_csv(E+"naive_turnover_v3_cal6913.csv").set_index("arm")
+_cm = [a for a in _tv.index if a in _nv3.index]; _row = _nv3.loc[_cm, "turnover_twoway_per_unit_gross"] / 2; _rret = _nv3.loc[_cm, "ann_ret"] / _nv3.loc[_cm, "gross_book"]
+chk("A.13: head trades 1.47x per unit of exposure and earns 1.62x (ratios of the 14-arm means); rule return 3.9-4.6%, break-even rule 2.75-3.74 vs head 2.66-3.79",
+    (round(_tv.loc[_cm, "daily_turnover_oneway_N6_convention"].mean() / _row.mean(), 2), round(_tv.loc[_cm, "ann_ret"].mean() / _rret.mean(), 2)) == (1.47, 1.62)
+    and (round(100*_rret.min(), 1), round(100*_rret.max(), 1)) == (3.9, 4.6) and (round(_nv3.loc[_cm, "breakeven_bps"].min(), 2), round(_nv3.loc[_cm, "breakeven_bps"].max(), 2)) == (2.75, 3.74))
+_pa = pd.read_csv(E+"pos_autocorr_naive_cal6913.csv"); _pc = _pa[~_pa.arm.isin(["k1", "random"])]
+chk("A.13: rule positions correlate with the previous day's at 0.46, 27% of names change sign (clusterizer means)", (round(_pc["corr"].mean(), 2), round(_pc["flip"].mean())) == (0.46, 27))
+_n5 = _nv3["netSR_5bp"].rank(ascending=False); chk("A.13: at 5 bp the controls finish first and third on the rule-based component", (int(_n5["k1"]), int(_n5["random"])) == (1, 3))
 print("== tab:ksweep (ksweep_v3_cal6913) [A.ksweep] ==")
 _kw = pd.read_csv(E+"ksweep_v3_cal6913.csv"); _pv = _kw.pivot(index="arm", columns="K", values="sharpe_mps").round(2)
 _kp = {"kmeans_ret": (2.21, 2.57, 2.48), "agglo_avg": (1.95, 2.15, 2.37), "agglo_complete": (2.07, 2.34, 2.55), "pca_load": (1.99, 2.28, 2.32), "spectral_unsigned": (1.69, 1.74, 1.61)}  # five seeds {1..5}
