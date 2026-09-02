@@ -6222,3 +6222,38 @@ Cover letter (Cover_Letter/cover_letter.tex, outside the manuscript and the gate
 sentence (now one clause), the computing-resources line (duplicates Acknowledgments), and two unverified statements ("no related
 paper of ours is in circulation", "no conflict with any member of the editorial board"); the interpretive "read off" removed.
 Numbers in the letter (12, two, 27, 500, 28%, 42%, DOI) match the manuscript.
+
+### N109 (2026-09-01) — user rulings on the N108 judgment items (C1 aligned, C4 added), two citation-wording items from the Code Branch's claim-support pass, and 19 DOIs added to refs.bib after its CrossRef pass
+(C1, user: "C1对齐") §7:22 "yet four of the 12 clusterizer books keep their alpha against the peer books and the peer books keep
+theirs against the equal weight of all 12" → "yet eight of the 12 clusterizer books keep their alpha against the peer books and
+the factors together, and the peer books keep theirs against the equal weight of all 12" — the count the abstract and §1:111
+already use; source tab:peer note [a] ("on the peer books and the six factors together, eight do") and §6.3:269 (peer books on
+the equal weight, 2.5%/2.3% a year, t = 5.5/6.8). "four" was also true (peer books alone, §6.3:265) but was the only layer citing it.
+(C4, user: "C4补一下（但double think怎么补最好）") §1 P9 gains two closing sentences after "their positions are highly similar.":
+"Because the books are this similar, an equal weight of all 12 does as well as re-selecting the trailing best each year
+(\secref{sec:gradient}). The inputs a clusterizer is given matter on the scale of the whole span between clusterizers: a longer
+estimation window moves the Sharpe ratio by as much as that span, and a different number of groups by nearly half of it, so the
+Sharpe ratio separates inputs more sharply than algorithms (\secref{sec:window})." Sources: §5.4:453 (equal weight vs
+re-selecting the trailing best each January, CI covers zero at every look-back), §5.5:491 ("moves it by as much as the whole span";
+K "nearly half the span"; the closing sentence on inputs vs algorithms). Placement: end of the paragraph whose claim is the weak
+separation among clusterizers, so the qualification (inputs do separate) closes that claim rather than opening the redundancy
+paragraph; the two §7 P2 sentences it previews were the only §7 findings with no §1 counterpart. Wording chosen to avoid the
+§7 P2 sentence ("selecting among them on their past performance") and the §5.5 opener; no new numeral (the "12" is the arm count).
+Citation wording (Code Branch findings, verified here; the user's rulings relayed by the Code Branch and applied as verified
+corrections): (i) §2:47 "\citep[consistency theory in][]{macmahon2015community, rohe2011spectral}" → "\citep{macmahon2015community,
+rohe2011spectral}" — MacMahon–Garlaschelli (2015) is RMT-based community detection for correlation matrices, not consistency
+theory; only Rohe et al. (2011) is; the prenote is dropped rather than re-attached. (ii) §6:34 "estimates loadings freely
+\citep{fan2013large, kelly2019characteristics}" → "\citep{fan2013large}" — IPCA restricts loadings to be linear in
+characteristics, so "freely" fits POET/PCA only; kelly2019characteristics remains cited at §6:74 where IPCA is named.
+refs.bib: DOI fields added to the 19 cited entries that lacked one (ahn2013eigenvalue, avellaneda2010statistical, bai2002determining,
+baik2005phase, bailey2014deflated, barillas2017alpha, carhart1997persistence, fama2015five, fan2013large, he2022sssnet,
+jegadeesh1990evidence, kelly2019characteristics, kelly2023financial, ledoit2008robust, lehmann1990fads, newey1987simple,
+onatski2010determining, timmermann2006forecast, white2000reality); each DOI resolved through api.crossref.org here and its
+record matched the entry on title, authors, volume and pages (CrossRef carries first pages only for the two JSTOR records) and
+on the print year (barillas2017alpha: online 2016, print 2017, as printed). cucuringu2019sponge, fu2023simple and holm1979simple
+have no DOI. The reference list now carries 51 DOIs (32 before). Held: MantegnaStanley2000's leading "An" — the CrossRef/Cambridge
+Core record omits it, the book's own title page carries it; left as printed, user to rule.
+Tokens: 01 +1 "12" (arm count in the new sentence); 06 −1 "2019" (the removed cite key, not a printed value); 02/07 words only;
+refs.bib +19 DOI strings, none a result. Build 46 pages, 0 errors/undefined, Overfull only at main.log:1038; every new sentence
+located in the PDF text (pp. 3, 4, 24, 32), every old wording absent. Nine gates pass (verify_printed 112 PASS). paper-sync:
+refs.bib, sections 01/02/06/07 modified; Code Branch to commit.
