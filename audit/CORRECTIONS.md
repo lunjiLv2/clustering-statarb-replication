@@ -6415,3 +6415,28 @@ nine-sentence paragraph at 04:180, §6.1:69, §6.2:118, §6.4:392) are split can
 (keep-or-cut plan still PAUSED); §6.3:269 "yet most clusterizer books earn alpha the peer books do not" is true with
 the factors added (8 of 12 joint; 4 of 12 on the peer books alone) — abstract/§1/§7 say "together". README.md lines
 23/34/71 still say "112 checks" (verify_printed now runs 114).
+
+### N113 (2026-09-01) — the 22:53 ten-site polish batch (not Refine's, not the Code Branch's) kept by user ruling "留！"
+**What is on disk (mtimes 22:53:31–22:53:42; diff taken against the 96c1247 snapshot, which equals the 22:45 tree).**
+main.tex 94/106/108/111 "licence" → "license" ×4 (the remaining "licence" at 04:64 is a comment). refs.bib
+TOLA2008235: `note = {Applications of statistical physics in economics and finance},` removed (special-issue name;
+title/journal/volume/number/pages/year/doi/author retained, bbl resolves). 03:347 comma after the last `cases`
+condition removed (the `\end{cases},` comma remains, so no double comma). 04:149 fig:alpha_vol caption "\textsc{gics}
+at a high alpha despite a high volatility" → "\textsc{gics} at the second-highest volatility with a mid-band alpha"
+(recomputed from alpha_vol_points_v3_cal6913.csv: gics vol 3.624 second among the 12 after spectral 3.801; alpha 6.603
+fifth of 12 in the 5.89–7.02 band; the sentence's scope is the 12 clusterizers since it already calls spectral "the
+highest volatility"). 05:491, A:147, A:430 "$-0.00$" → "$0.00$" (underlying −0.0029, −0.001, −0.0029; value unchanged,
+sign dropped — this was the "signed zero is deliberate" C item, now resolved the other way).
+**Attribution.** Not Refine (this session's last write was 22:45), not the Code Branch (its snapshot 96c1247 predates
+the batch and it stated it did not touch the tree). Origin not stated by the user; the user was shown the full diff
+and ruled "留！" at 23:04, so the batch stands as the user's decision.
+**Verification (Refine, on the live tree after the batch).** Build n112b: 0 `^!`, 0 undefined, 46 pages, Overfull
+only main.log:1038, float pages unchanged. Nine gates PASS (verify_printed 0 FAIL, check_pseed_5ps,
+check_pseed_flip_literals, check_seed_language, check_printed_5seed, check_field_window_5seed, check_note_maxw,
+check_calendar_bypass, check_figures_text 10/10). The gate labels that print "-0.00" (check_field_window_5seed:26,
+check_pseed_5ps:55) compare rounded values, not the text — cosmetic, Code Branch's call. declare.sh baseline refreshed
+and `make paper-sync` run after this entry; Code Branch to commit the paper/ snapshot; the user pushes.
+**Addendum (23:08).** An eleventh site in the same 22:53:31 batch, outside declare.sh's file list: preamble-oup.tex
+gained `\hypersetup{pdftitle={Quantifying the Contributions of Clustering in Statistical Arbitrage},pdfauthor={Lunji Zhu,
+Yixuan He, Mihai Cucuringu}}` (PDF metadata; title and author order match main.tex lines 37–39 and the rendered
+metadata of build n112b). Kept under the same ruling; synced to paper/preamble-oup.tex.

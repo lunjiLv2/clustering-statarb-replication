@@ -52,6 +52,6 @@ km = {s: books.head_book("kmeans_ret", s) for s in S}; mg = {s: books.head_book(
 d = np.array([books.sharpe(mg[s]) - books.sharpe(km[s]) for s in S]); dv = np.array([(books.ann_vol(mg[s]) - books.ann_vol(km[s])) for s in S])
 t = d.mean() / (d.std(ddof=1) / np.sqrt(len(S)))
 chk("app:singleton (A.2): merged arm 0.04 less Sharpe on the five-seed average, t=-0.9 on 4 df, sign changes", round(-d.mean(), 2) == 0.04 and round(t, 1) == -0.9 and (d > 0).any() and (d < 0).any(), f"gap {d.mean():.4f} t {t:.2f} signs {np.sign(d).astype(int)}")
-chk("app:singleton (A.2): 0.05 pp more volatile, per-seed gaps from -0.00 to +0.24", round(dv.mean(), 2) == 0.05 and round(dv.min(), 2) == -0.0 and round(dv.max(), 2) == 0.24, f"{dv.round(3)}")
+chk("app:singleton (A.2): 0.05 pp more volatile, per-seed gaps from 0.00 to +0.24", round(dv.mean(), 2) == 0.05 and round(dv.min(), 2) == -0.0 and round(dv.max(), 2) == 0.24, f"{dv.round(3)}")
 chk("app:singleton (A.2): k-means own head-seed sd 0.112", round(np.std([books.sharpe(km[s]) for s in S], ddof=1), 3) == 0.112)
 print(f"\n{len(fails)} FAIL" if fails else "\nall checks passed"); sys.exit(1 if fails else 0)

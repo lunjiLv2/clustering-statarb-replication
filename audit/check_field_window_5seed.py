@@ -23,6 +23,6 @@ chk("§5.1: pooled sd of an adjacent gap across its five runs 0.103 on 44 df, 95
 chk("§5.1: nine of the 11 adjacent gaps are smaller than 0.103", int((np.diff(-o.values) < pooled).sum()) == 9)
 mv = lambda a: np.array([books.sharpe(books.head_book(a, s, "_w252")) - books.sharpe(books.head_book(a, s, "_w21")) for s in S])
 sp, pc, ag = mv("spectral_unsigned"), mv("pca_load"), mv("agglo_avg")
-chk("§5.5: 21->252 window: spectral +0.88, PCA loadings +0.66, average linkage -0.00; spectral and PCA positive in every seed", (round(sp.mean(), 2), round(pc.mean(), 2), round(abs(ag.mean()), 2)) == (0.88, 0.66, 0.0) and (sp > 0).all() and (pc > 0).all(), f"{sp.mean():+.4f} {pc.mean():+.4f} {ag.mean():+.4f}")
+chk("§5.5: 21->252 window: spectral +0.88, PCA loadings +0.66, average linkage 0.00; spectral and PCA positive in every seed", (round(sp.mean(), 2), round(pc.mean(), 2), round(abs(ag.mean()), 2)) == (0.88, 0.66, 0.0) and (sp > 0).all() and (pc > 0).all(), f"{sp.mean():+.4f} {pc.mean():+.4f} {ag.mean():+.4f}")
 chk("§5.5: against average linkage, spectral +0.88 and PCA +0.67, the same sign in every seed", (round((sp - ag).mean(), 2), round((pc - ag).mean(), 2)) == (0.88, 0.67) and (sp - ag > 0).all() and (pc - ag > 0).all())
 print(f"\n{len(fails)} FAIL" if fails else "\nall checks passed"); sys.exit(1 if fails else 0)

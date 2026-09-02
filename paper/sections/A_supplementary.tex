@@ -144,7 +144,7 @@ produces at most $0.6$ singletons per day. $k$-means on returns produces $9.8$ s
 $500.0$ for every other arm.
 
 The cost of the asymmetry is measured; on this panel it is too small to resolve. A second arm trades the same $k$-means partitions with singleton members merged rather than deleted, which is $k$-means under
-\textsc{sponge}'s policy. That arm earns $0.04$ less in Sharpe ratio on the five-seed average and runs $0.05$ percentage points more volatile. Neither difference survives its own dispersion: the Sharpe gap carries $t=-0.9$ on four degrees of freedom and changes sign across the five seeds, and the volatility gap runs from $-0.00$ to $+0.24$ across them.
+\textsc{sponge}'s policy. That arm earns $0.04$ less in Sharpe ratio on the five-seed average and runs $0.05$ percentage points more volatile. Neither difference survives its own dispersion: the Sharpe gap carries $t=-0.9$ on four degrees of freedom and changes sign across the five seeds, and the volatility gap runs from $0.00$ to $+0.24$ across them.
 Set against $k$-means' own head-seed standard deviation of $0.112$,
 the gap between the two arms sits inside the noise of a single arm's refit. Harmonizing the policy in either direction would
 therefore move the leading clusterizer by less than its run-to-run noise, and
@@ -427,7 +427,7 @@ generator that cannot read the window; the observed gain is $-0.11$, negative in
 and the two arms that use no eigenvector do not move. The account misses the sign of the interaction with $\K$: for PCA loadings the same 60-to-$252$-day move is worth
 $+0.27$ at $\K=30$ against $+0.33$ at $\K=50$, so the window effect strengthens as the partition is refined. We have no account of that.
 
-\figref{fig:window_twin} shows the $60$-to-$21$-day step of the same sweep against seed noise. That step contains the account's one exception: complete linkage, which reads the same correlation matrix as average linkage and no eigenvector, loses $0.31$, outside its across-seed band. No $p$-value is quoted for the window responses: a paired test across five fits rests on four degrees of freedom, so each step is judged against its arm's own across-seed band instead. Average linkage, which moves $-0.00$ over the whole sweep (\secref{sec:window}), peaks at 120 days, mid-sweep.
+\figref{fig:window_twin} shows the $60$-to-$21$-day step of the same sweep against seed noise. That step contains the account's one exception: complete linkage, which reads the same correlation matrix as average linkage and no eigenvector, loses $0.31$, outside its across-seed band. No $p$-value is quoted for the window responses: a paired test across five fits rests on four degrees of freedom, so each step is judged against its arm's own across-seed band instead. Average linkage, which moves $0.00$ over the whole sweep (\secref{sec:window}), peaks at 120 days, mid-sweep.
 
 \begin{figure}[tb]
 \centering
