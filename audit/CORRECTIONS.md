@@ -6104,3 +6104,25 @@ A.9 prints "a regression of the gain on the 21-day starting level fits with r = 
 the w21 mean-of-per-seed level). Recomputed at five seeds: −0.930 (spectral 1.384 → +0.880, PCA 1.890 → +0.664, average linkage
 2.259 → −0.003). Added to verify_printed (SKIP without the window-variant logs). The check's label first tripped check_seed_language
 ("over the three …" matches its three-seed prose regex) — reworded to "across the swept clusterizers"; both gates green.
+
+### N105 (2026-09-01) — Code Branch's wording pass, nine items applied as ruled by the user in the Code Branch's chat (relayed; item 8 not approved, left); refs.bib field hygiene
+Applied (all wording, no digit changed): (1) A.1 gics "no return data is read at all" → "the taxonomy itself reads no return data;
+the correlation fill for the uncovered names does." (4) tab:moments note "plus momentum (Carhart, 1997) (FF5+MOM)" → "…, FF5+MOM
+below". (5) §1 "distinguish genuine clustering from" → "distinguish a real partition from" (the "clearly" in the same sentence is
+untouched). (6) §2 "Our work combines two strands of previous work" → "This article combines …" (user's wording). (7) §2 ¶3
+second "also" cut ("A partition of the cross-section is used as a restriction …"). (9) §4.4 "That rerun also settles the scale on
+which the head widens the advantage." → "That rerun also fixes the scale of the head's advantage." (10) §5.5 "registered in advance
+against the rival account, that low starters gain most, move" → "registered in advance to separate that account from its rival
+(that low starters gain most) move". (11) §1 roadmap "Section 6 tests the partition against factor models and per-stock peer sets,
+and finds that no book is net positive at five basis points one-way." → "Section 6 tests whether factor models or per-stock peer
+regressions make the partition redundant, then charges trading costs, under which no book is net positive at five basis points
+one-way." (first attempt matched only the second source line and left "tests the partition against whether …"; caught on
+re-read, fixed before the build). (12) §5.4 "($0.39$ against $0.41$, §5.2)" → "($0.39$ across partition draws against $0.41$
+across head seeds, §5.2)" — mapping verified against §5.2:294 (random control 0.39 across the five partition draws) and :295
+(0.41 across the five head seeds). (14) refs.bib: 22 issn/url/month lines removed from the ten listed entries (the `month={},}`
+line of han2026 replaced by the closing brace); reference list re-checked (Gatev, Gu entries render without month/url).
+Not applied: item 8 (§4.1 parenthetical), not approved.
+Tokens: refs.bib − the removed ISSN/URL/month digits only (declare.sh list); five section files XREF-only. Build 46 pages,
+0 errors/undefined; all eight rendered sentences located in the PDF. Nine gates pass (verify_printed 112 PASS / 0 SKIP;
+check_seed_language green after the Code Branch's 5889916 rewording). paper-sync: refs.bib + sections 01/02/04/05/A modified;
+Code Branch to commit.
