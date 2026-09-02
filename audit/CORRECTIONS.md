@@ -6546,3 +6546,26 @@ weights and selection is the forecast-combination result in trading form", which
 opener no longer makes (one-line fix available: "This is the forecast-combination result in trading form:"); and
 "informative" is a second adjective for what the rest of the paper calls "a real partition" (§7 P2 only, the
 coauthor's word).
+
+### N118 (2026-09-02) — §5.4:453 closing sentence: the equivalence claim removed (the N117 open item, user ruling "C1再想想…想好了就落")
+**Edit.** "**The match between equal weights and selection** is the forecast-combination result in trading form: when
+candidates are exchangeable up to noise, equal weights are hard to beat \citep{timmermann2006forecast}." → "**The result
+is familiar from the forecast-combination literature**: when candidates are exchangeable up to noise, equal weights are
+hard to beat \citep{timmermann2006forecast}."
+**Why this wording and not the one first proposed.** The defect was "the match", which asserts the equivalence the
+paragraph's opener no longer claims (the interval covers zero — failure to separate, not a match), the same overclaim
+Mihai removed at §5.4's opener and at §7. The fix floated in the N117 sweep, "This is the forecast-combination result
+in trading form:", was rejected on a second look: a bare demonstrative subject is exactly what this manuscript deletes
+everywhere else. Four candidates were compared. (a) "Equal weights are hard to beat when candidates are exchangeable up
+to noise." — shortest, but ends the paragraph on a bare literature statement with no link to the finding. (b) "The 12
+books are exchangeable up to noise, the condition under which equal weights are hard to beat." — concrete, but the very
+next sentence says five of the 12 sit reliably below the equal-weight book, so asserting exchangeability contradicts
+the paragraph that follows. (c) "The forecast-combination literature gives the reason:" — "the reason" overstates for
+the same reason as (b): the books are not fully exchangeable. (d) the adopted line keeps the original's structure,
+takes a short repeated antecedent ("The result") rather than a pronoun, claims only that the finding is a known one,
+and leaves the citation and the mechanism clause untouched. "in trading form" was dropped with the overclaim; the
+setting is not in doubt.
+**Verification.** Build n118: 0 `^!`, 0 undefined, 46 pages, Overfull unchanged (1 hbox at main.log:1038, 45 vbox), all
+26 float labels and pages identical to N117. New string present in the render, old string absent; the paragraph read
+end to end as rendered. declare.sh: one line, no number-token delta. `make paper-sync` exits 0 now (Code Branch fixed
+the recipe). Nine gates PASS.
