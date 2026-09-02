@@ -1,0 +1,2127 @@
+%% ======================================================================
+%%  refs.bib — bibliography for
+%%  "What Does Clustering Buy in Statistical Arbitrage? Risk, Not Return"
+%%  Zhu, He and Cucuringu — Journal of Financial Econometrics,
+%%  special issue "Machine Learning in Financial Econometrics".
+%%
+%%  DO NOT hand-edit keys. Cite from BIBKEYS.md, which lists every key in
+%%  this file together with a one-line description and the legacy keys it
+%%  replaces. If you need an entry that is missing, ADD it at the end of
+%%  BLOCK C with a "%% [verify]" comment and record it in BIBKEYS.md.
+%%
+%%  KEY CONVENTION: firstauthorYEARkeyword, all lowercase (bai2002determining).
+%%
+%%  PROVENANCE, three blocks:
+%%   BLOCK A  entries inherited verbatim from JFEC_draft/references.bib,
+%%            the canonical verified bibliography of the earlier draft
+%%            (web verification pass 2026-07-11; each entry carries its
+%%            own "verified/corrected" stamp). ONE change: the key
+%%            epstein2025attention now resolves to the PUBLISHED ICAIF'25
+%%            proceedings paper, defined at the end of BLOCK C.
+%%   BLOCK B  entries carried over from
+%%            Lunji_Draft_Cluster_for_Arb_JFEC_ML/refs.bib (the file
+%%            behind the written literature section), with publisher-export
+%%            keys normalised and all fields re-verified 2026-08-12.
+%%   BLOCK C  entries ADDED for the risk-versus-return narrative, verified
+%%            2026-08-12.
+%%
+%%  Duplicate works that appeared under two keys across the two source
+%%  files have been collapsed to a single key (see BIBKEYS.md, "retired
+%%  keys"). Nothing in this file is cited twice under two names.
+%%
+%%  BIBLIOGRAPHY STYLE: main.tex uses \bibliographystyle{plainnat}.
+%%  chicago.bst is NOT installed on this machine (TeX Live 2018); switch
+%%  to chicago/agsm on Overleaf or once the OUP class is in hand.
+%% ======================================================================
+
+%% ################ BLOCK A — inherited, verified 2026-07-11 ############
+
+%% ------------------------- VERIFIED ENTRIES --------------------------
+
+%% VERIFIED against the published PDF cover page (see
+%% "ICAIF draft/brutti_positioning.tex", BLOCK 1; DOI checked).
+%% Exempt from the 2026-07-11 web pass (locally verified).
+@article{brutti2026orthogonal,
+  title     = {Noise-robust orthogonal clustering and applications to equity markets},
+  author    = {Brutti, Rafa{\"e}l and Marowka, Maciej and Cucuringu, Mihai},
+  journal   = {Quantitative Finance},
+  volume    = {26},
+  number    = {6},
+  pages     = {903--930},
+  year      = {2026},
+  publisher = {Taylor \& Francis},
+  doi       = {10.1080/14697688.2026.2671183}
+}
+
+%% VERIFIED per JFEC_workspace/bps_benchmark/MEMO.md (web-checked there);
+%% pages 151--178 re-confirmed against Crossref + dblp (ML 32(2), Aug 1998).
+%% verified 2026-07-11 https://api.crossref.org/works/10.1023/A:1007424614876
+@article{herbster1998tracking,
+  title   = {Tracking the best expert},
+  author  = {Herbster, Mark and Warmuth, Manfred K.},
+  journal = {Machine Learning},
+  volume  = {32},
+  number  = {2},
+  pages   = {151--178},
+  year    = {1998}
+}
+
+%% VERIFIED per JFEC_workspace/bps_benchmark/MEMO.md (web-checked there).
+%% Exempt from the 2026-07-11 web pass (already fully verified).
+@article{mcalinn2019dynamic,
+  title   = {Dynamic {B}ayesian predictive synthesis in time series forecasting},
+  author  = {McAlinn, Kenichiro and West, Mike},
+  journal = {Journal of Econometrics},
+  volume  = {210},
+  number  = {1},
+  pages   = {155--169},
+  year    = {2019}
+}
+
+%% ---------------- ENTRIES VERIFIED IN THE 2026-07-11 PASS ------------
+
+%% stat-arb lineage.
+%% verified 2026-07-11 https://api.crossref.org/works/10.1080/14697680903124632
+@article{avellaneda2010statistical,
+  title   = {Statistical arbitrage in the {US} equities market},
+  author  = {Avellaneda, Marco and Lee, Jeong-Hyun},
+  journal = {Quantitative Finance},
+  volume  = {10},
+  number  = {7},
+  pages   = {761--782},
+  year    = {2010}
+}
+
+
+%% SPONGE. Author list, PMLR volume (89), and pages all confirmed.
+%% verified 2026-07-11 https://proceedings.mlr.press/v89/cucuringu19a.html
+@inproceedings{cucuringu2019sponge,
+  title     = {{SPONGE}: A generalized eigenproblem for clustering signed networks},
+  author    = {Cucuringu, Mihai and Davies, Peter and Glielmo, Aldo and Tyagi, Hemant},
+  booktitle = {Proceedings of the 22nd International Conference on Artificial Intelligence and Statistics (AISTATS)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {89},
+  pages     = {1088--1098},
+  year      = {2019}
+}
+
+%% Title/author uncertainty RESOLVED against the SIAM SDM 2022 proceedings:
+%% title is "SSSNET: Semi-Supervised Signed Network Clustering" (NOT the
+%% June-16 skeleton's "Self-supervised ... embedding"), and there ARE four
+%% authors (He, Reinert, Wang, Cucuringu). Entry below was correct as-is.
+%% verified 2026-07-11 https://epubs.siam.org/doi/10.1137/1.9781611977172.28
+@inproceedings{he2022sssnet,
+  title     = {{SSSNET}: Semi-supervised signed network clustering},
+  author    = {He, Yixuan and Reinert, Gesine and Wang, Songchao and Cucuringu, Mihai},
+  booktitle = {Proceedings of the 2022 SIAM International Conference on Data Mining (SDM)},
+  pages     = {244--252},
+  year      = {2022}
+}
+
+%% Hermitian directed clustering (App G inventory item
+%% "Cucuringu--Li--Sun--Zanetti 2020 AISTATS"). Title and authors confirmed.
+%% corrected 2026-07-11 https://proceedings.mlr.press/v108/cucuringu20a.html
+%% (added: pages 983--992, PMLR volume 108 — previously missing)
+@inproceedings{cucuringu2020hermitian,
+  title     = {Hermitian matrices for clustering directed graphs: insights and applications},
+  author    = {Cucuringu, Mihai and Li, Huan and Sun, He and Zanetti, Luca},
+  booktitle = {Proceedings of the 23rd International Conference on Artificial Intelligence and Statistics (AISTATS)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {108},
+  pages     = {983--992},
+  year      = {2020}
+}
+
+%% Editorial Law 7 citation. Authors/title/venue/year confirmed as claimed.
+%% corrected 2026-07-11 https://academic.oup.com/jfec/article/23/2/nbae026/7889003
+%% (added: volume 23, issue 2, eLocator nbae026, DOI — previously missing;
+%% OUP citation line shows the eLocator, no page range; RePEc lists
+%% pp. 1977-2016). This is the GHAR / realized-COVARIANCE paper; the
+%% GNN realized-VOLATILITY companion is Zhang-Pu-Cucuringu-Dong, IJF 41(1)
+%% 377-397, 2025, DOI 10.1016/j.ijforecast.2024.09.002 (arXiv:2308.01419).
+@article{zhang2025graph,
+  title   = {Graph-based methods for forecasting realized covariances},
+  author  = {Zhang, Chao and Pu, Xingyue and Cucuringu, Mihai and Dong, Xiaowen},
+  journal = {Journal of Financial Econometrics},
+  volume  = {23},
+  number  = {2},
+  pages   = {nbae026},
+  year    = {2025},
+  doi     = {10.1093/jjfinec/nbae026}
+}
+
+%% verified 2026-07-11 https://api.crossref.org/works/10.1080/01621459.2016.1195743
+@article{ando2017clustering,
+  title   = {Clustering huge number of financial time series: A panel data approach with high-dimensional predictors and factor structures},
+  author  = {Ando, Tomohiro and Bai, Jushan},
+  journal = {Journal of the American Statistical Association},
+  volume  = {112},
+  number  = {519},
+  pages   = {1182--1198},
+  year    = {2017},
+  doi     = {10.1080/01621459.2016.1195743}
+}
+
+%% verified 2026-07-11 https://api.crossref.org/works/10.1111/1468-0262.00273
+@article{bai2002determining,
+  title   = {Determining the number of factors in approximate factor models},
+  author  = {Bai, Jushan and Ng, Serena},
+  journal = {Econometrica},
+  volume  = {70},
+  number  = {1},
+  pages   = {191--221},
+  year    = {2002}
+}
+
+%% verified 2026-07-11 https://ideas.repec.org/a/ecm/emetrp/v77y2009i5p1447-1479.html
+@article{onatski2009testing,
+  title   = {Testing hypotheses about the number of factors in large factor models},
+  author  = {Onatski, Alexei},
+  journal = {Econometrica},
+  volume  = {77},
+  number  = {5},
+  pages   = {1447--1479},
+  year    = {2009}
+}
+
+%% verified 2026-07-11 https://api.crossref.org/works/10.1162/REST_a_00043
+@article{onatski2010determining,
+  title   = {Determining the number of factors from empirical distribution of eigenvalues},
+  author  = {Onatski, Alexei},
+  journal = {Review of Economics and Statistics},
+  volume  = {92},
+  number  = {4},
+  pages   = {1004--1016},
+  year    = {2010}
+}
+
+%% verified 2026-07-11 https://ideas.repec.org/a/ecm/emetrp/v81y2013i3p1203-1227.html
+@article{ahn2013eigenvalue,
+  title   = {Eigenvalue ratio test for the number of factors},
+  author  = {Ahn, Seung C. and Horenstein, Alex R.},
+  journal = {Econometrica},
+  volume  = {81},
+  number  = {3},
+  pages   = {1203--1227},
+  year    = {2013}
+}
+
+%% verified 2026-07-11 https://api.crossref.org/works/10.1111/j.1540-6261.1993.tb04754.x
+@article{connor1993test,
+  title   = {A test for the number of factors in an approximate factor model},
+  author  = {Connor, Gregory and Korajczyk, Robert A.},
+  journal = {Journal of Finance},
+  volume  = {48},
+  number  = {4},
+  pages   = {1263--1291},
+  year    = {1993}
+}
+
+%% CRITICAL for the P2 positioning (necessity counterpart of their fixed-T
+%% achievability-under-separation). Title uncertainty RESOLVED: the JFEC
+%% 2025 paper IS "Eigenvalue tests for the number of latent factors in
+%% short panels" (advance access Sept 2023). The sister paper "Latent
+%% Factor Analysis in Short Panels" is DIFFERENT: Journal of Econometrics
+%% vol. 255 (2026), arXiv:2306.14004 — that one is the PML paper. This
+%% JFEC paper identifies via EITHER strict sphericity OR IVs for betas,
+%% so P2's strict-sphericity positioning matches. CAUTION (draft-side):
+%% the AM/GM-type statistic is associated with the PML sister paper, not
+%% confirmed for this one — the JFEC paper uses eigenvalue-sum T(k),
+%% eigenvalue-difference S(k), and max-ratio S*(k) statistics. Published
+%% with Comments by Pelger (nbad026) and Onatski (nbad028), same issue.
+%% corrected 2026-07-11 https://academic.oup.com/jfec/article/23/1/nbad024/7271793
+%% (added: volume 23, issue 1, eLocator nbad024, DOI — previously missing)
+@article{fortin2025latent,
+  title   = {Eigenvalue tests for the number of latent factors in short panels},
+  author  = {Fortin, Alain-Philippe and Gagliardini, Patrick and Scaillet, Olivier},
+  journal = {Journal of Financial Econometrics},
+  volume  = {23},
+  number  = {1},
+  pages   = {nbad024},
+  year    = {2025},
+  doi     = {10.1093/jjfinec/nbad024}
+}
+
+%% verified 2026-07-11 https://doi.org/10.1016/j.jfineco.2019.05.001
+@article{kelly2019characteristics,
+  title   = {Characteristics are covariances: A unified model of risk and return},
+  author  = {Kelly, Bryan T. and Pruitt, Seth and Su, Yinan},
+  journal = {Journal of Financial Economics},
+  volume  = {134},
+  number  = {3},
+  pages   = {501--524},
+  year    = {2019}
+}
+
+%% Locally verified (arXiv:2510.11616, incl. the net-Sharpe 2.28 at 5bps
+%% figure) — exempt from the 2026-07-11 web pass per task spec; see
+%% VERIFICATION_REPORT.md. Re-check publication status at final pass.
+%% [SUPERSEDED HERE] epstein2025attention now points at the PUBLISHED
+%% ICAIF'25 proceedings version; see BLOCK C at the end of this file.
+
+%% Publication status checked: published online-first in Management
+%% Science 2025-12-04, Articles in Advance, NO volume/issue/pages assigned
+%% yet (as of July 2026) — so "Forthcoming" remains accurate. Re-check for
+%% a volume/issue assignment at final submission.
+%% verified 2026-07-11 https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2022.03132
+@article{guijarro2025deep,
+  title   = {Deep learning statistical arbitrage},
+  author  = {Guijarro-Ordonez, Jorge and Pelger, Markus and Zanotti, Greg},
+  journal = {Management Science},
+  doi     = {10.1287/mnsc.2022.03132},
+  note    = {Articles in Advance, published online December 4, 2025; arXiv:2106.04028},
+  year    = {2025}
+}
+
+%% verified 2026-07-11 https://doi.org/10.1111/rssb.12016
+%% (603--680 is the official pagination: JRSS-B read paper incl. discussion)
+@article{fan2013large,
+  title   = {Large covariance estimation by thresholding principal orthogonal complements},
+  author  = {Fan, Jianqing and Liao, Yuan and Mincheva, Martina},
+  journal = {Journal of the Royal Statistical Society: Series B},
+  volume  = {75},
+  number  = {4},
+  pages   = {603--680},
+  year    = {2013}
+}
+
+%% verified 2026-07-11 https://doi.org/10.1093/rfs/5.1.1
+@article{shanken1992estimation,
+  title   = {On the estimation of beta-pricing models},
+  author  = {Shanken, Jay},
+  journal = {Review of Financial Studies},
+  volume  = {5},
+  number  = {1},
+  pages   = {1--33},
+  year    = {1992}
+}
+
+%% WHICH-paper question RESOLVED: sec4_spanning.tex:68 cites this for the
+%% Kan--Zhou J1 statistic in the spanning-test section, so the AEF 2012
+%% spanning paper is the right Kan--Zhou reference (not their SDF-bound /
+%% portfolio-choice / model-comparison papers).
+%% verified 2026-07-11 https://ideas.repec.org/a/cuf/journl/y2012v13i1kanzhou.html
+@article{kan2012tests,
+  title   = {Tests of mean-variance spanning},
+  author  = {Kan, Raymond and Zhou, Guofu},
+  journal = {Annals of Economics and Finance},
+  volume  = {13},
+  number  = {1},
+  pages   = {139--187},
+  year    = {2012}
+}
+
+%% GKR 2014 (App G inventory). DOI is 10.1093/rfs/hht135 (NOT hhu013).
+%% verified 2026-07-11 https://academic.oup.com/rfs/article-abstract/27/7/2139/1578148
+@article{gospodinov2014misspecification,
+  title   = {Misspecification-robust inference in linear asset-pricing models with irrelevant risk factors},
+  author  = {Gospodinov, Nikolay and Kan, Raymond and Robotti, Cesare},
+  journal = {Review of Financial Studies},
+  volume  = {27},
+  number  = {7},
+  pages   = {2139--2170},
+  year    = {2014}
+}
+
+%% verified 2026-07-11 https://www.cambridge.org/core/journals/journal-of-financial-and-quantitative-analysis/article/abs/model-comparison-with-sharpe-ratios/7AAB79D48CC55E0AD1BC6C8AABD6F5D9
+%% (draft-side flag: check the draft's max-Sharpe^2 Wald boundary-degeneracy
+%% discussion against their Sections 2--3 regularity conditions)
+@article{barillas2020model,
+  title   = {Model comparison with {S}harpe ratios},
+  author  = {Barillas, Francisco and Kan, Raymond and Robotti, Cesare and Shanken, Jay},
+  journal = {Journal of Financial and Quantitative Analysis},
+  volume  = {55},
+  number  = {6},
+  pages   = {1840--1874},
+  year    = {2020}
+}
+
+%% Key matches S5's usage (NUMBER_LEDGER §"S5 appends" key list).
+%% verified 2026-07-11 https://www.econometricsociety.org/publications/econometrica/1989/09/01/test-efficiency-given-portfolio
+@article{gibbons1989efficiency,
+  title   = {A test of the efficiency of a given portfolio},
+  author  = {Gibbons, Michael R. and Ross, Stephen A. and Shanken, Jay},
+  journal = {Econometrica},
+  volume  = {57},
+  number  = {5},
+  pages   = {1121--1152},
+  year    = {1989}
+}
+
+%% AR test provenance (S5 key). Published byline is "T. W. Anderson";
+%% spelled-out given name below is acceptable.
+%% verified 2026-07-11 https://api.crossref.org/works/10.1214/aoms/1177730090
+@article{anderson1949estimation,
+  title   = {Estimation of the parameters of a single equation in a complete system of stochastic equations},
+  author  = {Anderson, Theodore W. and Rubin, Herman},
+  journal = {Annals of Mathematical Statistics},
+  volume  = {20},
+  number  = {1},
+  pages   = {46--63},
+  year    = {1949}
+}
+
+%% Exact title confirmed as "Which Alpha?" (S5 key). Not to be confused
+%% with Barillas & Shanken "Comparing Asset Pricing Models" (JF 2018).
+%% verified 2026-07-11 https://academic.oup.com/rfs/article-abstract/30/4/1316/2758634
+@article{barillas2017alpha,
+  title   = {Which alpha?},
+  author  = {Barillas, Francisco and Shanken, Jay},
+  journal = {Review of Financial Studies},
+  volume  = {30},
+  number  = {4},
+  pages   = {1316--1338},
+  year    = {2017}
+}
+
+%% (S5 key).
+%% verified 2026-07-11 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1540-6261.1997.tb03808.x
+@article{carhart1997persistence,
+  title   = {On persistence in mutual fund performance},
+  author  = {Carhart, Mark M.},
+  journal = {Journal of Finance},
+  volume  = {52},
+  number  = {1},
+  pages   = {57--82},
+  year    = {1997}
+}
+
+%% q5 / expected-growth factor model (S5 key).
+%% verified 2026-07-11 https://academic.oup.com/rof/article-abstract/25/1/1/5727769
+@article{hou2021augmented,
+  title   = {An augmented {$q$}-factor model with expected growth},
+  author  = {Hou, Kewei and Mo, Haitao and Xue, Chen and Zhang, Lu},
+  journal = {Review of Finance},
+  volume  = {25},
+  number  = {1},
+  pages   = {1--41},
+  year    = {2021}
+}
+
+%% HAC covariance (S5 key).
+%% verified 2026-07-11 https://www.econometricsociety.org/publications/econometrica/1987/05/01/notes-and-comments-simple-positive-semi-definite
+@article{newey1987simple,
+  title   = {A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix},
+  author  = {Newey, Whitney K. and West, Kenneth D.},
+  journal = {Econometrica},
+  volume  = {55},
+  number  = {3},
+  pages   = {703--708},
+  year    = {1987}
+}
+
+%% Circular block bootstrap (S5 key); editors and pages confirmed against
+%% the author's UCSD publication list + the Wiley book page.
+%% verified 2026-07-11 https://mathweb.ucsd.edu/~politis/DPpublication.html
+@incollection{politis1992circular,
+  title     = {A circular block-resampling procedure for stationary data},
+  author    = {Politis, Dimitris N. and Romano, Joseph P.},
+  booktitle = {Exploring the Limits of Bootstrap},
+  editor    = {LePage, Raoul and Billard, Lynne},
+  publisher = {Wiley},
+  pages     = {263--270},
+  year      = {1992}
+}
+
+%% verified 2026-07-11 https://ideas.repec.org/a/eee/jfinec/v116y2015i1p1-22.html
+@article{fama2015five,
+  title   = {A five-factor asset pricing model},
+  author  = {Fama, Eugene F. and French, Kenneth R.},
+  journal = {Journal of Financial Economics},
+  volume  = {116},
+  number  = {1},
+  pages   = {1--22},
+  year    = {2015}
+}
+
+%% verified 2026-07-11 https://ideas.repec.org/a/bla/jfinan/v45y1990i3p881-98.html
+@article{jegadeesh1990evidence,
+  title   = {Evidence of predictable behavior of security returns},
+  author  = {Jegadeesh, Narasimhan},
+  journal = {Journal of Finance},
+  volume  = {45},
+  number  = {3},
+  pages   = {881--898},
+  year    = {1990}
+}
+
+%% verified 2026-07-11 https://academic.oup.com/qje/article-abstract/105/1/1/1928416
+@article{lehmann1990fads,
+  title   = {Fads, martingales, and market efficiency},
+  author  = {Lehmann, Bruce N.},
+  journal = {Quarterly Journal of Economics},
+  volume  = {105},
+  number  = {1},
+  pages   = {1--28},
+  year    = {1990}
+}
+
+%% verified 2026-07-11 https://academic.oup.com/jfec/article/22/2/407/7034255
+@article{pesaran2024testing,
+  title   = {Testing for alpha in linear factor pricing models with a large number of securities},
+  author  = {Pesaran, M. Hashem and Yamagata, Takashi},
+  journal = {Journal of Financial Econometrics},
+  volume  = {22},
+  number  = {2},
+  pages   = {407--460},
+  year    = {2024}
+}
+
+%% App G inventory item "Lou--Polk--Skouras 2019 JFE" (used in §3).
+%% verified 2026-07-11 https://api.crossref.org/works/10.1016/j.jfineco.2019.03.011
+@article{lou2019tug,
+  title   = {A tug of war: Overnight versus intraday expected returns},
+  author  = {Lou, Dong and Polk, Christopher and Skouras, Spyros},
+  journal = {Journal of Financial Economics},
+  volume  = {134},
+  number  = {1},
+  pages   = {192--213},
+  year    = {2019}
+}
+
+%% App G inventory item "Ang--Chen 2002" (tail/asymmetric correlation,
+%% used in §6 tail-basis discussion).
+%% verified 2026-07-11 https://ideas.repec.org/a/eee/jfinec/v63y2002i3p443-494.html
+@article{ang2002asymmetric,
+  title   = {Asymmetric correlations of equity portfolios},
+  author  = {Ang, Andrew and Chen, Joseph},
+  journal = {Journal of Financial Economics},
+  volume  = {63},
+  number  = {3},
+  pages   = {443--494},
+  year    = {2002}
+}
+
+%% "Operational Research Quarterly" is the standard historical citation
+%% form for the 1969 volume (publisher now files it under the successor
+%% title Journal of the Operational Research Society) — venue kept as-is.
+%% verified 2026-07-11 https://api.crossref.org/works/10.1057/jors.1969.103
+@article{bates1969combination,
+  title   = {The combination of forecasts},
+  author  = {Bates, John M. and Granger, Clive W. J.},
+  journal = {Operational Research Quarterly},
+  volume  = {20},
+  number  = {4},
+  pages   = {451--468},
+  year    = {1969}
+}
+
+%% verified 2026-07-11 https://ideas.repec.org/h/eee/ecofch/1-04.html
+%% (chapter number and editors added per verification note)
+@incollection{timmermann2006forecast,
+  title     = {Forecast combinations},
+  author    = {Timmermann, Allan},
+  booktitle = {Handbook of Economic Forecasting},
+  editor    = {Elliott, Graham and Granger, Clive W. J. and Timmermann, Allan},
+  volume    = {1},
+  chapter   = {4},
+  pages     = {135--196},
+  publisher = {Elsevier},
+  year      = {2006}
+}
+
+%% verified 2026-07-11 https://academic.oup.com/rfs/article-abstract/22/5/1915/1592901
+@article{demiguel2009optimal,
+  title   = {Optimal versus naive diversification: How inefficient is the {$1/N$} portfolio strategy?},
+  author  = {DeMiguel, Victor and Garlappi, Lorenzo and Uppal, Raman},
+  journal = {Review of Financial Studies},
+  volume  = {22},
+  number  = {5},
+  pages   = {1915--1953},
+  year    = {2009}
+}
+
+%% PPW 2012 JBF per dro_fusion/MEMO.md. Substantive check for the §5 usage
+%% PASSES: ambiguity is over the joint loss distribution (Wasserstein
+%% balls), and the manuscript correctly attributes only the high-ambiguity
+%% 1/N limit to Pflug et al., labeling the joint-ellipsoid geometry as its
+%% own sharpening.
+%% verified 2026-07-11 https://doi.org/10.1016/j.jbankfin.2011.07.018
+@article{pflug2012ambiguity,
+  title   = {The {$1/N$} investment strategy is optimal under high model ambiguity},
+  author  = {Pflug, Georg Ch. and Pichler, Alois and Wozabal, David},
+  journal = {Journal of Banking \& Finance},
+  volume  = {36},
+  number  = {2},
+  pages   = {410--417},
+  year    = {2012}
+}
+
+%% verified 2026-07-11 https://doi.org/10.1111/1468-0262.00152
+@article{white2000reality,
+  title   = {A reality check for data snooping},
+  author  = {White, Halbert},
+  journal = {Econometrica},
+  volume  = {68},
+  number  = {5},
+  pages   = {1097--1126},
+  year    = {2000}
+}
+
+%% verified 2026-07-11 https://doi.org/10.1198/073500105000000063
+@article{hansen2005test,
+  title   = {A test for superior predictive ability},
+  author  = {Hansen, Peter Reinhard},
+  journal = {Journal of Business \& Economic Statistics},
+  volume  = {23},
+  number  = {4},
+  pages   = {365--380},
+  year    = {2005}
+}
+
+%% verified 2026-07-11 https://doi.org/10.1080/01621459.1994.10476870
+@article{politis1994stationary,
+  title   = {The stationary bootstrap},
+  author  = {Politis, Dimitris N. and Romano, Joseph P.},
+  journal = {Journal of the American Statistical Association},
+  volume  = {89},
+  number  = {428},
+  pages   = {1303--1313},
+  year    = {1994}
+}
+
+%% Automatic block-length selection (correction note).
+%% corrected 2026-07-11 https://doi.org/10.1080/07474930802459016
+%% (title: publisher-registered title carries the attribution suffix
+%% "by D. Politis and H. White", previously omitted)
+@article{patton2009automatic,
+  title   = {Correction to ``{A}utomatic block-length selection for the dependent bootstrap'' by {D}. {P}olitis and {H}. {W}hite},
+  author  = {Patton, Andrew and Politis, Dimitris N. and White, Halbert},
+  journal = {Econometric Reviews},
+  volume  = {28},
+  number  = {4},
+  pages   = {372--375},
+  year    = {2009}
+}
+
+%% verified 2026-07-11 https://doi.org/10.1111/j.1468-0262.2006.00718.x
+@article{giacomini2006tests,
+  title   = {Tests of conditional predictive ability},
+  author  = {Giacomini, Raffaella and White, Halbert},
+  journal = {Econometrica},
+  volume  = {74},
+  number  = {6},
+  pages   = {1545--1578},
+  year    = {2006}
+}
+
+%% verified 2026-07-11 https://doi.org/10.3905/jpm.2014.40.5.094
+@article{bailey2014deflated,
+  title   = {The deflated {S}harpe ratio: Correcting for selection bias, backtest overfitting, and non-normality},
+  author  = {Bailey, David H. and L{\'o}pez de Prado, Marcos},
+  journal = {Journal of Portfolio Management},
+  volume  = {40},
+  number  = {5},
+  pages   = {94--107},
+  year    = {2014}
+}
+
+%% "Oliver" is NOT a typo: the article as published prints "Oliver Ledoit"
+%% (Crossref, OpenAlex, RePEc all agree) — bib is faithful to the byline.
+%% verified 2026-07-11 https://doi.org/10.1016/j.jempfin.2008.03.002
+@article{ledoit2008robust,
+  title   = {Robust performance hypothesis testing with the {S}harpe ratio},
+  author  = {Ledoit, Olivier and Wolf, Michael},
+  journal = {Journal of Empirical Finance},
+  volume  = {15},
+  number  = {5},
+  pages   = {850--859},
+  year    = {2008}
+}
+
+%% Ledoit--Wolf shrinkage (used in §7 covariance-null referee pre-emption).
+%% verified 2026-07-11 https://api.crossref.org/works/10.1016/S0047-259X(03)00096-4
+@article{ledoit2004well,
+  title   = {A well-conditioned estimator for large-dimensional covariance matrices},
+  author  = {Ledoit, Olivier and Wolf, Michael},
+  journal = {Journal of Multivariate Analysis},
+  volume  = {88},
+  number  = {2},
+  pages   = {365--411},
+  year    = {2004}
+}
+
+%% OAS estimator (used in §7); author order and pages both confirmed.
+%% verified 2026-07-11 https://api.crossref.org/works/10.1109/TSP.2010.2053029
+@article{chen2010shrinkage,
+  title   = {Shrinkage algorithms for {MMSE} covariance estimation},
+  author  = {Chen, Yilun and Wiesel, Ami and Eldar, Yonina C. and Hero, Alfred O.},
+  journal = {IEEE Transactions on Signal Processing},
+  volume  = {58},
+  number  = {10},
+  pages   = {5016--5029},
+  year    = {2010}
+}
+
+%% App G inventory item "Wied et al. CUSUM"; coauthors, venue, and 2012
+%% print year all confirmed (online Nov 2011).
+%% verified 2026-07-11 https://api.crossref.org/works/10.1017/S0266466611000661
+@article{wied2012testing,
+  title   = {Testing for a change in correlation at an unknown point in time using an extended functional delta method},
+  author  = {Wied, Dominik and Kr{\"a}mer, Walter and Dehling, Herold},
+  journal = {Econometric Theory},
+  volume  = {28},
+  number  = {3},
+  pages   = {570--589},
+  year    = {2012}
+}
+
+%% ----- random-matrix / boundary-inference block (d2_theory_note TODO box;
+%% ----- used in §4 and Appendix A; all verified 2026-07-11) -----
+
+%% verified 2026-07-11 https://projecteuclid.org/journals/annals-of-statistics/volume-29/issue-2/On-the-distribution-of-the-largest-eigenvalue-in-principal-components/10.1214/aos/1009210544.full
+@article{johnstone2001distribution,
+  title   = {On the distribution of the largest eigenvalue in principal components analysis},
+  author  = {Johnstone, Iain M.},
+  journal = {Annals of Statistics},
+  volume  = {29},
+  number  = {2},
+  pages   = {295--327},
+  year    = {2001}
+}
+
+%% verified 2026-07-11 https://projecteuclid.org/journals/annals-of-probability/volume-33/issue-5/Phase-transition-of-the-largest-eigenvalue-for-nonnull-complex-sample/10.1214/009117905000000233.full
+@article{baik2005phase,
+  title   = {Phase transition of the largest eigenvalue for nonnull complex sample covariance matrices},
+  author  = {Baik, Jinho and Ben Arous, G{\'e}rard and P{\'e}ch{\'e}, Sandrine},
+  journal = {Annals of Probability},
+  volume  = {33},
+  number  = {5},
+  pages   = {1643--1697},
+  year    = {2005}
+}
+
+%% verified 2026-07-11 https://api.crossref.org/works/10.1016/j.jmva.2005.08.003
+@article{baik2006eigenvalues,
+  title   = {Eigenvalues of large sample covariance matrices of spiked population models},
+  author  = {Baik, Jinho and Silverstein, Jack W.},
+  journal = {Journal of Multivariate Analysis},
+  volume  = {97},
+  number  = {6},
+  pages   = {1382--1408},
+  year    = {2006}
+}
+
+%% verified 2026-07-11 https://www3.stat.sinica.edu.tw/statistica/j17n4/j17n418/j17n418.html
+@article{paul2007asymptotics,
+  title   = {Asymptotics of sample eigenstructure for a large dimensional spiked covariance model},
+  author  = {Paul, Debashis},
+  journal = {Statistica Sinica},
+  volume  = {17},
+  number  = {4},
+  pages   = {1617--1642},
+  year    = {2007}
+}
+
+%% OMH. ANCHOR DECISION (sec3_identification.tex:422): cite BOTH this 2013
+%% single-spike/sphericity paper AND the 2014 multispiked extension for the
+%% below-threshold contiguity results — with a 5-component PCA factor model
+%% the multispiked case is the directly applicable regime; keep the pair.
+%% verified 2026-07-11 https://projecteuclid.org/journals/annals-of-statistics/volume-41/issue-3/Asymptotic-power-of-sphericity-tests-for-high-dimensional-data/10.1214/13-AOS1100.full
+@article{onatski2013asymptotic,
+  title   = {Asymptotic power of sphericity tests for high-dimensional data},
+  author  = {Onatski, Alexei and Moreira, Marcelo J. and Hallin, Marc},
+  journal = {Annals of Statistics},
+  volume  = {41},
+  number  = {3},
+  pages   = {1204--1231},
+  year    = {2013}
+}
+
+%% Venue uncertainty RESOLVED: this IS the published JMLR version,
+%% 19(5):1-66, 2018 (arXiv:1608.00696 is the earlier 2016 preprint).
+%% Scope (for the Prop. 2 differentiation paragraph): residual & pairs
+%% bootstrap (+jackknife) for LINEAR MODELS in the proportional regime
+%% p/n -> kappa in (0,1). Key says 2019; published year is 2018 — key
+%% rename deferred to avoid breaking \cite (see header).
+%% corrected 2026-07-11 https://jmlr.org/papers/v19/17-006.html
+%% (title: JMLR hyphenates "High-dimensions"; added issue number 5)
+@article{elkaroui2019bootstrap,
+  title   = {Can we trust the bootstrap in high-dimensions? {T}he case of linear models},
+  author  = {El Karoui, Noureddine and Purdom, Elizabeth},
+  journal = {Journal of Machine Learning Research},
+  volume  = {19},
+  number  = {5},
+  pages   = {1--66},
+  year    = {2018}
+}
+
+%% Pages 399-405 confirmed publisher-side (RePEc's 399-406 is wrong).
+%% verified 2026-07-11 https://api.crossref.org/works/10.1111/1468-0262.00114
+@article{andrews2000inconsistency,
+  title   = {Inconsistency of the bootstrap when a parameter is on the boundary of the parameter space},
+  author  = {Andrews, Donald W. K.},
+  journal = {Econometrica},
+  volume  = {68},
+  number  = {2},
+  pages   = {399--405},
+  year    = {2000}
+}
+
+%% verified 2026-07-11 https://www.cambridge.org/core/journals/econometric-theory/article/abs/model-selection-and-inference-facts-and-fiction/EF3C7D79D5AFC4C6325345A3C8E26296
+@article{leeb2005model,
+  title   = {Model selection and inference: Facts and fiction},
+  author  = {Leeb, Hannes and P{\"o}tscher, Benedikt M.},
+  journal = {Econometric Theory},
+  volume  = {21},
+  number  = {1},
+  pages   = {21--59},
+  year    = {2005}
+}
+
+%% Andrews--Guggenberger. ANCHOR DECISION: THIS (2010 ET) paper develops
+%% the uniform asymptotic-size framework itself and is the better anchor
+%% for the uniformity-over-nuisance framing at sec3_identification.tex:429;
+%% the 2009 Econometrica paper applies it to build size-corrected remedies.
+%% verified 2026-07-11 https://api.crossref.org/works/10.1017/S0266466609100051
+@article{andrews2010asymptotic,
+  title   = {Asymptotic size and a problem with subsampling and with the {$m$} out of {$n$} bootstrap},
+  author  = {Andrews, Donald W. K. and Guggenberger, Patrik},
+  journal = {Econometric Theory},
+  volume  = {26},
+  number  = {2},
+  pages   = {426--468},
+  year    = {2010}
+}
+
+%% The AG paper §4 (sec3_identification) currently cites for the
+%% uniformity-over-nuisance framing — see anchor decision above: recommend
+%% adding/substituting andrews2010asymptotic for the framing claim; keep
+%% this one only if the size-correction remedy is the intended point.
+%% verified 2026-07-11 https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA7015
+@article{andrews2009hybrid,
+  title   = {Hybrid and size-corrected subsampling methods},
+  author  = {Andrews, Donald W. K. and Guggenberger, Patrik},
+  journal = {Econometrica},
+  volume  = {77},
+  number  = {3},
+  pages   = {721--762},
+  year    = {2009}
+}
+
+%% OMH multispiked extension, cited in §4 alongside onatski2013asymptotic
+%% (keep the pair — see anchor decision above). Volume/pages confirmed.
+%% verified 2026-07-11 https://projecteuclid.org/journals/annals-of-statistics/volume-42/issue-1/Signal-detection-in-high-dimension--The-multispiked-case/10.1214/13-AOS1181.full
+@article{onatski2014signal,
+  title   = {Signal detection in high dimension: The multispiked case},
+  author  = {Onatski, Alexei and Moreira, Marcelo J. and Hallin, Marc},
+  journal = {Annals of Statistics},
+  volume  = {42},
+  number  = {1},
+  pages   = {225--254},
+  year    = {2014}
+}
+
+%% Anchor question RESOLVED: the draft's usage (permutation nulls for
+%% factor/PCA structure) matches this solo Dobriban PERMUTATION paper
+%% (AoS 48(5), 2020) — entry content correct as-is. The KEY misleadingly
+%% points at Dobriban & Owen (2019, JRSS-B 81(1), 163-183, "Deterministic
+%% parallel analysis"), which is a DIFFERENT paper and NOT the anchor.
+%% Key rename to dobriban2020permutation deferred (see header). NOTE: no
+%% \cite{dobriban2019deterministic} found in any .tex body — confirm it is
+%% actually cited before submission.
+%% verified 2026-07-11 https://projecteuclid.org/journals/annals-of-statistics/volume-48/issue-5/Permutation-methods-for-factor-analysis-and-PCA/10.1214/19-AOS1907.full
+@article{dobriban2019deterministic,
+  title   = {Permutation methods for factor analysis and {PCA}},
+  author  = {Dobriban, Edgar},
+  journal = {Annals of Statistics},
+  volume  = {48},
+  number  = {5},
+  pages   = {2824--2847},
+  year    = {2020}
+}
+
+%% BDER Wishart-to-GOE TV threshold (n ~ d^3). Correct bibliographic anchor;
+%% matching Appendix A's quoted statements to their theorems is a content
+%% check to do against the paper text.
+%% verified 2026-07-11 https://doi.org/10.1002/rsa.20633
+@article{bubeck2016testing,
+  title   = {Testing for high-dimensional geometry in random graphs},
+  author  = {Bubeck, S{\'e}bastien and Ding, Jian and Eldan, Ronen and R{\'a}cz, Mikl{\'o}s Z.},
+  journal = {Random Structures \& Algorithms},
+  volume  = {49},
+  number  = {3},
+  pages   = {503--532},
+  year    = {2016}
+}
+
+%% verified 2026-07-11 https://doi.org/10.1007/s00220-007-0209-3
+@article{feral2007largest,
+  title   = {The largest eigenvalue of rank one deformation of large {W}igner matrices},
+  author  = {F{\'e}ral, Delphine and P{\'e}ch{\'e}, Sandrine},
+  journal = {Communications in Mathematical Physics},
+  volume  = {272},
+  number  = {1},
+  pages   = {185--228},
+  year    = {2007}
+}
+
+%% BGN finite-rank additive deformation.
+%% verified 2026-07-11 https://doi.org/10.1016/j.aim.2011.02.007
+@article{benaych2011eigenvalues,
+  title   = {The eigenvalues and eigenvectors of finite, low rank perturbations of large random matrices},
+  author  = {Benaych-Georges, Florent and Nadakuditi, Raj Rao},
+  journal = {Advances in Mathematics},
+  volume  = {227},
+  number  = {1},
+  pages   = {494--521},
+  year    = {2011}
+}
+
+%% Appended by sec6 (interpretation) writer; originally cited from memory.
+%% corrected 2026-07-11 https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5371952
+%% (title: full SSRN title differs from the remembered short form;
+%%  author 2: Ning Zhang, NOT Chao Zhang — Chao Zhang is a real Cucuringu
+%%  co-author on OTHER papers, e.g. zhang2025graph above, but not here.
+%%  Cross-checked on Cucuringu's UCLA homepage. Posted June 30, 2025.)
+@unpublished{lu2025tugleadlag,
+  title  = {A tug of war across the market: overnight-vs-daytime lead-lag networks and clustering-based portfolio strategies},
+  author = {Lu, Yutong and Zhang, Ning and Reinert, Gesine and Cucuringu, Mihai},
+  note   = {SSRN working paper 5371952, posted June 30, 2025},
+  year   = {2025}
+}
+
+%% ----- cost/deployment block (§8, sec7_deploy_conclusion) and §6 risk
+%% ----- fusion; all verified 2026-07-11 -----
+
+%% Trading-cost evidence (§8). Status checked: still an unpublished
+%% working paper as of July 2026 (April 7, 2018 version); SSRN 3229719
+%% confirmed. Not to be confused with "Trading Costs of Asset Pricing
+%% Anomalies" (SSRN 2294498).
+%% verified 2026-07-11 https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3229719
+@unpublished{frazzini2018trading,
+  title  = {Trading costs},
+  author = {Frazzini, Andrea and Israel, Ronen and Moskowitz, Tobias J.},
+  note   = {Working paper, AQR Capital Management; SSRN 3229719},
+  year   = {2018}
+}
+
+%% Anomaly trading costs (§8).
+%% verified 2026-07-11 https://api.crossref.org/works/10.1093/rfs/hhv063
+@article{novymarx2016taxonomy,
+  title   = {A taxonomy of anomalies and their trading costs},
+  author  = {Novy-Marx, Robert and Velikov, Mihail},
+  journal = {Review of Financial Studies},
+  volume  = {29},
+  number  = {1},
+  pages   = {104--147},
+  year    = {2016}
+}
+
+%% Dynamic trading with transaction costs (§8).
+%% verified 2026-07-11 https://api.crossref.org/works/10.1111/jofi.12080
+@article{garleanu2013dynamic,
+  title   = {Dynamic trading with predictable returns and transaction costs},
+  author  = {G{\^a}rleanu, Nicolae and Pedersen, Lasse Heje},
+  journal = {Journal of Finance},
+  volume  = {68},
+  number  = {6},
+  pages   = {2309--2340},
+  year    = {2013}
+}
+
+%% Volatility-managed portfolios (§6 risk-fusion discussion).
+%% verified 2026-07-11 https://api.crossref.org/works/10.1111/jofi.12513
+@article{moreira2017volatility,
+  title   = {Volatility-managed portfolios},
+  author  = {Moreira, Alan and Muir, Tyler},
+  journal = {Journal of Finance},
+  volume  = {72},
+  number  = {4},
+  pages   = {1611--1644},
+  year    = {2017}
+}
+
+%% Usage check PASSED: cited via \citep[cf.][]{kan2007optimal} at
+%% sections/sec5_diversity.tex:593, included in the final assembly — KEEP.
+%% verified 2026-07-11 https://api.crossref.org/works/10.1017/S0022109000004129
+@article{kan2007optimal,
+  title   = {Optimal portfolio choice with parameter uncertainty},
+  author  = {Kan, Raymond and Zhou, Guofu},
+  journal = {Journal of Financial and Quantitative Analysis},
+  volume  = {42},
+  number  = {3},
+  pages   = {621--656},
+  year    = {2007}
+}
+
+%% ----- Q-batch narrative-completion citations (added 2026-07-10 by the
+%% slot-filling pass; all verified 2026-07-11) -----
+
+%% Q1 liquidity mechanism framing (sec6). Substantive claim VERIFIED:
+%% VIX-predictability of liquidity-provision (reversal) returns is exactly
+%% Nagel's claim.
+%% verified 2026-07-11 https://academic.oup.com/rfs/article-abstract/25/7/2005/1602153
+@article{nagel2012evaporating,
+  title   = {Evaporating liquidity},
+  author  = {Nagel, Stefan},
+  journal = {Review of Financial Studies},
+  volume  = {25},
+  number  = {7},
+  pages   = {2005--2039},
+  year    = {2012}
+}
+
+%% Q1 event study (Aug-2007 unwind/rebound). The 2011 JFM transactions-data
+%% version (cited here) is correct; the 2007 JIM paper is a different,
+%% shorter survey-data study.
+%% verified 2026-07-11 https://www.sciencedirect.com/science/article/abs/pii/S1386418110000261
+@article{khandani2011what,
+  title   = {What happened to the quants in {August} 2007? {Evidence} from
+             factors and transactions data},
+  author  = {Khandani, Amir E. and Lo, Andrew W.},
+  journal = {Journal of Financial Markets},
+  volume  = {14},
+  number  = {1},
+  pages   = {1--46},
+  year    = {2011}
+}
+
+%% Q1 industrialization reading. Causal claim VERIFIED: NYSE 2003 staggered
+%% autoquote introduction as exogenous instrument; AT narrows spreads.
+%% verified 2026-07-11 https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1540-6261.2010.01624.x
+@article{hendershott2011algorithmic,
+  title   = {Does algorithmic trading improve liquidity?},
+  author  = {Hendershott, Terrence and Jones, Charles M. and
+             Menkveld, Albert J.},
+  journal = {Journal of Finance},
+  volume  = {66},
+  number  = {1},
+  pages   = {1--33},
+  year    = {2011}
+}
+
+%% Q1 spread estimator. Methodology claims VERIFIED (negative-value
+%% flooring and overnight-gap adjustments are in the paper). Keep pages
+%% 719-760 (publisher record; Corwin's own note says 719-759).
+%% verified 2026-07-11 https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1540-6261.2012.01729.x
+@article{corwin2012simple,
+  title   = {A simple way to estimate bid-ask spreads from daily high and
+             low prices},
+  author  = {Corwin, Shane A. and Schultz, Paul},
+  journal = {Journal of Finance},
+  volume  = {67},
+  number  = {2},
+  pages   = {719--760},
+  year    = {2012}
+}
+
+%% Q1 price-impact measure.
+%% verified 2026-07-11 https://ideas.repec.org/a/eee/finmar/v5y2002i1p31-56.html
+@article{amihud2002illiquidity,
+  title   = {Illiquidity and stock returns: cross-section and time-series
+             effects},
+  author  = {Amihud, Yakov},
+  journal = {Journal of Financial Markets},
+  volume  = {5},
+  number  = {1},
+  pages   = {31--56},
+  year    = {2002}
+}
+
+%% Q2 dispersion attribution. Bibliographic fields CONFIRMED, but
+%% ATTRIBUTION CAVEAT (draft-side): their tested finding is RD(+)->value
+%% premium and RD(-)->momentum premium; they make NO direct claim about
+%% short-term reversal profits. Phrase the draft's hypothesis as
+%% "motivated by"/"consistent with" their RD-momentum result, do not
+%% attribute the reversal-dispersion direction to them.
+%% verified 2026-07-11 https://www.cambridge.org/core/journals/journal-of-financial-and-quantitative-analysis/article/abs/crosssectional-return-dispersion-and-time-variation-in-value-and-momentum-premiums/77E2E3B09BDA5992C29BBCE2CEDC08FE
+@article{stivers2010cross,
+  title   = {Cross-sectional return dispersion and time variation in value
+             and momentum premiums},
+  author  = {Stivers, Chris and Sun, Licheng},
+  journal = {Journal of Financial and Quantitative Analysis},
+  volume  = {45},
+  number  = {4},
+  pages   = {987--1014},
+  year    = {2010}
+}
+
+%% Q3 breadth frontier foil (fundamental law, IR ~ IC*sqrt(BR)) — the
+%% sqrt(N) prediction the draft rejects is indeed this paper's core claim.
+%% verified 2026-07-11 https://api.crossref.org/works/10.3905/jpm.1989.409211
+@article{grinold1989fundamental,
+  title   = {The fundamental law of active management},
+  author  = {Grinold, Richard C.},
+  journal = {Journal of Portfolio Management},
+  volume  = {15},
+  number  = {3},
+  pages   = {30--37},
+  year    = {1989}
+}
+
+%% Q4/Q5 deployability frontier (overlapping-portfolio accounting).
+%% verified 2026-07-11 https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1540-6261.1993.tb04702.x
+@article{jegadeesh1993returns,
+  title   = {Returns to buying winners and selling losers: implications for
+             stock market efficiency},
+  author  = {Jegadeesh, Narasimhan and Titman, Sheridan},
+  journal = {Journal of Finance},
+  volume  = {48},
+  number  = {1},
+  pages   = {65--91},
+  year    = {1993}
+}
+
+
+
+
+
+
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.1046/j.1475-679X.2003.00122.x
+%% (key unchanged from the source refs.bib)
+@article{bhojraj2003whats,
+  title   = {What's my line? {A} comparison of industry classification schemes
+             for capital market research},
+  author  = {Bhojraj, Sanjeev and Lee, Charles M. C. and Oler, Derek K.},
+  journal = {Journal of Accounting Research},
+  volume  = {41},
+  number  = {5},
+  pages   = {745--774},
+  year    = {2003},
+  doi     = {10.1046/j.1475-679X.2003.00122.x}
+}
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.2469/faj.v63.n6.4927
+%% (key unchanged; note the source export's DOI was one digit off)
+@article{chan2007industry,
+  title   = {Industry classifications and return comovement},
+  author  = {Chan, Louis K. C. and Lakonishok, Josef and Swaminathan, Bhaskaran},
+  journal = {Financial Analysts Journal},
+  volume  = {63},
+  number  = {6},
+  pages   = {56--70},
+  year    = {2007},
+  doi     = {10.2469/faj.v63.n6.4927}
+}
+
+
+
+
+
+
+
+%% arXiv preprint; identifier confirmed from the source export
+%% (arXiv:2406.10695, q-fin.ST). No journal version located as of
+%% 2026-08-12 — re-check publication status at final pass.
+%% (legacy key: korniejczuk2024statisticalarbitragemultipairtrading)
+@misc{korniejczuk2024statistical,
+  title        = {Statistical arbitrage in multi-pair trading strategy based
+                  on graph clustering algorithms in {US} equities market},
+  author       = {Korniejczuk, Adam and {\'S}lepaczuk, Robert},
+  year         = {2024},
+  eprint       = {2406.10695},
+  archivePrefix = {arXiv},
+  primaryClass = {q-fin.ST},
+  note         = {arXiv:2406.10695}
+}
+
+
+%% =====================================================================
+%%  BLOCK C — entries ADDED for the risk-versus-return narrative
+%%  (residual reversal; naive diversification and combination;
+%%  replication / ML-versus-restrictions; factor-alignment;
+%%  Sharpe-ratio inference and multiple testing; partition comparison).
+%%  All fields verified against Crossref / the publisher record on
+%%  2026-08-12 unless the entry says otherwise.
+%% =====================================================================
+
+%% --- residual reversal: the economics of the within-group signal ------
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.1016/j.finmar.2012.10.005
+%% (note the DOI year is 2012; the article appears in the 2013 volume)
+@article{blitz2013residual,
+  title   = {Short-term residual reversal},
+  author  = {Blitz, David and Huij, Joop and Lansdorp, Simon and Verbeek, Marno},
+  journal = {Journal of Financial Markets},
+  volume  = {16},
+  number  = {3},
+  pages   = {477--504},
+  year    = {2013},
+  doi     = {10.1016/j.finmar.2012.10.005}
+}
+
+%% Working paper. Crossref's SSRN stub lists only the first author; the
+%% SSRN landing page gives both (Joop Huij, Simon Lansdorp), which is what
+%% is recorded here.
+%% verified 2026-08-12 https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2929306
+@unpublished{huij2017residual,
+  title  = {Residual momentum and reversal strategies revisited},
+  author = {Huij, Joop and Lansdorp, Simon},
+  note   = {SSRN working paper 2929306, posted March 8, 2017},
+  year   = {2017},
+  doi    = {10.2139/ssrn.2929306}
+}
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.1287/mnsc.2013.1766
+@article{da2014closer,
+  title   = {A closer look at the short-term return reversal},
+  author  = {Da, Zhi and Liu, Qianqiu and Schaumburg, Ernst},
+  journal = {Management Science},
+  volume  = {60},
+  number  = {3},
+  pages   = {658--674},
+  year    = {2014},
+  doi     = {10.1287/mnsc.2013.1766}
+}
+
+%% verified 2026-08-29 https://api.crossref.org/works/10.1017/S0022109014000404
+@article{hameed2015industries,
+  title   = {Industries and stock return reversals},
+  author  = {Hameed, Allaudeen and Mian, G. Mujtaba},
+  journal = {Journal of Financial and Quantitative Analysis},
+  volume  = {50},
+  number  = {1--2},
+  pages   = {89--117},
+  year    = {2015},
+  doi     = {10.1017/S0022109014000404}
+}
+
+%% --- diversification, combination and out-of-sample scepticism --------
+%% NOTE: demiguel2009optimal is already in BLOCK A above (verified
+%% 2026-07-11) and is NOT repeated here.
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.1093/rfs/hhm014
+%% (Crossref stamps the online-first year as 2007; the print issue is
+%%  July 2008, RFS 21(4), which is the conventional citation year)
+@article{welch2008comprehensive,
+  title   = {A comprehensive look at the empirical performance of equity
+             premium prediction},
+  author  = {Welch, Ivo and Goyal, Amit},
+  journal = {Review of Financial Studies},
+  volume  = {21},
+  number  = {4},
+  pages   = {1455--1508},
+  year    = {2008},
+  doi     = {10.1093/rfs/hhm014}
+}
+
+%% --- replication, ML and economic restrictions ------------------------
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.1111/jofi.13249
+@article{jensen2023replication,
+  title   = {Is there a replication crisis in finance?},
+  author  = {Jensen, Theis Ingerslev and Kelly, Bryan and Pedersen, Lasse Heje},
+  journal = {Journal of Finance},
+  volume  = {78},
+  number  = {5},
+  pages   = {2465--2518},
+  year    = {2023},
+  doi     = {10.1111/jofi.13249}
+}
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.1287/mnsc.2022.4449
+@article{avramov2023machine,
+  title   = {Machine learning vs.\ economic restrictions: evidence from stock
+             return predictability},
+  author  = {Avramov, Doron and Cheng, Si and Metzker, Lior},
+  journal = {Management Science},
+  volume  = {69},
+  number  = {5},
+  pages   = {2587--2619},
+  year    = {2023},
+  doi     = {10.1287/mnsc.2022.4449}
+}
+
+%% --- factor alignment: why the risk model and the signal disagree -----
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.3905/jpm.2008.709976
+@article{lee2008risk,
+  title   = {Do risk factors eat alphas?},
+  author  = {Lee, Jyh-Huei and Stefek, Dan},
+  journal = {Journal of Portfolio Management},
+  volume  = {34},
+  number  = {4},
+  pages   = {12--25},
+  year    = {2008},
+  doi     = {10.3905/jpm.2008.709976}
+}
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.3905/jpm.2012.38.2.029
+%% DISCREPANCY RESOLVED: the assignment brief gave pages 29--45; both
+%% Crossref and the publisher's table of contents for JPM 38(2) give
+%% 29--43, which is what is recorded here.
+@article{ceria2012factor,
+  title   = {Factor alignment problems and quantitative portfolio management},
+  author  = {Ceria, Sebasti{\'a}n and Saxena, Anureet and Stubbs, Robert A.},
+  journal = {Journal of Portfolio Management},
+  volume  = {38},
+  number  = {2},
+  pages   = {29--43},
+  year    = {2012},
+  doi     = {10.3905/jpm.2012.38.2.029}
+}
+
+%% --- inference on Sharpe ratios and on sets of strategies -------------
+%% NOTE: ledoit2008robust, bailey2014deflated, newey1987simple, white2000reality
+%% and hansen2005test are already in BLOCK A above and are NOT repeated here.
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.3982/ECTA5771
+%% (Crossref's author array for this record is empty; the byline
+%%  Hansen--Lunde--Nason is taken from the published article)
+@article{holm1979simple,
+  title   = {A simple sequentially rejective multiple test procedure},
+  author  = {Holm, Sture},
+  journal = {Scandinavian Journal of Statistics},
+  volume  = {6},
+  number  = {2},
+  pages   = {65--70},
+  year    = {1979}
+}
+
+@article{hansen2011mcs,
+  title   = {The model confidence set},
+  author  = {Hansen, Peter Reinhard and Lunde, Asger and Nason, James M.},
+  journal = {Econometrica},
+  volume  = {79},
+  number  = {2},
+  pages   = {453--497},
+  year    = {2011},
+  doi     = {10.3982/ECTA5771}
+}
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.2469/faj.v58.n4.2453
+@article{lo2002statistics,
+  title   = {The statistics of {S}harpe ratios},
+  author  = {Lo, Andrew W.},
+  journal = {Financial Analysts Journal},
+  volume  = {58},
+  number  = {4},
+  pages   = {36--52},
+  year    = {2002},
+  doi     = {10.2469/faj.v58.n4.2453}
+}
+
+%% --- comparing partitions (the ARI used throughout Section 5) ---------
+
+%% verified 2026-08-12 https://api.crossref.org/works/10.1007/BF01908075
+@article{hubert1985comparing,
+  title   = {Comparing partitions},
+  author  = {Hubert, Lawrence and Arabie, Phipps},
+  journal = {Journal of Classification},
+  volume  = {2},
+  number  = {1},
+  pages   = {193--218},
+  year    = {1985},
+  doi     = {10.1007/BF01908075}
+}
+
+%% --- no-arbitrage restrictions inside a learned model -----------------
+
+%% Requested by sections/02_literature.tex (Section 2.5).
+%% verified 2026-08-12 https://api.crossref.org/works/10.1287/mnsc.2023.4695
+@article{chen2024deep,
+  title   = {Deep learning in asset pricing},
+  author  = {Chen, Luyang and Pelger, Markus and Zhu, Jason},
+  journal = {Management Science},
+  volume  = {70},
+  number  = {2},
+  pages   = {714--750},
+  year    = {2024},
+  doi     = {10.1287/mnsc.2023.4695}
+}
+
+%% --- published version of the attention-factor paper ------------------
+
+%% Replaces the working-paper entry that BLOCK A carried under this key.
+%% verified 2026-08-12 https://api.crossref.org/works/10.1145/3768292.3770398
+@inproceedings{epstein2025attention,
+  title     = {Attention factors for statistical arbitrage},
+  author    = {Epstein, Elliot and Wang, Rose and Choi, Jaewon and Pelger, Markus},
+  booktitle = {Proceedings of the 6th ACM International Conference on AI in
+               Finance (ICAIF)},
+  pages     = {396--404},
+  year      = {2025},
+  doi       = {10.1145/3768292.3770398}
+}
+
+%% ################ BLOCK D — venue reframing round, 2026-08-14 ##########
+%%
+%% Six entries added for the JFEC reframing of Section 1. Every one is on the
+%% approved list in VENUE/references_approved.md AND was re-resolved
+%% independently on 2026-08-14 against the URL stamped on the entry. No entry
+%% here was taken on the authority of another file.
+%%
+%% If a parallel agent adds any of these under a different key, keep ONE key
+%% and repoint the citations; do not leave two entries for one work.
+
+%% The estimand: community detection run on a CORRELATION matrix is its own
+%% problem. Cited in §1 for that claim only. NOT for a sectorial reading —
+%% the paper reports communities "irreducible to a standard, sectorial
+%% taxonomy", which is a different and weaker statement.
+%% Article number 021006; NO page range exists. Exactly two authors.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1103/physrevx.5.021006
+@article{macmahon2015community,
+  title   = {Community detection for correlation matrices},
+  author  = {MacMahon, Mel and Garlaschelli, Diego},
+  journal = {Physical Review X},
+  volume  = {5},
+  number  = {2},
+  pages   = {021006},
+  year    = {2015},
+  doi     = {10.1103/PhysRevX.5.021006}
+}
+
+%% Cited in §1 as the CONTRAST that scopes our claim: the literature bounds
+%% misclustering against a stochastic blockmodel; we posit no such model and
+%% report no recovery result. Do not cite it as though we used the bound.
+%% Crossref carries NO page range for this DOI; 1878--1915 is from Project
+%% Euclid, which is also where the August 2011 issue date comes from.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1214/11-aos887
+%% and https://projecteuclid.org/journals/annals-of-statistics/volume-39/issue-4/Spectral-clustering-and-the-high-dimensional-stochastic-blockmodel/10.1214/11-AOS887.full
+@article{rohe2011spectral,
+  title   = {Spectral clustering and the high-dimensional stochastic blockmodel},
+  author  = {Rohe, Karl and Chatterjee, Sourav and Yu, Bin},
+  journal = {The Annals of Statistics},
+  volume  = {39},
+  number  = {4},
+  pages   = {1878--1915},
+  year    = {2011},
+  doi     = {10.1214/11-AOS887}
+}
+
+%% The venue's own signed-graph-Laplacian equity paper — the interface for the
+%% SPONGE / SSSNET arms. TWO THINGS TO GET RIGHT: (a) the premium is NEGATIVE
+%% in the stated direction ("firms with higher sensitivity to DNI exhibit lower
+%% expected returns"); (b) they build a FACTOR, not a partition — do not
+%% describe them as clustering. Cited ONCE, in §1.
+%% verified 2026-08-14 https://academic.oup.com/jfec/article/22/5/1616/7663022
+@article{uddin2024network,
+  title   = {The network factor of equity pricing: A signed graph {L}aplacian
+             approach},
+  author  = {Uddin, Ajim and Tao, Xinyuan and Yu, Dantong},
+  journal = {Journal of Financial Econometrics},
+  volume  = {22},
+  number  = {5},
+  pages   = {1616--1655},
+  year    = {2024},
+  doi     = {10.1093/jjfinec/nbae010}
+}
+
+%% Cited in §1 for the design contrast ONLY: in the group-factor literature the
+%% groups are PREDETERMINED and the question is what they share. They do not
+%% estimate a partition — do not write that they do.
+%% eLocator nbae020, no page range. Year is the issue year, 2025.
+%% verified 2026-08-14 https://academic.oup.com/jfec/article/23/2/nbae020/7756207
+@article{goncalves2025bootstrap,
+  title   = {Bootstrap inference for group factor models},
+  author  = {Gon{\c{c}}alves, S{\'{i}}lvia and Koh, Julia and Perron, Benoit},
+  journal = {Journal of Financial Econometrics},
+  volume  = {23},
+  number  = {2},
+  pages   = {nbae020},
+  year    = {2025},
+  doi     = {10.1093/jjfinec/nbae020}
+}
+
+%% Cited in §1, Result B: estimation risk in the SAMPLING DISTRIBUTION of a
+%% Sharpe ratio reorders a performance ranking. We do NOT apply his adjustment,
+%% and the sentence citing him says so.
+%% YEAR TRAP: Crossref carries no published-print and `issued` reads 2008-11-07;
+%% the OUP issue line (Volume 7, Issue 2, Spring 2009) is the authority.
+%% verified 2026-08-14 https://academic.oup.com/jfec/article-abstract/7/2/152/856339
+@article{bao2009estimation,
+  title   = {Estimation risk-adjusted {S}harpe ratio and fund performance
+             ranking under a general return distribution},
+  author  = {Bao, Yong},
+  journal = {Journal of Financial Econometrics},
+  volume  = {7},
+  number  = {2},
+  pages   = {152--173},
+  year    = {2009},
+  doi     = {10.1093/jjfinec/nbn022}
+}
+
+%% Cited in §1 for the register, not for a result: a portfolio built from an
+%% estimate, read for what it says about the estimate. They construct
+%% phi-portfolios from estimated alpha and compare their Sharpe ratios to
+%% mean-variance and S&P portfolios. eLocator nbae029, no page range.
+%% NOTE: distinct from pesaran2024testing (Pesaran--Yamagata, JFEC 22(2)).
+%% verified 2026-08-14 https://academic.oup.com/jfec/article/23/3/nbae029/7914442
+@article{pesaran2025identifying,
+  title   = {Identifying and exploiting alpha in linear asset pricing models
+             with strong, semi-strong, and latent factors},
+  author  = {Pesaran, M. Hashem and Smith, Ron P.},
+  journal = {Journal of Financial Econometrics},
+  volume  = {23},
+  number  = {3},
+  pages   = {nbae029},
+  year    = {2025},
+  doi     = {10.1093/jjfinec/nbae029}
+}
+
+%% ---- BLOCK D, second tranche: Section 2 (networks/connectedness and the ----
+%% ---- venue's performance-inference literature), 2026-08-14 ---------------
+%%
+%% Nine entries. Every one is on the approved list in
+%% VENUE/references_approved.md AND was re-resolved independently on
+%% 2026-08-14 against the URL stamped on the entry. Nothing here was taken on
+%% the authority of another file, including references_approved.md itself.
+%% uddin2024network, macmahon2015community and bao2009estimation were already
+%% added above by the Section 1 pass and are NOT duplicated here.
+
+%% The connectedness canon, cited AS A PAIR in Section 2.1 and nowhere else:
+%% the strand estimates a weighted, usually directed ADJACENCY MATRIX; we
+%% estimate a PARTITION. Citing the JFEC equity instance without the method
+%% paper would read as venue-shopping, and vice versa.
+%% NOTE the two printed spellings of the second author: Y{\i}lmaz (dotless i)
+%% on the 2014 Journal of Econometrics record, Yilmaz on the JFEC record.
+%% Each is reproduced as printed. A *reprint* of the 2014 article exists at
+%% J. Econometrics 234 (2023) 70--90, doi 10.1016/j.jeconom.2023.03.003 --
+%% cite the 2014 original; do not let a reference manager substitute it.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1016/j.jeconom.2014.04.012
+@article{diebold2014network,
+  title   = {On the network topology of variance decompositions: Measuring the
+             connectedness of financial firms},
+  author  = {Diebold, Francis X. and Y{\i}lmaz, Kamil},
+  journal = {Journal of Econometrics},
+  volume  = {182},
+  number  = {1},
+  pages   = {119--134},
+  year    = {2014},
+  doi     = {10.1016/j.jeconom.2014.04.012}
+}
+
+%% YEAR TRAP: this is 2016, not 2015. Crossref reports `issued` 2015-11-20
+%% (advance access), carries NO volume and NO issue at all, and puts the
+%% eLocator nbv021 in the `page` field. Every field except authors and title
+%% is taken from the OUP issue table of contents (issue header
+%% "Volume 14, Issue 1, Winter 2016, Pages 1-226"; entry pp. 81-127).
+%% verified 2026-08-14 https://academic.oup.com/jfec/issue/14/1
+@article{diebold2016transatlantic,
+  title   = {Trans-{A}tlantic equity volatility connectedness: {U}.{S}. and
+             {E}uropean financial institutions, 2004--2014},
+  author  = {Diebold, Francis X. and Yilmaz, Kamil},
+  journal = {Journal of Financial Econometrics},
+  volume  = {14},
+  number  = {1},
+  pages   = {81--127},
+  year    = {2016},
+  doi     = {10.1093/jjfinec/nbv021}
+}
+
+%% ONE parenthetical only, at the sentence that names community detection as a
+%% literature. It supports nothing about any specific algorithm. Single author.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1016/j.physrep.2009.11.002
+@article{fortunato2010community,
+  title   = {Community detection in graphs},
+  author  = {Fortunato, Santo},
+  journal = {Physics Reports},
+  volume  = {486},
+  number  = {3--5},
+  pages   = {75--174},
+  year    = {2010},
+  doi     = {10.1016/j.physrep.2009.11.002}
+}
+
+%% The nearest result to ours in another asset class: they estimate a latent
+%% COMMUNITY STRUCTURE on a financial network by covariate-assisted spectral
+%% clustering and report better risk diversification ACROSS communities. Used
+%% for that, and for the contrast that follows it -- one community estimate,
+%% no size-matched information-free floor.
+%% YEAR: 2024 (issue); Crossref `issued` is 2022-12-12.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1080/07350015.2022.2146695
+@article{guo2024timevarying,
+  title   = {A time-varying network for cryptocurrencies},
+  author  = {Guo, Li and H{\"a}rdle, Wolfgang Karl and Tao, Yubo},
+  journal = {Journal of Business \& Economic Statistics},
+  volume  = {42},
+  number  = {2},
+  pages   = {437--456},
+  year    = {2024},
+  doi     = {10.1080/07350015.2022.2146695}
+}
+
+%% The modern high-dimensional entry in the Sharpe-inference chain of §2.3,
+%% which otherwise stops in 2014. THE SENTENCE CITING IT STATES THE
+%% DIFFERENCE: our ratios are computed on one book's realised daily payoff,
+%% not on a frontier estimated over a large asset set, so their theory does
+%% not cover our statistic.
+%% Elsevier's article page 403s to automated fetches; the Crossref
+%% registration record is the authority. Two ScienceDirect PIIs circulate for
+%% this DOI -- cite the DOI, not a PII. Printed title lower-cases "analysis".
+%% verified 2026-08-14 https://api.crossref.org/works/10.1016/j.jeconom.2022.03.009
+@article{caner2023sharpe,
+  title   = {{S}harpe ratio analysis in high dimensions: Residual-based
+             nodewise regression in factor models},
+  author  = {Caner, Mehmet and Medeiros, Marcelo and Vasconcelos, Gabriel F. R.},
+  journal = {Journal of Econometrics},
+  volume  = {235},
+  number  = {2},
+  pages   = {393--417},
+  year    = {2023},
+  doi     = {10.1016/j.jeconom.2022.03.009}
+}
+
+%% Data snooping over TRADING RULES, with the grouping held implicit -- the
+%% contrast the §2.3 gap paragraph draws against snooping over the grouping.
+%% ⚠ Crossref's deposit for this DOI lists ONE author ("Hsu, P.-H."): Kuan is
+%% missing from it. The byline here is from the OUP issue table of contents.
+%% verified 2026-08-14 https://academic.oup.com/jfec/issue/3/4
+@article{hsu2005reexamining,
+  title   = {Reexamining the profitability of technical analysis with data
+             snooping checks},
+  author  = {Hsu, Po-Hsuan and Kuan, Chung-Ming},
+  journal = {Journal of Financial Econometrics},
+  volume  = {3},
+  number  = {4},
+  pages   = {606--628},
+  year    = {2005},
+  doi     = {10.1093/jjfinec/nbi026}
+}
+
+%% The stepwise extensions, which identify WHICH candidates survive rather
+%% than only whether any does. The abstract names "their stepwise extensions
+%% by Romano and Wolf (2005) and Hsu, Hsu, and Kuan (2010)", which is what
+%% licenses the word "stepwise" in the citing sentence.
+%% Crossref abbreviates the authors to initials; full forenames are from OUP.
+%% verified 2026-08-14 https://academic.oup.com/jfec/article-lookup/doi/10.1093/jjfinec/nbq032
+%% and https://academic.oup.com/jfec/article-abstract/9/3/550/852113
+@article{neuhierl2011data,
+  title   = {Data snooping and market-timing rule performance},
+  author  = {Neuhierl, Andreas and Schlusche, Bernd},
+  journal = {Journal of Financial Econometrics},
+  volume  = {9},
+  number  = {3},
+  pages   = {550--587},
+  year    = {2011},
+  doi     = {10.1093/jjfinec/nbq032}
+}
+
+%% Dependent multiplicity WITHOUT modelling the dependence and without
+%% resampling -- the configuration our nineteen arms are in.
+%% ❗ WE DID NOT RUN IT. The citing sentence says the model confidence set is
+%% the resampling counterpart and is what this paper uses. Do not write
+%% anything that implies StepC was applied here.
+%% Printed title begins "A Stepwise..."; OUP's search-result string drops the
+%% leading article. eLocator nbaf020, no page range.
+%% verified 2026-08-14 https://academic.oup.com/jfec/article/23/5/nbaf020/8325512
+@article{bouamara2025stepwise,
+  title   = {A stepwise {C}auchy combination test for multiple testing problems
+             with financial applications},
+  author  = {Bouamara, Nabil and Laurent, S{\'e}bastien and Shi, Shuping},
+  journal = {Journal of Financial Econometrics},
+  volume  = {23},
+  number  = {5},
+  pages   = {nbaf020},
+  year    = {2025},
+  doi     = {10.1093/jjfinec/nbaf020}
+}
+
+%% Our own argument one level down: a network summary statistic reported
+%% without the sampling variability of the estimate behind it is distorted.
+%% The distortion is POSITIVE (upward), and it arises when the fitted model's
+%% parameters enter "without regard to their statistical significance" or
+%% without regularisation -- say it that way, not as "ignoring sampling error".
+%% eLocator nbaf021, no page range. Volume 24 is 2026.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1093/jjfinec/nbaf021
+@article{bonaccolto2026spillover,
+  title   = {(Quantile) spillover indexes: Simulation-based evidence,
+             confidence intervals and a decomposition},
+  author  = {Bonaccolto, Giovanni and Caporin, Massimiliano and
+             Shahzad, Syed Jawad Hussain},
+  journal = {Journal of Financial Econometrics},
+  volume  = {24},
+  number  = {1},
+  pages   = {nbaf021},
+  year    = {2026},
+  doi     = {10.1093/jjfinec/nbaf021}
+}
+
+%% ---- BLOCK D, third tranche: Sections 3-10 (the design, the results, ------
+%% ---- the factor comparison and the conclusion), 2026-08-14 ---------------
+%%
+%% Thirteen entries. Every one is on the approved list in
+%% VENUE/references_approved.md AND was re-resolved independently on
+%% 2026-08-14 against the URL stamped on the entry; nothing here entered on
+%% the authority of another file, references_approved.md included. Entries
+%% already added by the Section 1 and Section 2 passes are NOT duplicated.
+%% Two further keys used by this pass, pesaran2024testing and
+%% fortin2025latent, were already in this file uncited; both were re-resolved
+%% on 2026-08-14 (nbad002, nbad024) and their metadata confirmed, so they were
+%% left as they stand.
+
+%% The number of groups is a studied selection problem with a comparative
+%% literature behind it. Cited ONCE, in §3.4 at the effective-K paragraph.
+%% Nothing about which procedure is right is claimed from it.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1007/BF02294245
+@article{milligan1985examination,
+  title   = {An examination of procedures for determining the number of
+             clusters in a data set},
+  author  = {Milligan, Glenn W. and Cooper, Martha C.},
+  journal = {Psychometrika},
+  volume  = {50},
+  number  = {2},
+  pages   = {159--179},
+  year    = {1985},
+  doi     = {10.1007/BF02294245}
+}
+
+%% The one JFEC paper that partitions a cross-section, and its subject is
+%% partition STABILITY: persistence is imposed by shrinking each observation
+%% toward the centre of its previous assignment, to suppress "flickering".
+%% Cited in §3.4 (daily re-estimation) and §5.4 (seed and window instability).
+%% OUP prints the first author as "Igor Custodio João"; Crossref agrees here.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1093/jjfinec/nbac038
+@article{custodio2024dynamic,
+  title   = {Dynamic nonparametric clustering of multivariate panel data},
+  author  = {Custodio Jo{\~a}o, Igor and Schaumburg, Julia and Lucas, Andr{\'e}
+             and Schwaab, Bernd},
+  journal = {Journal of Financial Econometrics},
+  volume  = {22},
+  number  = {2},
+  pages   = {335--374},
+  year    = {2024},
+  doi     = {10.1093/jjfinec/nbac038}
+}
+
+%% The adjusted Rand index is one choice of partition distance among several,
+%% with an information-theoretic alternative of different properties. Cited in
+%% §5.3 where every partition distance in the paper is an ARI. We do NOT
+%% report the variation of information and must not imply that we do.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1016/j.jmva.2006.11.013
+@article{meila2007comparing,
+  title   = {Comparing clusterings---an information based distance},
+  author  = {Meil{\u a}, Marina},
+  journal = {Journal of Multivariate Analysis},
+  volume  = {98},
+  number  = {5},
+  pages   = {873--895},
+  year    = {2007},
+  doi     = {10.1016/j.jmva.2006.11.013}
+}
+
+%% Estimating a partition of a panel by a k-means objective is a recognised
+%% econometric problem with its own consistency theory, and the estimation
+%% error in the partition propagates to what is computed afterwards. Cited in
+%% §5. We prove no consistency result of our own and must not imply one.
+%% verified 2026-08-14 https://api.crossref.org/works/10.3982/ECTA11319
+@article{bonhomme2015grouped,
+  title   = {Grouped patterns of heterogeneity in panel data},
+  author  = {Bonhomme, St{\'e}phane and Manresa, Elena},
+  journal = {Econometrica},
+  volume  = {83},
+  number  = {3},
+  pages   = {1147--1184},
+  year    = {2015},
+  doi     = {10.3982/ECTA11319}
+}
+
+%% Our design in miniature, in this venue, with a second-moment payoff: a
+%% data-driven block partition of the covariance matrix improves a downstream
+%% portfolio decision, with the number of blocks chosen adaptively.
+%% ⚠ SINGLE-AUTHORED. Never "De Nard et al."
+%% ⚠ Year is 2022 (Fall 2022 issue); Crossref `issued` reads 2020 (advance).
+%% verified 2026-08-14 https://api.crossref.org/works/10.1093/jjfinec/nbaa020
+@article{denard2022oops,
+  title   = {Oops! {I} shrunk the sample covariance matrix again: {B}lockbuster
+             meets shrinkage},
+  author  = {De Nard, Gianluca},
+  journal = {Journal of Financial Econometrics},
+  volume  = {20},
+  number  = {4},
+  pages   = {569--611},
+  year    = {2022},
+  doi     = {10.1093/jjfinec/nbaa020}
+}
+
+%% Sectoral restrictions imposed on the RESIDUAL covariance matrix, evaluated
+%% by minimum-variance portfolios. This is the paper our contribution is
+%% stated against in §4: that literature compares structured against
+%% unstructured, never holding the structure's size and role fixed while
+%% varying only which structure, and never against a random partition.
+%% ⚠ OUP prints "Diego S de Brito", not "Brito". ⚠ Year is 2024, not 2023.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1093/jjfinec/nbad013
+@article{alves2024forecasting,
+  title   = {Forecasting large realized covariance matrices: The benefits of
+             factor models and shrinkage},
+  author  = {Alves, Rafael P. and de Brito, Diego S. and Medeiros, Marcelo C.
+             and Ribeiro, Ruy M.},
+  journal = {Journal of Financial Econometrics},
+  volume  = {22},
+  number  = {3},
+  pages   = {696--742},
+  year    = {2024},
+  doi     = {10.1093/jjfinec/nbad013}
+}
+
+%% The same mechanism as our headline, documented at this venue: feeding a
+%% covariance estimate into a cross-sectional sort raises the power of the
+%% anomaly test with no new signal -- the construction changes the
+%% denominator, not the numerator. Cited in §4.
+%% ⚠ Crossref carries NO volume, issue or pages for this DOI; every field
+%% below comes from the OUP issue line (Volume 17, Issue 4, Fall 2019).
+%% ⚠ This article prints "Olivier Ledoit", not the "Oliver" typography this
+%% file documents for the 2008 Journal of Empirical Finance paper.
+%% verified 2026-08-14 https://academic.oup.com/jfec/article-abstract/17/4/645/5056864
+@article{ledoit2019efficient,
+  title   = {Efficient sorting: A more powerful test for cross-sectional
+             anomalies},
+  author  = {Ledoit, Olivier and Wolf, Michael and Zhao, Zhao},
+  journal = {Journal of Financial Econometrics},
+  volume  = {17},
+  number  = {4},
+  pages   = {645--686},
+  year    = {2019},
+  doi     = {10.1093/jjfinec/nby015}
+}
+
+%% The quantitative warrant for the second layer: a correlation between
+%% forecast and realised abnormal returns "as low as 0.032" already makes an
+%% analyst valuable. Cited in §6.1. Their 0.032 is THEIR number about THEIR
+%% setting -- it is not a measurement of our head and must never be printed
+%% as one. Full forenames from the OUP page; Crossref abbreviates to initials.
+%% verified 2026-08-14 https://academic.oup.com/jfec/article-lookup/doi/10.1093/jjfinec/nbq018
+@article{kane2010forecast,
+  title   = {Forecast precision and portfolio performance},
+  author  = {Kane, Alex and Kim, Tae-Hwan and White, Halbert},
+  journal = {Journal of Financial Econometrics},
+  volume  = {8},
+  number  = {3},
+  pages   = {265--304},
+  year    = {2010},
+  doi     = {10.1093/jjfinec/nbq018}
+}
+
+%% The in-venue structural precedent for the SHAPE of §7: estimate a graph on
+%% the cross-section, then evaluate the portfolio it implies.
+%% ⚠ They decompose the PRECISION MATRIX into low-rank (factor) and sparse
+%% (graph) components. Do NOT write "they estimate a graph on the residuals".
+%% ⚠ Year is 2024, not 2023.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1093/jjfinec/nbad011
+@article{lee2024optimal,
+  title   = {Optimal portfolio using factor graphical lasso},
+  author  = {Lee, Tae-Hwy and Seregina, Ekaterina},
+  journal = {Journal of Financial Econometrics},
+  volume  = {22},
+  number  = {3},
+  pages   = {670--695},
+  year    = {2024},
+  doi     = {10.1093/jjfinec/nbad011}
+}
+
+%% Factor strength defined by the growth rate of the sum of squared betas:
+%% strong factors grow at the rate of the number of assets, semi-strong ones
+%% more slowly. Cited in §7.1 for the one sentence it buys -- that a K-group
+%% partition of N names yields K factors carrying N/K unit betas each, so the
+%% cluster factors are STRONG on their scale.
+%% ❗ Do not overclaim the reverse: the partition factors are not weak, and
+%% no argument here may lean on their weakness.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1093/jjfinec/nbac028
+@article{connor2024semistrong,
+  title   = {Semi-strong factors in asset returns},
+  author  = {Connor, Gregory and Korajczyk, Robert A.},
+  journal = {Journal of Financial Econometrics},
+  volume  = {22},
+  number  = {1},
+  pages   = {70--93},
+  year    = {2024},
+  doi     = {10.1093/jjfinec/nbac028}
+}
+
+%% Finite-sample, identification-robust inference on risk premia. Cited in
+%% §7.4 beside anderson1949estimation, where the paper says which test it did
+%% not run. It improves an existing concession; it does not open a new one.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1093/jjfinec/nbac010
+@article{kleibergen2023identification,
+  title   = {Identification robust testing of risk premia in finite samples},
+  author  = {Kleibergen, Frank and Kong, Lingwei and Zhan, Zhaoguo},
+  journal = {Journal of Financial Econometrics},
+  volume  = {21},
+  number  = {2},
+  pages   = {263--297},
+  year    = {2023},
+  doi     = {10.1093/jjfinec/nbac010}
+}
+
+%% Choosing the rolling-window length for a factor extraction refitted through
+%% time, as an estimation problem in its own right. Cited AS A PAIR with
+%% kelly2015threepass in §5.3 and nowhere else: we VARY the window (the 21-
+%% and 60-day arms) and do not SELECT it, and the citing sentence concedes
+%% exactly that. Citing the JFEC extension without the original filter it
+%% extends would read as venue-management.
+%% ⚠ eLocator nbag014, no page range. The OUP page also shows a PDF
+%% pagination "1--29"; that is NOT an issue page range and must not be used.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1093/jjfinec/nbag014
+@article{liu2026threepass,
+  title   = {Three-pass regression filter model with time-varying coefficients:
+             A rolling window selection approach},
+  author  = {Liu, Wei and Zhou, Qiankun},
+  journal = {Journal of Financial Econometrics},
+  volume  = {24},
+  number  = {4},
+  pages   = {nbag014},
+  year    = {2026},
+  doi     = {10.1093/jjfinec/nbag014}
+}
+
+%% The three-pass regression filter itself. Required if liu2026threepass is
+%% cited; cited nowhere else. Note refs.bib already carries
+%% kelly2019characteristics, a different paper with the same first author.
+%% verified 2026-08-14 https://api.crossref.org/works/10.1016/j.jeconom.2015.02.011
+@article{kelly2015threepass,
+  title   = {The three-pass regression filter: A new approach to forecasting
+             using many predictors},
+  author  = {Kelly, Bryan and Pruitt, Seth},
+  journal = {Journal of Econometrics},
+  volume  = {186},
+  number  = {2},
+  pages   = {294--316},
+  year    = {2015},
+  doi     = {10.1016/j.jeconom.2015.02.011}
+}
+
+%% Verified 2026-08-14 against
+%%   https://academic.oup.com/jfec/article/22/2/492/7081291  (article page: title,
+%%   authors, volume 22 issue 2, pp. 492-530)
+%%   https://api.crossref.org/works/10.1093/jjfinec/nbad005  (full four-author list)
+%% NOTE the year: Crossref reports 2023 (online first); the printed ISSUE year is 2024.
+@article{zhang2024volatility,
+  title   = {Volatility Forecasting with Machine Learning and Intraday Commonality},
+  author  = {Zhang, Chao and Zhang, Yihuang and Cucuringu, Mihai and Qian, Zhongmin},
+  journal = {Journal of Financial Econometrics},
+  volume  = {22},
+  number  = {2},
+  pages   = {492--530},
+  year    = {2024},
+  doi     = {10.1093/jjfinec/nbad005},
+}
+
+
+%%=====================================================================
+%%  Entries carried over from the Overleaf bibliography, for the
+%%  author-written literature review in sections/02_literature.tex.
+%%  Copied verbatim 2026-08-14; metadata NOT independently re-verified.
+%%=====================================================================
+
+@article{10.1093/rfs/hhaa009,
+    author = {Gu, Shihao and Kelly, Bryan and Xiu, Dacheng},
+    title = {Empirical Asset Pricing via Machine Learning},
+    journal = {Review of Financial Studies},
+    volume = {33},
+    number = {5},
+    pages = {2223-2273},
+    year = {2020},
+    month = {05},
+    abstract = {We perform a comparative analysis of machine learning methods for the canonical problem of empirical asset pricing: measuring asset risk premiums. We demonstrate large economic gains to investors using machine learning forecasts, in some cases doubling the performance of leading regression-based strategies from the literature. We identify the best-performing methods (trees and neural networks) and trace their predictive gains to allowing nonlinear predictor interactions missed by other methods. All methods agree on the same set of dominant predictive signals, a set that includes variations on momentum, liquidity, and volatility.Authors have furnished an Internet Appendix, which is available on the Oxford University Press Web site next to the link to the final published paper online.},
+    issn = {0893-9454},
+    doi = {10.1093/rfs/hhaa009},
+    eprint = {https://academic.oup.com/rfs/article-pdf/33/5/2223/33209812/hhaa009.pdf},
+}
+
+@article{FAMA1997153,
+title = {Industry costs of equity},
+journal = {Journal of Financial Economics},
+volume = {43},
+number = {2},
+pages = {153-193},
+year = {1997},
+issn = {0304-405X},
+doi = {10.1016/S0304-405X(96)00896-3},
+url = {https://www.sciencedirect.com/science/article/pii/S0304405X96008963},
+author = {Eugene F. Fama and Kenneth R. French},
+keywords = {Cost of equity, Asset pricing models, Risk loadings},
+abstract = {Estimates of the cost of equity for industries are imprecise. Standard errors of more than 3.0% per year are typical for both the CAPM and the three-factor model of Fama and French (1993). These large standard errors are the result of(i) uncertainty about true factor risk premiums and (ii) imp ecise estimates of the loadings of industries on the risk factors. Estimates of the cost of equity for firms and projects are surely even less precise.}
+}
+
+@article{FISCHER2018654,
+title = {Deep learning with long short-term memory networks for financial market predictions},
+journal = {European Journal of Operational Research},
+volume = {270},
+number = {2},
+pages = {654-669},
+year = {2018},
+issn = {0377-2217},
+doi = {10.1016/j.ejor.2017.11.054},
+url = {https://www.sciencedirect.com/science/article/pii/S0377221717310652},
+author = {Thomas Fischer and Christopher Krauss},
+keywords = {Finance, Statistical arbitrage, LSTM, Machine learning, Deep learning},
+abstract = {Long short-term memory (LSTM) networks are a state-of-the-art technique for sequence learning. They are less commonly applied to financial time series predictions, yet inherently suitable for this domain. We deploy LSTM networks for predicting out-of-sample directional movements for the constituent stocks of the S&P 500 from 1992 until 2015. With daily returns of 0.46 percent and a Sharpe ratio of 5.8 prior to transaction costs, we find LSTM networks to outperform memory-free classification methods, i.e., a random forest (RAF), a deep neural net (DNN), and a logistic regression classifier (LOG). The outperformance relative to the general market is very clear from 1992 to 2009, but as of 2010, excess returns seem to have been arbitraged away with LSTM profitability fluctuating around zero after transaction costs. We further unveil sources of profitability, thereby shedding light into the black box of artificial neural networks. Specifically, we find one common pattern among the stocks selected for trading – they exhibit high volatility and a short-term reversal return profile. Leveraging these findings, we are able to formalize a rules-based short-term reversal strategy that yields 0.23 percent prior to transaction costs. Further regression analysis unveils low exposure of the LSTM returns to common sources of systematic risk – also compared to the three benchmark models.}
+}
+
+@article{Gatevetal2006,
+    author = {Gatev, Evan and Goetzmann, William N. and Rouwenhorst, K. Geert},
+    title = {Pairs Trading: Performance of a Relative-Value Arbitrage Rule},
+    journal = {Review of Financial Studies},
+    volume = {19},
+    number = {3},
+    pages = {797-827},
+    year = {2006},
+    month = {10},
+    abstract = {We test a Wall Street investment strategy, “pairs trading,” with daily data over 1962–2002. Stocks are matched into pairs with minimum distance between normalized historical prices. A simple trading rule yields average annualized excess returns of up to 11\% for self-financing portfolios of pairs. The profits typically exceed conservative transaction-cost estimates. Bootstrap results suggest that the “pairs” effect differs from previously documented reversal profits. Robustness of the excess returns indicates that pairs trading profits from temporary mispricing of close substitutes. We link the profitability to the presence of a common factor in the returns, different from conventional risk measures.},
+    issn = {0893-9454},
+    doi = {10.1093/rfs/hhj020},
+    eprint = {https://academic.oup.com/rfs/article-pdf/19/3/797/24421685/hhj020.pdf},
+}
+
+@article{HAN2023929,
+title = {Pairs trading via unsupervised learning},
+journal = {European Journal of Operational Research},
+volume = {307},
+number = {2},
+pages = {929-947},
+year = {2023},
+issn = {0377-2217},
+doi = {10.1016/j.ejor.2022.09.041},
+url = {https://www.sciencedirect.com/science/article/pii/S037722172200769X},
+author = {Chulwoo Han and Zhaodong He and Alenson Jun Wei Toh},
+keywords = {Finance, Unsupervised learning, Pairs trading, Clustering},
+abstract = {This paper develops a pairs trading strategy via unsupervised learning. Unlike conventional pairs trading strategies that identify pairs based on return time series, we identify pairs by incorporating firm characteristics as well as price information. Firm characteristics are revealed to provide important information for pair identification and significantly improve the performance of the pairs trading strategy. Applied to the US stock market from January 1980 to December 2020, the long-short portfolio constructed via the agglomerative clustering earns a statistically significant annualized mean return of 24.8% and a Sharpe ratio of 2.69. The strategy remains profitable after accounting for transaction costs and removing stocks below 20% NYSE-size quantile. A host of robustness tests confirm that the results are not driven by data snooping.}
+}
+
+@inproceedings{Jinetal2023, author = {Jin, Qi and Cucuringu, Mihai and Cartea, \'{A}lvaro}, title = {Correlation Matrix Clustering for Statistical Arbitrage Portfolios}, year = {2023}, isbn = {9798400702402}, publisher = {Association for Computing Machinery}, address = {New York, NY, USA}, doi = {10.1145/3604237.3626894}, abstract = {We propose a framework to construct statistical arbitrage portfolios with graph clustering algorithms. First, we use various clustering methods to partition the correlation matrix of market residual returns of stocks into clusters. Next, we construct and evaluate the performance of mean-reverting statistical arbitrage portfolios within each cluster. We explore five clustering algorithms and demonstrate that our proposed framework generates profitable trading strategies with over annualized returns and statistically significant Sharpe ratios above one. The performance of our statistical arbitrage portfolios is neutral to the market and cannot be fully explained by intra-industry mean-reversion effects.}, booktitle = {Proceedings of the Fourth ACM International Conference on AI in Finance}, pages = {557--564}, numpages = {8}, keywords = {Clustering, Correlation matrix, Portfolio management, Random matrix theory, Statistical arbitrage}, location = {Brooklyn, NY, USA}, series = {ICAIF '23} }
+
+@article{KRAUSS2017689,
+title = {Deep neural networks, gradient-boosted trees, random forests: Statistical arbitrage on the {S\&P} 500},
+journal = {European Journal of Operational Research},
+volume = {259},
+number = {2},
+pages = {689-702},
+year = {2017},
+issn = {0377-2217},
+doi = {10.1016/j.ejor.2016.10.031},
+url = {https://www.sciencedirect.com/science/article/pii/S0377221716308657},
+author = {Christopher Krauss and Xuan Anh Do and Nicolas Huck},
+keywords = {Finance, Deep learning, Gradient-boosting, Random forests, Ensemble learning},
+abstract = {In recent years, machine learning research has gained momentum: new developments in the field of deep learning allow for multiple levels of abstraction and are starting to supersede well-known and powerful tree-based techniques mainly operating on the original feature space. All these methods can be applied to various fields, including finance. This paper implements and analyzes the effectiveness of deep neural networks (DNN), gradient-boosted-trees (GBT), random forests (RAF), and several ensembles of these methods in the context of statistical arbitrage. Each model is trained on lagged returns of all stocks in the S&P 500, after elimination of survivor bias. From 1992 to 2015, daily one-day-ahead trading signals are generated based on the probability forecast of a stock to outperform the general market. The highest k probabilities are converted into long and the lowest k probabilities into short positions, thus censoring the less certain middle part of the ranking. Empirical findings are promising. A simple, equal-weighted ensemble (ENS1) consisting of one deep neural network, one gradient-boosted tree, and one random forest produces out-of-sample returns exceeding 0.45 percent per day for k=10, prior to transaction costs. Irrespective of the fact that profits are declining in recent years, our findings pose a severe challenge to the semi-strong form of market efficiency.}
+}
+
+@ARTICLE{LeeChang2026,
+  author={Lee, Hyunju and Chang, Woojin},
+  journal={IEEE Access}, 
+  title={An End-to-End Deep Learning Model for Clustering-Based Statistical Arbitrage}, 
+  year={2026},
+  volume={14},
+  number={},
+  pages={47301-47318},
+  abstract={We propose an end-to-end deep learning framework for statistical arbitrage in the cryptocurrency futures market, which integrates clustering and trading within a unified structure. Statistical arbitrage seeks to exploit price deviations among similar assets to generate market-neutral profits. The cryptocurrency market, characterized by structural similarities among assets and market inefficiency, offers promising opportunities for such strategies. We incorporate clustering into the model to learn optimal arbitrage trading strategies that capture dynamic relationships within the cryptocurrency market and detect arbitrage opportunities. A transformer encoder is employed to model temporal dependencies among assets. The entire arbitrage process from portfolio selection to trade allocation is jointly optimized under a customized objective function that reflects the core principles of traditional statistical arbitrage. Empirical results demonstrate that the proposed model consistently outperforms benchmark strategies with negative Sharpe ratios, achieving a cumulative return of 3.310 and an annualized Sharpe ratio of 2.516 after accounting for transaction costs. Sub-period analysis shows that the strategy remains robust across varying market conditions with annualized Sharpe ratios ranging from 1.168 to 2.240 with transaction fees, supporting its market-neutral characteristics. Ablation studies further validate the crucial contribution of each model component, such as clustering, the end-to-end structure, and the proposed objective function, in enabling effective statistical arbitrage.},
+  keywords={Portfolios;Cryptocurrency;Deep learning;Transformers;Profitability;Principal component analysis;Predictive models;Pipelines;Linear programming;Adaptation models;Clustering;cryptocurrency futures market;statistical arbitrage;transformer},
+  doi={10.1109/ACCESS.2026.3678064},
+  ISSN={2169-3536},
+  month={},}
+
+@article{Mantegna1999,
+  author  = {Mantegna, R. N.},
+  title   = {Hierarchical structure in financial markets},
+  journal = {The European Physical Journal B},
+  year    = {1999},
+  volume  = {11},
+  number  = {1},
+  pages   = {193--197},
+  month   = sep,
+  doi     = {10.1007/s100510050929},
+  issn    = {1434-6036},
+}
+
+@book{MantegnaStanley2000,
+  author    = {Mantegna, Rosario N. and Stanley, H. Eugene},
+  title     = {An Introduction to Econophysics: Correlations and Complexity in Finance},
+  publisher = {Cambridge University Press},
+  address   = {Cambridge, UK},
+  year      = {1999},
+  isbn      = {978-0-521-62008-6},
+  doi       = {10.1017/CBO9780511755767},
+}
+
+@article{PhysRevE.68.056110,
+  title = {Dynamics of market correlations: Taxonomy and portfolio analysis},
+  author = {Onnela, J.-P. and Chakraborti, A. and Kaski, K. and Kert\'esz, J. and Kanto, A.},
+  journal = {Physical Review E},
+  volume = {68},
+  issue = {5},
+  pages = {056110},
+  numpages = {12},
+  year = {2003},
+  month = {Nov},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevE.68.056110},
+  url = {https://link.aps.org/doi/10.1103/PhysRevE.68.056110}
+}
+
+@article{SARMENTO2020113490,
+title = {Enhancing a Pairs Trading strategy with the application of Machine Learning},
+journal = {Expert Systems with Applications},
+volume = {158},
+pages = {113490},
+year = {2020},
+issn = {0957-4174},
+doi = {10.1016/j.eswa.2020.113490},
+url = {https://www.sciencedirect.com/science/article/pii/S0957417420303146},
+author = {Simão Moraes Sarmento and Nuno Horta},
+keywords = {Pairs trading, Market neutral, Machine Learning, Deep learning, Unsupervised learning},
+abstract = {Pairs Trading is one of the most valuable market-neutral strategies used by hedge funds. It is particularly interesting because it overcomes the arduous process of valuing securities by focusing on relative pricing. By buying a relatively undervalued security and selling a relatively overvalued one, a profit can be made upon the pair’s price convergence. However, with the growing availability of data, it became increasingly harder to find rewarding pairs. In this work, we address two problems: (i) how to find profitable pairs while constraining the search space and (ii) how to avoid long decline periods due to prolonged divergent pairs. To manage these difficulties, the application of promising Machine Learning techniques is investigated in detail. We propose the integration of an Unsupervised Learning algorithm, OPTICS, to handle problem (i). The results obtained demonstrate the suggested technique can outperform the common pairs’ search methods, achieving an average portfolio Sharpe ratio of 3.79, in comparison to 3.58 and 2.59 obtained by standard approaches. For problem (ii), we introduce a forecasting-based trading model, capable of reducing the periods of portfolio decline by 75%. Yet, this comes at the expense of decreasing overall profitability. The proposed strategy is tested using an ARMA model, an LSTM and an LSTM Encoder-Decoder. This work’s results are simulated during varying periods between January 2009 and December 2018, using 5-min price data from a group of 208 commodity-linked ETFs, and accounting for transaction costs.}
+}
+
+@article{TOLA2008235,
+title = {Cluster analysis for portfolio optimization},
+journal = {Journal of Economic Dynamics and Control},
+volume = {32},
+number = {1},
+pages = {235-258},
+year = {2008},
+note = {Applications of statistical physics in economics and finance},
+issn = {0165-1889},
+doi = {10.1016/j.jedc.2007.01.034},
+url = {https://www.sciencedirect.com/science/article/pii/S0165188907000462},
+author = {Vincenzo Tola and Fabrizio Lillo and Mauro Gallegati and Rosario N. Mantegna},
+keywords = {Portfolio optimization, Clustering methods, Correlation matrices, Random matrix theory},
+abstract = {We consider the problem of the statistical uncertainty of the correlation matrix in the optimization of a financial portfolio. By assuming idealized conditions of perfect forecast ability for the future return and volatility of stocks and short selling, we show that the use of clustering algorithms can improve the reliability of the portfolio in terms of the ratio between predicted and realized risk. Bootstrap analysis indicates that this improvement is obtained in a wide range of the parameters N (number of assets) and T (investment horizon). The predicted and realized risk level and the relative portfolio composition of the selected portfolio for a given value of the portfolio return are also investigated for each considered filtering method. We also show that several of the results obtained by assuming idealized conditions are still observed under the more realistic assumptions of no short selling and mean return and volatility forecasting based on historical data.}
+}
+
+@article{masini2023machine,
+  title   = {Machine learning advances for time series forecasting},
+  author  = {Masini, Ricardo P. and Medeiros, Marcelo C. and Mendes, Eduardo F.},
+  journal = {Journal of Economic Surveys},
+  volume  = {37},
+  number  = {1},
+  pages   = {76--111},
+  year    = {2023},
+  doi     = {10.1111/joes.12429}
+}
+
+@article{kelly2023financial,
+  title     = {Financial machine learning},
+  author    = {Kelly, Bryan T. and Xiu, Dacheng},
+  journal   = {Foundations and Trends in Finance},
+  volume    = {13},
+  number    = {3--4},
+  pages     = {205--363},
+  year      = {2023}
+}
+
+
+%% ADDED 2026-08-23. The trading head's sequence mixer is this paper's
+%% construction: a learned kernel as long as the sequence, Squash
+%% soft-thresholding toward zero, and FFT convolution with a learned skip.
+%% Identified from the implementation, not from prose: pipeline_work.py:467
+%% is Squash verbatim, K = sign(w) * relu(|w| - lambda), and the constant is
+%% named squash_lambda.
+%% VERIFIED 2026-08-24 against proceedings.mlr.press/v202/fu23a.html:
+%% full author list and pages confirmed (PMLR 202:10373-10391).
+@inproceedings{fu2023simple,
+  title     = {Simple Hardware-Efficient Long Convolutions for Sequence
+               Modeling},
+  author    = {Fu, Daniel Y. and Epstein, Elliot L. and Nguyen, Eric and
+               Thomas, Armin W. and Zhang, Michael and Dao, Tri and
+               Rudra, Atri and R{\'e}, Christopher},
+  booktitle = {Proceedings of the 40th International Conference on Machine
+               Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {202},
+  pages     = {10373--10391},
+  year      = {2023},
+  note      = {arXiv:2302.06646}
+}
+
+%% verified 2026-08-26 via Crossref (DOI record): JAR 40(2), 407--439
+@article{bhojraj2002peer,
+  title   = {Who is my peer? {A} valuation-based approach to the selection of comparable firms},
+  author  = {Bhojraj, Sanjeev and Lee, Charles M. C.},
+  journal = {Journal of Accounting Research},
+  volume  = {40},
+  number  = {2},
+  pages   = {407--439},
+  year    = {2002},
+  doi     = {10.1111/1475-679X.00054}
+}

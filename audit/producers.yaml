@@ -1,0 +1,37 @@
+# Producer graph: every exhibit of the manuscript → the script that makes it, its inputs, its output.
+# This file is the allow-list of the repository: a file not reachable from here is not shipped.
+# Conventions: cal6913 = analysis/COMMON_CALENDAR_v3.csv; rule books at factor shift 0, trained books at shift 1;
+# "mps" = mean of per-seed statistics, "avg" = seed-averaged book.
+exhibits:
+  "tab:moments (was tab:hedge + tab:signal, merged 2026-08-31)": {script: "analysis/turnover_v3.py + analysis/naive_turnover_v3.py", inputs: [head_logs, rule_books], outputs: [turnover_v3_mean_cal6913.csv, turnover_v3_perseed_cal6913.csv, naive_turnover_v3_cal6913.csv], convention: "mps (note avg)"}
+  "tab:moments alpha half (was tab:signal)": {script: "analysis/spanning_v3.py", inputs: [rule_books, head_logs, factors], outputs: [rule_spanning_era_v3_cal6913.csv], convention: "avg", NW21}
+  "tab:split": {script: "analysis/split_v3.py", inputs: [split_inputs_cal6913.csv, peer_spanning_v3_cal6913.csv], outputs: [split_v3_cal6913.csv]}
+  "tab:head_adds": {script: "analysis/spanning_v3.py + turnover CSVs", outputs: [rule_spanning_era_v3_cal6913.csv]}
+  "fig:alpha_vol (new 2026-08-31, Figure 2)": {script: "figures/scripts/fig_alpha_vol_v3.py", inputs: [head_logs, factors], outputs: [alpha_vol_points_v3_cal6913.csv], convention: "x = volatility, mean of per-seed (tab:moments); y = alpha of the seed-averaged payoff, NW21 (tab:moments)"}
+  "fig:rank_shift": {script: "figures/scripts/fig_rank_shift_v3.py", inputs: [rule_books, head_logs]}
+  "sec:5.1": {script: "figures/scripts/fig_field_ruler_v3.py", inputs: [head_logs], note: pooled within-configuration s.d. 0.0844}
+  "fig:field_ruler": {script: "figures/scripts/fig_field_ruler_v3.py", inputs: [head_logs]}
+  "fig:pseed_flip": {script: "figures/scripts/fig_pseed_flip_v3.py", inputs: [rule_books (twins), head_logs (twins, seed 42)]}
+  "sec:5.2 ARI": {script: "analysis/ari_within_rule_v3.py + analysis/ari_across_rule_v3.py", inputs: [partitions], outputs: [ari_within_rule_v3_cal6913.csv, ari_across_rule_v3_cal6913.csv]}
+  "tab:formal": {script: "analysis/formal_v3.py (newstats_lib)", inputs: [head_logs], outputs: [formal_v3_intersect_*.csv, formal_v3_intersect_ctl_*.csv], bootstrap: circular block 21, 5000 draws}
+  "tab:gradient": {script: "analysis/gradient_pos_v3.py + ARI + fig_bet_corr", inputs: [weights, partitions, head_logs], outputs: [gradient_pos_v3_cal6913.csv, bet_corr_matrix_v3_12arm_cal6913.csv]}
+  "fig:bet_corr": {script: "figures/scripts/fig_bet_corr_v3.py", inputs: [weights]}
+  "fig:select_vs_ew": {script: "figures/scripts/fig_select_vs_ew_v3.py + analysis/select_ci_v3.py", inputs: [head_logs], outputs: [select_ci_v3_cal6913.csv]}
+  "sec:5.5": {script: "figures/scripts/fig_window_twin_v3.py", inputs: [head_logs (w21/w120/w252, k10/k50 variants)]}
+  "tab:spanning": {script: "analysis/spanning_v3.py + analysis/strev_spanning_v3.py", inputs: [rule_books, head_logs, factors], outputs: [rule_spanning_era_v3_cal6913.csv, strev_spanning_v3_cal6913.csv]}
+  "tab:k1span": {script: "analysis/strev_spanning_v3.py (K=1 block)", outputs: [k1_regressor_v3_cal6913.csv]}
+  "sec:6.2 PCs": {script: "analysis/pc_factors_v3.py", inputs: [panel, partitions(kmeans universe), rule_books, head_logs, factors], outputs: [pc_factors_v3_cal6913.csv, pc_spanning_v3_cal6913.csv, pc_spanning_rule_shiftm1_v3_cal6913.csv], note: needs the panel (L2)}
+  "tab:era": {script: "analysis/spanning_v3.py", outputs: [rule_spanning_era_v3_cal6913.csv]}
+  "tab:peer": {script: "analysis/peer_spanning_v3.py", inputs: [head_logs, peer books w60/w252, factors], outputs: [peer_spanning_v3_cal6913.csv]}
+  "sec:6.3 lens": {script: "analysis/peer_lens_v3_cal6913.py", inputs: [panel, partitions], outputs: [peer_lens_cal6913.csv], note: needs the panel (L2)}
+  "sec:6.1 / fig:lens_curve (two panels: PCs and FF) / fig:match_cost": {script: "analysis/verify_lens.py + analysis/lens_extras_v3.py", inputs: [panel, partitions, factors], outputs: [lens_v3_full_stages_cal6913.csv, lens_extras_v3_cal6913.csv], note: needs the panel (L2)}
+  "sec:4.2 vshare": {script: "analysis/vshare_v3.py", inputs: [panel, partitions], outputs: [vshare_v3_cal6913.csv, vshare_v3_nosingleton_cal6913.csv], note: needs the panel (L2)}
+  "fig:dose / A.8": {script: "analysis/dose_v3_traded.py", inputs: [panel, partitions], outputs: [dose_v3_traded_cal6913.csv], note: needs the panel (L2)}
+  "tab:costs": {script: "analysis/turnover_v3.py + analysis/naive_turnover_v3.py", inputs: [weights, head_logs, rule_books]}
+  "sec:6.4 pos autocorr": {script: "analysis/pos_autocorr_naive.py", outputs: [pos_autocorr_naive_cal6913.csv]}
+  "tab:sizes": {script: "analysis/sizes_from_caches.py", inputs: [partitions], note: to be extracted from the audit scripts}
+  "tab:ksweep": {script: "analysis/ksweep_v3.py", inputs: [head_logs (k10/k50)], outputs: [ksweep_v3_cal6913.csv], convention: "mps"}
+  "A.10 size study": {script: "analysis/mc_size_v3.py + analysis/serial_dep_v3.py", outputs: ["mc_size_v3_B5000_s{42,7,101,2024}.csv", serial_dep_v3.csv]}
+  "A.12 / A.13": {script: "analysis/pos_overlap_v3.py", outputs: [pos_overlap_v3_cal6913.csv]}
+  "sec:4.4 30-day rule": {script: "rule_engine/run_naive_routeA.py --sig-w 30 + analysis/rule_sigw30 block", outputs: [rule_sigw30_spanning_cal6913.csv]}
+  "harness": {script: "audit/verify_printed.py", inputs: [all CSVs above, head_logs]}

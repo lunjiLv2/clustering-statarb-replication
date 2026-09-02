@@ -1,0 +1,38 @@
+{
+ "prices.pkl": {
+  "sha256": "2a943e6cb044a5f945302a4f7e70fa3805f64f3811ea0bb36997a6eb4dbc4a24",
+  "bytes": 486011354,
+  "shape": [
+   8803,
+   6899
+  ],
+  "first": "1990-01-17",
+  "last": "2024-12-30",
+  "n_names": 6899,
+  "nonnull_mean": 0.37586486060199964
+ },
+ "caps.pkl": {
+  "sha256": "a5d3a5e439a59ba8653f603dad50f6ceead4617d57cfb0b54eb9639cdb272fd5",
+  "bytes": 486011342,
+  "shape": [
+   8803,
+   6899
+  ],
+  "first": "1990-01-17",
+  "last": "2024-12-30",
+  "n_names": 6899,
+  "nonnull_mean": 0.37547847385699157
+ },
+ "mask.pkl": {
+  "sha256": "b1d5e4aa7c48c7491bcc05b2f8f9d8b3cb0419b2793b6743c13104a5ffffbc69",
+  "bytes": 60888066,
+  "shape": [
+   8803,
+   6899
+  ],
+  "first": "1990-01-17",
+  "last": "2024-12-30",
+  "n_names": 6899,
+  "nonnull_mean": 1.0
+ }
+}

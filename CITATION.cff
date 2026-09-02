@@ -1,0 +1,26 @@
+# Draft — author list and order to be confirmed by the authors before release.
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the paper and the Zenodo record."
+title: "Quantifying the Contributions of Clustering in Statistical Arbitrage — replication package"
+type: software
+authors:
+  - family-names: Zhu
+    given-names: Lunji
+    affiliation: University of California, Los Angeles
+  - family-names: Cucuringu
+    given-names: Mihai
+    affiliation: University of California, Los Angeles
+version: 0.9.0
+date-released: 2026-09-01
+license: MIT
+repository-code: "https://github.com/lzwbh/clustering-statarb-replication"
+preferred-citation:
+  type: article
+  title: "Quantifying the Contributions of Clustering in Statistical Arbitrage"
+  authors:
+    - family-names: Zhu
+      given-names: Lunji
+    - family-names: Cucuringu
+      given-names: Mihai
+  journal: "Journal of Financial Econometrics (submitted)"
+  year: 2026

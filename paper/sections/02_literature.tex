@@ -1,0 +1,94 @@
+%!TEX root = ../main.tex
+%%=====================================================================
+\section{Related Literature}\label{sec:lit}
+%%=====================================================================
+%%  HOUSE RULES FOR THIS SECTION (measured over four JFEC type-A
+%%  literature sections; see _reference/LIT_PLAN.md).
+%%   - NO \subsection, NO \paragraph labels. 0 of 4 corpus sections use
+%%     any; structure is carried by ordinals in the prose, 4 of 4.
+%%   - Every paragraph closes on a sentence about THIS article.
+%%     11 of 20 corpus body paragraphs close first-person; 0 of 4
+%%     sections close on a plain citation.
+%%   - Gap claims are BOUNDED, never absolute ("comparisons are few",
+%%     "first ... in the sense that"). A bare "none has done X" is a
+%%     form the corpus never produces.
+%%   - A hostile prior finding is reported straight and its diagnosis
+%%     is HEDGED ("We reckon it is due to ..."), never disputed.
+%%   - The nearest rival gets three clauses of credit BEFORE any
+%%     difference is drawn, and the difference is a property of THEIR
+%%     design, not an error.
+%%   - The evaluation machinery is cited HERE, not only where used.
+%%     That is the corpus norm and it is what keeps this section's
+%%     citation load independent of the introduction's.
+%%=====================================================================
+Our work combines two strands of previous work: methods for recovering peer-group structure from stock return time series, and modern statistical arbitrage strategies. In this section, we briefly review the literature in each strand, and highlight the gap that our work fills.
+
+Industry taxonomies are the usual benchmark for a similarity-based
+clustering, and the evaluation criterion is how much contemporaneous return
+comovement the groups explain. Taxonomies such as the Standard Industrial Classification
+(\textsc{sic}), the North American Industry Classification System
+(\textsc{naics}), and the Global Industry Classification Standard
+(\textsc{gics}) partition the cross-section
+according to a classifying body's judgment about firms' primary lines
+of business.
+\citet{bhojraj2003whats} show that \textsc{gics} outperforms
+\textsc{sic}, \textsc{naics}, and the 48-industry algorithm of \citet{FAMA1997153} on that
+criterion; the other three perform similarly to one another, and the
+\textsc{gics} advantage is sharpest among large firms.
+\citet{chan2007industry} likewise find that within-industry comovement
+is strongest among large caps, and that finer \textsc{gics} levels separate
+comovement further. They further report that industry partitions are more homogeneous out of sample than groups obtained by statistical cluster analysis. Peers can also be
+chosen firm by firm rather than read from a shared classification
+\citep{bhojraj2002peer}, a construction we return to in \secref{sec:peer}.
+
+The correlation matrix
+of stock returns also contains information about market structure: the structure it encodes is hierarchical and tree-like
+\citep{Mantegna1999, MantegnaStanley2000} and it behaves differently in
+calm and in crash periods \citep{PhysRevE.68.056110}. That information can be extracted in several ways: by hierarchical linkage \citep{TOLA2008235}, by its spectrum \citep[consistency theory in][]{macmahon2015community, rohe2011spectral}, and by
+signed-graph methods that separate positive from negative correlation
+\citep{cucuringu2019sponge, he2022sssnet, uddin2024network}. A partition is also a factor
+model with grouped loadings \citep{ando2017clustering}, which is the form in which we later ask whether a factor model makes
+%%  ⛔ SUBJECT MUST NOT BE GENERALIZED (CB, 2026-08-30). The sentence beginning\n%%  \"The linkage, spectral, and signed-graph methods all start...\" is true
+%%  only of the linkage / spectral / signed-graph families. tab:methods row 1 has
+%%  $k$-means on returns reading $\widetilde{\Rmat}$ DIRECTLY -- it forms no
+%%  correlation matrix at all (same for the random control). Widening the subject to
+%%  "the clusterizers" or "all methods" turns this into a false statement.
+it redundant. A partition of the cross-section is also used as a restriction in covariance estimation, where it is normally read from a taxonomy: \citet{alves2024forecasting} restrict the residual covariance of the S\&P~500 to ten \textsc{sic} sectors. The linkage, spectral, and signed-graph methods all start from the same correlation matrix; whether they recover different information from it, and
+whether what they recover survives a factor model or a per-stock peer
+regression, are the questions of \secref{sec:invariance} and
+\secref{sec:factor}. We study what a clusterizer contributes to
+trading, holding the trading model fixed at each of two models in turn,
+while 12 clusterizers and two controls read the same panel.
+
+Machine learning has entered statistical arbitrage stage by stage. 
+\citet{Gatevetal2006} formalize pairs trading as a
+rules-based relative-value arbitrage and document its profitability
+over decades of US data. The selection step has been automated by machine learning, from
+return similarity \citep{SARMENTO2020113490} and from firm
+characteristics \citep{HAN2023929}.
+\citet{avellaneda2010statistical} replace the pair with a factor or ETF
+decomposition and bet on an Ornstein--Uhlenbeck ``$s$-score'' built on
+the residual. The trading model itself was then learned from data:
+\citet{KRAUSS2017689} benchmark deep networks, gradient-boosted trees,
+and random forests on lagged returns of the S\&P~500 cross-section,
+\citet{FISCHER2018654} test long short-term memory networks on the same
+data,
+\citet{guijarro2025deep} learn the trading signal and its allocation
+jointly on the residuals of a factor model, and \citet{epstein2025attention} learn the latent factors themselves
+with an attention mechanism over firm characteristics. The models come from a wider machine learning program in asset pricing and financial econometrics
+\citep{10.1093/rfs/hhaa009, kelly2019characteristics, zhang2024volatility, zhang2025graph}. Each applies machine learning to a different input of a trading
+strategy: expected returns, factor loadings, volatility, and covariances. We take
+one such model, a neural trading head trained on the Sharpe ratio of
+its own book, and ask what it adds to a partition held fixed and
+whether it erases the difference between a real partition and a random one.
+
+The signal these strategies trade is a reversal, and the reversal literature has already found that demeaning within a group sharpens it. Short-term reversal itself dates to \citet{jegadeesh1990evidence} and \citet{lehmann1990fads}. \citet{da2014closer} find that sorting on returns within industries nearly doubles the return of the standard reversal strategy on large stocks, because industry momentum otherwise masks the reversal; \citet{hameed2015industries} document that intra-industry reversals are larger, more stable, and present among large liquid stocks, and decompose the unconditional reversal into intra- and inter-industry parts; and \citet{blitz2013residual} obtain a similar gain by reversing the residuals of a factor model. Our within-group demeaning is the same operation with the industry replaced by a statistical partition. These studies establish the value of conditioning reversal on economically or statistically related peers, but do not compare alternative grouping methods against both no-grouping and random-grouping controls; the two controls and the mean--volatility split of this paper supply that comparison.
+
+Clustering methods can also generate the partition-based residuals a statistical arbitrage strategy trades. \citet{Jinetal2023} first brought a signed spectral
+method (\textsc{sponge}, \citealp{cucuringu2019sponge}) to statistical
+arbitrage, on the correlation matrix of market residuals of US equities;
+\citet{LeeChang2026} learn the clustering and the model that trades it
+jointly, end to end, inside a transformer encoder on cryptocurrency
+futures. \citet{brutti2026orthogonal} cluster return deviations with a noise-robust clusterizer, build
+the partition to be orthogonal to the sector taxonomy, and show over
+$2012$--$2024$ that the reversion payoff survives residualization against standard benchmarks; they also trade a no-clustering benchmark under the same rule. Comparisons across these studies are few, and those that exist either vary the clusterizer and the trading model together or, as in \citet{Jinetal2023}, compare variants within one family. We separate the two effects, ask whether clusterizers that disagree on the groups recover different information, and judge their ranking against the noise of the design's own replications. 

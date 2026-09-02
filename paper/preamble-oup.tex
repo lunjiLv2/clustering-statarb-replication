@@ -1,0 +1,79 @@
+%%=====================================================================
+%%  preamble-oup.tex — the OUP port.
+%%
+%%  The class already provides: amsmath amssymb amsthm array caption
+%%  graphicx hyperref multirow natbib rotating tikz xcolor url listings
+%%  algorithm algpseudocode footmisc wrapfig tcolorbox subfloat.
+%%  Do NOT reload any of them; several take options the class has set.
+%%
+%%  Dropped from the article-class preamble, because the class owns them:
+%%    geometry fontenc inputenc lmodern microtype setspace  (page + fonts)
+%%    natbib hyperref caption                               (refs + captions)
+%%    the float-placement counters and \captionsetup        (class house style)
+%%    the theorem environments                              (unused in the body)
+%%  Kept from it: booktabs, threeparttable, mathtools, bm, float, and the
+%%  whole macro block, which the sections depend on.
+%%=====================================================================
+
+% --- what the class does not supply ---------------------------------
+\usepackage{booktabs}      % \cmidrule (16 uses) and \addlinespace (12); also
+                           % supplies \bottomrule, which the class calls \botrule
+\usepackage{threeparttable}% table notes under tables (30 uses)
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{float}
+\usetikzlibrary{positioning,calc,fit,backgrounds,arrows.meta,shapes.geometric,decorations.pathreplacing,patterns}
+\graphicspath{{figures/}}
+\newcommand{\societylogo}{}  % the template defines this in its preamble
+
+% --- cross-reference helpers (cleveref is not installed here) --------
+\newcommand{\secref}[1]{Section~\ref{#1}}
+\newcommand{\secsref}[2]{Sections~\ref{#1} and~\ref{#2}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\eqnref}[1]{Equation~\eqref{#1}}
+\newcommand{\appref}[1]{Appendix~\ref{#1}}
+\newcommand{\panelref}[2]{Panel~#1 of \tabref{#2}}
+
+% --- drafting helpers (delete before submission) ---------------------
+\newcommand{\TODO}[1]{\textcolor{red}{[\textbf{TODO:} #1]}}
+\newcommand{\PH}[1]{\textcolor{gray}{\ensuremath{\langle}\text{#1}\ensuremath{\rangle}}}
+\newcommand{\PENDGROSS}{\TODO{pending gross-alignment verification}}
+\newcommand{\PROVEN}{\textsc{[proven]}}
+\newcommand{\SKETCH}{\textsc{[sketch]}}
+\newcommand{\CONJ}{\textsc{[conjecture]}}
+
+%%---------------------------------------------------------------------
+%%  NOTATION — identical to the article-class build; the sections use it.
+%%---------------------------------------------------------------------
+\newcommand{\N}{N}
+\newcommand{\Tw}{T}
+\newcommand{\K}{K}
+\newcommand{\Rmat}{\mathbf{R}}
+\newcommand{\Cmat}{\mathbf{C}}
+\newcommand{\Wmat}{\mathbf{W}}
+\newcommand{\Dmat}{\mathbf{D}}
+\newcommand{\Proj}{\mathbf{P}}
+\newcommand{\Imat}{\mathbf{I}}
+\newcommand{\rt}{\tilde{\mathbf{r}}}
+\newcommand{\Zmat}{\mathbf{Z}}
+\newcommand{\Lam}{\bm{\Lambda}}
+\newcommand{\ones}[1]{\bm{1}_{#1}}
+\newcommand{\Pgics}{\mathbf{P}_{\mathrm{GICS}}}
+\newcommand{\SR}{\mathrm{SR}}
+\newcommand{\Exp}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\rank}{\operatorname{rank}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\Part}{\mathcal{P}}
+\newcommand{\PartOne}{\Part_{\mathrm{one}}}
+\newcommand{\PartRnd}{\Part_{\mathrm{rand}}}
+\newcommand{\alphaFF}{\alpha_{\mathrm{FF5+MOM}}}
+\newcommand{\ARI}{\mathrm{ARI}}
+\newcommand{\nogroup}{\emph{no grouping}}
+\newcommand{\randgroup}{\emph{random grouping}}

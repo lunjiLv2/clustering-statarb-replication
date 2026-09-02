@@ -1,0 +1,16 @@
+name: L0 verify
+# Layer L0: every printed number of the manuscript is recomputed from the shipped result CSVs,
+# the tables are printed, and the code/prose are scanned for retired-seed-set leftovers.
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -r environment/requirements-l0.txt
+      - run: python data/fetch_ken_french.py
+      - run: python audit/verify_printed.py
+      - run: python analysis/print_tables.py > /dev/null
+      - run: python audit/check_seed_language.py

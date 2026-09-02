@@ -1,0 +1,17 @@
+matplotlib==3.10.7
+matplotlib-inline==0.2.1
+numpy==2.3.3
+pandas==2.3.3
+pandas-datareader==0.10.0
+pymupdf==1.28.2
+scikit-learn==1.7.2
+scipy==1.16.3
+statsmodels==0.14.5
+torch==2.7.1+cu118
+torch-geometric==2.7.0
+torch_geometric_signed_directed==1.0.1
+torchaudio==2.7.1+cu118
+torchvision==0.22.1+cu118
+signet==0.1.0    # SPONGE clustering (github.com/alan-turing-institute/SigNet); head pipeline import
+tqdm==4.67.1
+pypdf==6.16.1

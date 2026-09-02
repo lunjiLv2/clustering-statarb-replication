@@ -1,0 +1,119 @@
+%!TEX root = ../main.tex
+%%=====================================================================
+%%  §1  INTRODUCTION          target 4-5 pp.
+%%
+%%  REWRITTEN 2026-08-21 on the v3 panel, to the JFEC house sequence
+%%  (motivation -> literature -> gap/design -> contributions -> results
+%%  -> roadmap). Two structural changes from the 2026-08-16 version:
+%%   * the literature positioning is UNCOMMENTED and moved up. 9 of 9
+%%     sampled JFEC introductions carry literature inside the intro.
+%%   * contributions moved from 0.85 of the way in to 0.35, and turned
+%%     from a nested enumerate into running ordinals. 0 of 9 sampled
+%%     introductions use a list of any kind.
+%%  NUMERALS: deliberately almost none. 5 of 9 sampled introductions
+%%  report no numeric finding at all, and half of the figures the old
+%%  version printed are either superseded on v3 or not yet independently
+%%  recomputed. Every one of them now lives in the section or table this
+%%  text points at. Do not reintroduce a numeral here without checking
+%%  it against the exhibit that carries it.
+%%  Voice: the author edits.
+%%
+%%  POSITIONING (unchanged, still binding):
+%%   * brutti2026orthogonal ALREADY have a no-clustering control. Ours
+%%     CORROBORATES; claim no priority. What their design cannot deliver
+%%     is the moment decomposition (their P&L is normalized by its own
+%%     standard deviation) and the partition-randomizing null (their
+%%     placebo permutes within clusters, partition fixed).
+%%   * guijarro2025deep report SR, mu and sigma per model. "We report
+%%     volatility separately" is NOT a contribution.
+%%
+%%  FORBIDDEN HERE (each tested, each failed):
+%%   - "every clustering earns the same alpha" (ANOVA rejects)
+%%   - "the best method earns less alpha than no clustering"
+%%   - any era rank-stability claim, in EITHER direction
+%%   - any adjacent-pair ordering, any tradability claim
+%%   - any point value for the head lift (bound only, +0.74 to +1.50)
+%%   - any post-2009 alpha edge over K=1
+%%   - "a clusterizer never sees a payoff" (false for four rules)
+%%   - "forces/imposes group neutrality" (refuted, §4.3)
+%%=====================================================================
+\section{Introduction}
+\label{sec:intro}
+
+Machine learning methods are now used at most stages of trading
+strategies \citep{kelly2023financial}, and clustering has become one of
+the standard ways to form peer groups for relative-value trading. A
+clustering-based statistical arbitrage strategy makes two decisions
+that are usually evaluated together: it partitions the cross-section into
+comoving peer groups, and a trading model builds a book, a set of long and short positions, on
+that partition, typically from returns residualized against the market. The effectiveness of each component is then inferred from the Sharpe ratio of the two together \citep{Jinetal2023, LeeChang2026, brutti2026orthogonal}, even though end-to-end performance does not identify which component produced it. We ask three questions: how much the clusterizer and the trading model
+each contribute, and whether through the mean or the volatility of the payoff; whether different clusterizers
+recover different information; and whether what the clusterizer
+contributes could be obtained instead from traditional factor models, from a reversal factor, or from per-stock peer regressions.
+
+How the cross-section ought to be grouped has been studied for far
+longer than the strategies that trade it, and the groups have come from three sources. An industry taxonomy supplies them in advance
+\citep{bhojraj2003whats}. The groups can instead be estimated from
+returns,
+usually from the correlation matrix \citep{Mantegna1999}, which
+\citet{TOLA2008235} put to work in portfolio construction and
+\citet{Jinetal2023} cluster for statistical arbitrage. Most recently, the groups have been learned directly against a trading
+objective: \citet{LeeChang2026} fit
+the grouping and the model that trades it jointly, inside one
+transformer. Economic taxonomy, the statistical structure of returns,
+and the trading objective itself have all been brought to bear on how the groups are formed.
+
+A second strand of literature asks what a strategy does with such a partition.
+Relative-value trading has been extended since \citet{Gatevetal2006} documented the profitability of trading a single mean-reverting spread. \citet{avellaneda2010statistical} replaced the pair with the residual left after removing a systematic component; a partition supplies another such component, the group mean. Clustering-based strategies are a more recent line of work. \citet{Jinetal2023}, \citet{LeeChang2026}, and
+\citet{brutti2026orthogonal} each contribute clusterizers of their own together with the strategy they support. \citet{Jinetal2023} compare five spectral clusterizers, four of them signed, under one rule. Their goal is to study the performance of alternative spectral clusterizers; ours is the contribution of clustering itself within the trading pipeline. To the best of our knowledge, no previous study compares clusterizers from different families under a common trading model, or separates what the partition contributes from what the model contributes. When the two are evaluated together, a higher Sharpe ratio may come from a better partition, from a better model, or from the way the two match, so end-to-end performance alone cannot attribute the gain. Attribution also requires the mean and the volatility of the payoff to be examined separately. \citet{guijarro2025deep} examine both for factor-based statistical arbitrage, reporting the Sharpe ratio, mean, and volatility of every model they fit and varying the factor construction under different signal models, but clustering enters their study only as a remark.
+
+We examine the clusterizers and the trading models separately.
+For the clustering stage, we compare 12 clusterizers from six families (geometric, hierarchical, eigenstructure-based, learned, trading-driven, and a sector taxonomy) against two controls.
+The controls are a single all-market group ($\K=1$) and a uniform
+random partition with the same number of groups as the real partitions. This paper introduces two of the six families: trading-driven clusterizers, which optimize a soft assignment against the payoff of the book the assignment induces and then harden
+the assignment into a partition, so that a grouping trained on a trading
+objective can still be compared with one that was not; and
+\textsc{sssnet} \citep{he2022sssnet}, a signed-graph neural network brought to statistical arbitrage for the first time. Our objective is not to estimate the best attainable performance of each clustering family, but to compare what their partitions contribute under a common downstream pipeline.
+
+For the trading stage, we trade every partition under two trading components: a fixed cross-sectional rule (adapted from \citet{Jinetal2023}) and a neural trading head in the design of \citet{guijarro2025deep}, with the long convolution of \citet{fu2023simple} in place of their transformer. Because the fixed rule has no fitted parameter, its performance comes from the partition alone; the neural trading head then shows how the conclusions change when a fitted model is placed downstream of the partition. Both components are run on the same panel, the 500 largest US equities, daily, over 27 years.
+
+The comparison rests on three standards. First, the two controls measure the cost of a missing partition and of a wrong one separately. Second, ranking
+gaps are judged against the dispersion of the design's own
+replications, the trading head refitted across its seeds and the partition redrawn under its own seed. Third, a Sharpe gap
+is split into a mean part and a volatility part (\secref{sec:split}), because the sample
+does not measure the two equally (\secref{sec:resolution}). Together, these standards turn an end-to-end performance comparison into a component-level evaluation: the controls identify whether the component contributes, the replications show whether competing implementations can be distinguished, and the decomposition identifies the channel through which the performance gap arises.
+
+Clustering lowers the volatility of the book and raises its alpha; the neural trading head widens the alpha advantage while narrowing the volatility benefit. First, demeaning the signal within
+real peer groups removes the comovement those groups share, and the
+book built on the demeaned signal runs about $40\%$ less volatile than either control under the fixed rule, and about a third less under the trading head (\secref{sec:hedge}).
+Second, a return demeaned within its peer group is a sharper
+relative-value input, and at the rule-based component the two controls
+hold the lowest alphas of the 14 books (\secref{sec:hedge}). Under the neural trading head the alpha advantage widens over both controls, especially over the random control, so a wrong partition costs more under the head than under the fixed rule.
+
+The neural trading head raises alpha at all 14 arms while raising volatility by proportionally less, so every book ends with a higher Sharpe ratio (\secref{sec:head}). 
+The ranking it produces largely agrees with the rule-based
+component's, so the ranking reflects the quality of the partition as a trading input rather than the trading model that produced it
+(\secref{sec:head}), though the middle of the ranking moves by up to five places and the gap between the two controls closes.
+
+We find that the 12 clusterizers group stocks on different principles and
+produce partitions that agree little by the adjusted Rand index, yet trade highly correlated books. Whichever way they draw the groups, demeaning within them removes far more comovement than the random control removes, and far more than no clustering, which removes nothing; ten of the 12 remove nearly the same amount
+(\secref{sec:mechanism}). The resemblance also grows down the
+pipeline, in the trading positions the partitions induce and again in
+the payoffs those positions earn, until two different clusterizers differ
+about as much as one clusterizer differs from its own refit (\secref{sec:gradient}). Thus, the data clearly distinguish genuine clustering from the no-clustering and random controls, but provide much weaker separation among the clusterizers themselves. Most adjacent gaps in the Sharpe ranking lie within the run-to-run variation in the gap itself (\secref{sec:field}). A clusterizer is not even stable against itself: redrawing the partition's own seed rearranges most of what switching the algorithm rearranges, and the neural trading head enlarges rather than damps the Sharpe movement that redraw causes (\secref{sec:pseed}). The clusterizers' Sharpe ratios differ mainly through the volatility of their books; their positions are highly similar.
+
+Neither a factor model nor per-stock peer regressions make a partition redundant. \citet{guijarro2025deep} remark that latent factor estimation can, under appropriate assumptions, take the place of clustering. Taken as stated, the remark would make the clustering stage redundant, so we test it. After the leading principal components, and again the Fama--French factors, are projected out, the variance share every real partition explains declines gently, and none nears the random control's floor (\secref{sec:lens}). In the time series, every book retains positive and significant alpha after controlling for the standard factors, a short-term reversal factor, and the leading principal components; the reversal factor absorbs no more than half of any alpha and more of the controls' than of the clusterizers'. Regressed on the same pipeline run without clustering, every clusterizer's book keeps roughly half of its alpha while the random control's keeps almost none (\secref{sec:spanning}). Because clustering is a special case of peer-based trading, in which every stock in a group shares one peer set, we also compare it with per-stock peer regressions, in which each stock has its own. Peer regressions are a stronger substitute than the factors, and
+in the cross-section they do absorb much of what a partition
+summarizes, which neither the principal components nor the
+Fama--French factors do. The peer regressions do not, however, fully absorb what the partitions earn. Against the peer books and the factors together, both controls lose their alpha entirely while eight of the 12 clusterizers keep theirs. Regressed the other way, the peer books keep their alpha against the equal weight of all 12 (\secref{sec:peer}). The two constructions summarize similar
+comovements but trade differently on them.
+
+The article proceeds as follows. \secref{sec:lit} places the design in
+the literature. \secref{sec:design} sets out the panel, the 12
+clusterizers, the two controls, and the two trading components.
+\secref{sec:riskreturn} decomposes what the clustering contributes,
+gives the mechanism, and measures what the trading head adds on top of
+it. \secref{sec:invariance} compares the 12 clusterizers against the
+noise of the design. \secref{sec:factor} tests the partition against
+factor models and per-stock peer sets, and finds that no book is net positive at five basis points one-way.
+\secref{sec:conclusion} concludes. The appendix gives the per-clusterizer construction, the trading head's architecture and schedule, and the additional results the text refers to.

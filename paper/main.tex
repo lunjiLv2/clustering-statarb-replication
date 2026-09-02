@@ -1,0 +1,103 @@
+%%=====================================================================
+%%  JFEC — Machine Learning special issue.  OFFICIAL OUP CLASS BUILD.
+%%
+%%  Content is identical to ../JFEC_A_Manuscript; only the class, the
+%%  front matter and the preamble differ. Edit prose in sections/, which
+%%  is shared in substance with that tree — keep the two in step.
+%%
+%%  LAYOUT. `modern, small` is the design the journal's own instructions
+%%  recommend, and it is also one of the two the class leaves single
+%%  column (cls:2519-2523) -- which the tables need, four of them
+%%  carrying seven or eight columns of banded figures.
+%%  `unnumsec` is NOT used: the body carries 65 \secref pointers and
+%%  needs numbered heads.
+%%=====================================================================
+\documentclass[namedate,webpdf,modern,small]{oup-authoring-template}
+%% The class sets \floatpagefraction=.94, which strands every figure behind the
+%% [p] pipeline figure until the end of the document. Relax it so exhibits
+%% appear where they are discussed (verified 2026-08-25: 42 -> 41 pages).
+\renewcommand\floatpagefraction{.5}
+
+\input{preamble-oup}
+
+\begin{document}
+
+\journaltitle{Journal of Financial Econometrics}
+\DOI{DOI added during production}
+\copyrightyear{2026}
+\pubyear{2026}
+\vol{00}
+\issue{0}
+\access{Advance Access Publication Date: Day Month Year}
+\appnotes{Paper}
+\firstpage{1}
+
+\title[Quantifying the Contributions of Clustering in Statistical Arbitrage]{Quantifying the Contributions of Clustering in Statistical Arbitrage}
+
+\author[1,$\ast$]{Lunji Zhu}
+\author[2]{Yixuan He}
+\author[1,3]{Mihai Cucuringu}
+
+\address[1]{\orgdiv{Department of Mathematics}, \orgname{University of
+California, Los Angeles}, \orgaddress{\state{California},
+\country{United States}}}
+\address[2]{\orgdiv{School of Mathematical and Natural Sciences}, \orgname{Arizona State University}, \orgaddress{\state{Arizona}, \country{United States}}}
+\address[3]{\orgdiv{Department of Statistics and Oxford-Man Institute of Quantitative Finance}, \orgname{University of Oxford}, \orgaddress{\country{United Kingdom}}}
+
+\corresp[$\ast$]{Corresponding author. \href{mailto:lunji@math.ucla.edu}{lunji@math.ucla.edu}.}
+
+\received{Date}{0}{Year}
+\revised{Date}{0}{Year}
+\accepted{Date}{0}{Year}
+
+\abstract{Clustering-based statistical arbitrage makes two decisions, the clustering and the trading model, usually evaluated together. We separate them by trading 12
+clusterizers and two controls, no clustering and a random partition, on 27
+years of large US equities, under a fixed cross-sectional rule and a neural trading head. Clustering adds alpha and cuts book
+volatility by $28\%$ to $42\%$, while the trading head adds primarily alpha. The clusterizers disagree on the groups yet trade closely correlated books; their Sharpe-ratio differences arise mainly through volatility. Most of the 12 clusterizers retain alpha that factors and per-stock peer regressions together cannot explain.}
+\keywords{statistical arbitrage, clustering, signed graphs, Sharpe ratio, factor models}
+
+\keywords[JEL classification]{C58, G11, C38}
+
+\maketitle
+
+\input{sections/01_introduction}
+\input{sections/02_literature}
+\input{sections/03_design}
+%%---------------------------------------------------------------------
+%%  RESULTS 1 (§4).  Two files, one section: 04 opens it, 06 continues
+%%  it as §4.4 and must NOT carry a \section line.
+%%---------------------------------------------------------------------
+\input{sections/04_hedge_and_signal}
+%%---------------------------------------------------------------------
+%%  RESULTS 2 (§5).
+%%---------------------------------------------------------------------
+\input{sections/05_convergence}
+%%---------------------------------------------------------------------
+%%  RESULTS 3 (§6).  07 opens it, 08 is its closing subsection §6.4.
+%%---------------------------------------------------------------------
+\input{sections/06_factor_model}
+\input{sections/07_conclusion}
+
+\section*{Conflicts of interest}
+The authors declare that they have no competing interests.
+
+\section*{Funding}
+Yixuan He is supported by an NVIDIA Academic Grant Award as well as a Jetstream2 AI Fellowship.
+
+%% Data availability statement goes here once the replication
+%% repository is organized (user decision 2026-08-24: deferred).
+
+\section*{Acknowledgments}
+The computations in this article were performed on an NVIDIA GPU
+server awarded to Yixuan He and on the Sol supercomputer at Arizona
+State University; we thank NVIDIA Corporation and ASU Research
+Computing for these resources.
+
+\bibliographystyle{oup-abbrvnat}
+\bibliography{refs}
+
+\begin{appendices}
+\input{sections/A_supplementary}
+\end{appendices}
+
+\end{document}

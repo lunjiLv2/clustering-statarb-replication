@@ -1,0 +1,803 @@
+%!TEX root = ../main.tex
+%%=====================================================================
+%%  §4 "What the design can resolve" WAS FOLDED IN HERE on 2026-08-15
+%%  and became §3.6. The old sections/04_resolution.tex is deleted.
+%%  Reason on record: a standalone pre-results identification section is
+%%  not a convention anything in _reference/VENUE/ supports, and at 3-4
+%%  pages before any result it read as pre-emptive defence. The venue
+%%  audit's complaint was body-vs-appendix, not a missing section.
+%%  What did NOT come with it, and where it went:
+%%    the pooled yardstick  -> §5 (sections/05_convergence.tex)
+%%    the calibrated simulation -> §5.4, beside the era discussion
+%%    the corr(SR,1/vol) refusal -> a footnote where volatility is
+%%      first quantified
+%%=====================================================================
+%%=====================================================================
+%%  §3  EVERYTHING FIXED BUT THE GROUPING      target 3-4 pp.
+%%
+%%  JOB. Make the reader believe that nothing varies except the object
+%%  under study, and NAME THE OBJECT. This is the section the venue
+%%  audit called structurally sound but foreign in voice: it currently
+%%  reads as a data section. It should read as a design that isolates an
+%%  estimand.
+%%
+%%  NAME THE ESTIMAND. A partition of the day's residual correlation
+%%  matrix -- equivalently a restricted, one-hot loading matrix. Saying
+%%  this once buys the whole paper its econometrics footing, and it is
+%%  what makes §8's matched-rank comparison against principal components
+%%  a non-nested comparison of two restricted factor structures rather
+%%  than a horse race.
+%%
+%%  MUST CONTAIN:
+%%   * panel: 6,941 OOS days, 1997-05-23 to 2024-12-30, top ~500 by cap
+%%   * THE SPLIT-ADJUSTMENT CORRECTION. A credibility asset -- state it
+%%     plainly in the body, do not bury it in a footnote. Facts, from
+%%     NUMBERS.md N13.1:
+%%       - the old panel built returns as pct_change() on prevAdjClose,
+%%         which is off by the split factor on split days
+%%       - most extreme recorded bad return: AIG on 2009-06-30 logged as
+%%         +1644% against a true -12.78%
+%%       - it was NOT noise. Reverse splits hit the names a mean-reversion
+%%         book is LONG and forward splits hit the names it is SHORT, so
+%%         BOTH SIGNS PAID THE BOOK. That sentence is the reason this
+%%         belongs in the body: the error was biased in the strategy's
+%%         favor, not symmetric around zero
+%%       - corrected panel validated by asserting
+%%         pct_change(fill_method=None) == returns.shift(1):
+%%         max|diff| 1.776e-15 over 28,119,362 target cells
+%%     ⚠ The effect on full-sample Sharpe -- "-0.069 to -0.144 SR across
+%%       six naive streams", i.e. the old panel OVERSTATED Sharpes -- is
+%%       only PARTIALLY VERIFIED. It is quoted from PROVENANCE.md; the
+%%       underlying FINDINGS.md was never re-read and the six streams were
+%%       never recomputed. ATTRIBUTE IT IN THE TEXT or drop the range and
+%%       keep the AIG example, which is verified.
+%%   * residualization: single-factor market model, 60-day rolling beta,
+%%     computed ONCE, IDENTICAL across every configuration
+%%     ⚠ the head residualizes for the SIGNAL but books RAW returns.
+%%       Do not describe the strategy as "trading residuals"
+%%   * the twelve methods by family, ONE sentence each -- the audit calls
+%%     the long catalogue "a methods catalogue for a practitioner".
+%%     Compress it; the detail goes to the appendix
+%%   * THE TWO NULLS, and what each identifies:
+%%       no clustering at all (K=1)    -> what clustering is worth
+%%       random clustering (K=30)      -> what getting it wrong costs
+%%     random falls BELOW no-clustering, which is why the two are not
+%%     interchangeable. RECOMPUTED FROM DailyPnL 2026-08-15, both
+%%     conventions, all 6,941 days:
+%%       SR_mean   k1 1.4107 (n=3, sd 0.1198)   random 1.2662 (n=4, 0.1249)
+%%       SR_avg    k1 1.5855                    random 1.4214
+%%     ⚠ THE SIGN IS STABLE; THE SIGNIFICANCE IS NOT. At the seed level
+%%       the gap (+0.1445) is smaller than either control's own seed s.d.
+%%       and Welch gives t = 1.551, p = 0.187 -- NOT resolvable. On the
+%%       seed-averaged daily series a circular block bootstrap (block 21,
+%%       5,000 draws, seed 42) gives +0.1641, 95% CI [+0.0276, +0.3104],
+%%       p = 0.016 -- resolvable. The two tests answer different
+%%       questions (would a NEW SEED reverse it, versus do THESE two
+%%       books differ over the sample). Report the ordering with its
+%%       convention and its test; do NOT call it significant unqualified.
+%%     ⚠ The conceptual point does not depend on the ordering at all:
+%%       the two controls identify different things whichever is higher.
+%%       Lead with that, and let the ordering be a measured detail.
+%%   * the two trading layers: rule-based (no fitted parameter) and
+%%     learned. Define "the book" and "gross exposure" -- foreign terms
+%%     until defined
+%%   * seeds: three per configuration, and why
+%%   * validity: a run is invalid if ANY day has no long or no short.
+%%     ⚠ "Four of eighty-five" is STALE -- the campaign has grown.
+%%     Recomputed 2026-08-15 with ne_gate.discover() + gate_ok():
+%%     151 runs discovered, FOUR fail, all on seed 7 (family_gics_seed7,
+%%     family_random_seed7, kmeans_seed7, sssnet_seed7). The 151 includes
+%%     the window and K sweeps, so SCOPE THE DENOMINATOR to the arm set
+%%     the sentence is about rather than quoting a bare count.
+%%   * ⚠ TWO STATISTICS ARE BOTH CALLED "SHARPE RATIO" here and differ
+%%     by 0.14-0.27 -- RECOMPUTED 2026-08-15 across the common-window
+%%     field, min +0.1418 (PCA loadings) max +0.2665 (SSSNET) mean
+%%     +0.1791; NUMBERS.md N0.1 gives +0.1418..+0.2731 on SET19. The
+%%     "0.15-0.17" that stood here and in the printed footnote was WRONG
+%%     and understated the top end by 0.10. SR_avg > SR_mean always,
+%%     because averaging seeds diversifies away head-training noise.
+%%     Statistics: the mean of per-seed Sharpes (SR_mean) and the
+%%     Sharpe of the seed-averaged payoff (SR_avg). Say which one every
+%%     table uses. This is the single most reusable footgun in the paper
+%%   * K is fixed NOMINALLY at 30 and not effectively: effective K runs
+%%     8.68-28.89 over the seventeen nominal-K=30 arms
+%%
+%%  TABLE: the design table (rows = elements, columns = specification).
+%%  Make "exactly one thing varies" visible.
+%%
+%%  ⛔ "Exactly one row varies" is FALSE as printed in the generated
+%%     draft -- the correlation window is NOT common across the family
+%%     (eleven arms at 60, five deliberate w21 twins, three at neither
+%%     -- CORRECTED 2026-08-21 from label-cache evidence; the counts
+%%     printed here were transposed). Say so
+%%     here, and restrict every ranking exhibit to a common window.
+%%=====================================================================
+\section{Data and Experimental Design}
+\label{sec:design}
+
+In this section we hold every element of a statistical arbitrage
+pipeline fixed except the clusterizer and the trading model, and we state what the resulting comparison estimates. A clustering-based statistical arbitrage strategy has two stages. A \emph{clusterizer} divides the cross-section of $\N_t$ stocks
+into $\K$ groups: it maps the day's panel of residual returns to a
+partition. A trading model then bets on relative value within each
+group. We trade every partition under both a fixed cross-sectional rule and a
+neural trading head. Throughout, \emph{clusterizer} denotes the algorithm, \emph{clustering} the operation it performs, and \emph{partition} the grouping it produces. The two-stage design---extract a
+relative-value residual, then bet on it---follows the deep statistical
+arbitrage line of \citet{guijarro2025deep} and
+\citet{epstein2025attention}. Comparing partitions inside such a pipeline has precedents in \citet{Jinetal2023}, within the spectral family, and in \citet{brutti2026orthogonal}, whose no-clustering benchmark our rule-based results corroborate, though not its turnover (\secref{sec:costs}).
+
+Write the day-$t$ partition $\Part_t$ as a membership matrix
+%
+\begin{equation}\label{eq:membership}
+  \Zmat_t \in \{0,1\}^{\N_t \times \K},
+  \qquad
+  \Zmat_t \ones{\K} = \ones{\N_t},
+\end{equation}
+%
+so that $[\Zmat_t]_{ik} = 1$ exactly when stock $i$ belongs to group $k$,
+and the constraint records that every stock belongs to exactly one. The object we vary is $\Zmat_t$. It is formed from the panel of residual
+returns and re-estimated every trading day. Equivalently, $\Zmat_t$ is a
+factor loading matrix restricted to be one-hot: every stock loads on
+exactly one group, with unit weight. An unrestricted
+$\Lam_t \in \real^{\N_t \times \K}$ ($\K$ principal components,
+say) lets every stock load on every component. Both are rank-$\K$
+descriptions of the same cross-section, which makes them comparable.
+
+Let $\pi_t(\Zmat)$ denote the payoff of the book the trading component produces from a partition $\Zmat$. We estimate the map
+%
+\begin{equation}\label{eq:estimand}
+  \Zmat \;\longmapsto\; \bigl(\mu(\Zmat),\, \sigma(\Zmat)\bigr),
+  \qquad
+  \mu(\Zmat) = \Exp\bigl[\pi_t(\Zmat)\bigr],
+  \qquad
+  \sigma^2(\Zmat) = \Var\bigl[\pi_t(\Zmat)\bigr],
+\end{equation}
+%
+and the organizing claim of this article is that clustering moves $\sigma$ more than it moves $\mu$. \figref{fig:pipeline}
+draws the pipeline that produces $\pi_t$: every arm, one clusterizer or control traded at one component, shares
+every stage except the partition. \secref{sec:factor} uses
+the loading-matrix equivalence of \eqnref{eq:membership} directly,
+comparing $\Zmat_t$ against principal components at matched rank~$\K$.
+
+\begin{figure}[p]
+\centering
+\resizebox{\textwidth}{!}{\input{figures/fig_pipeline}}
+\caption{The strategy pipeline. This figure shows the stages of the pipeline as horizontal bands, one per stage. The arms differ only in the partition band, whose second column lists the input each clusterizer uses; every other band is common to all arms. Raw returns bypass the residual construction and re-enter at the payoff. The four insets are computed from the panel and from the $k$-means partition the runs used ($\K=30$, re-estimated daily) for 7~July 2014, a day with $\N_t = 500$ names, all 30 groups occupied, the largest holding $78$ names and six holding one, which carry no position. $\Cmat$ is ordered by that day's groups; $\Zmat_t$ is the membership matrix with columns sorted by group size. The paths are 26 of the $478$ eligible names, 30 days of cumulative peer-demeaned residual return in percent, with the five days the rule-based component reads shaded.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{The Panel}
+\label{sec:panel}
+
+We build the panel from daily CRSP data obtained through WRDS, covering
+1990 to 2024. The traded universe is the 500 names
+with the largest market capitalization as of the \emph{previous} close,
+reselected daily. This restriction keeps the comparison in a large, liquid-equity universe while allowing membership to evolve using only information available at the previous close. The names must be common stock with a full residual history over the estimation window.\footnote{CRSP share codes $10$, $11$, and $12$.} The return is CRSP's close-to-close return adjusted for splits and dividends. Every result in this article is computed on the $6{,}913$ out-of-sample trading days that all 14 arms (the 12 clusterizers and the two controls) share at both trading components, 8 July 1997 to 27 December 2024. The neural trading head is pre-trained on the first $1{,}000$ days on which a book can be
+formed, and the walk-forward loop begins on the day after the last of them. The panel's date labels run one trading day ahead of the Fama--French calendar; the offset is corrected before any regression on the factor file, and no statistic computed within the panel depends on it (\appref{app:calendar}). 
+
+%%  ⚠ DECISION PENDING (2026-08-15). The split-adjustment material was
+%%  drafted in the body and MOVED to Appendix A.1 at the author's
+%%  instruction, leaving the pointer sentence above. A \TODO in
+%%  A_supplementary.tex asks the coauthors to settle body vs footnote vs
+%%  appendix. If it comes back to the body, the full text is in the
+%%  appendix file and can be moved back intact.
+
+\subsection{Residualization}
+\label{sec:resid}
+
+To remove the market factor, we residualize every stock's return
+against the S\&P~500 exchange-traded fund (SPY) using a single-factor
+market model. 
+Writing $r_{it}$ for the raw return on stock $i$ and $r_{mt}$ for the
+market return,
+%
+\begin{equation}\label{eq:residual}
+  \tilde r_{it} \;=\; r_{it} - \hat\beta_{it}\, r_{mt},
+  \qquad
+  \hat\beta_{it}
+  \;=\;
+  \frac{\widehat{\Cov}_{[t-59,\,t]}\bigl(r_i,\, r_m\bigr)}
+       {\widehat{\Var}_{[t-59,\,t]}\bigl(r_m\bigr)},
+\end{equation}
+%
+the estimation window running over the 60 trading days ending at $t$
+inclusive; the window length follows \citet{avellaneda2010statistical}. The ratio in \eqnref{eq:residual} is the least-squares slope from a regression of $r_i$ on $r_m$ with an intercept; the intercept is not subtracted, so $\tilde r_{it}$ is a market-hedged return, which we call a ``residual'' for brevity, rather than the regression residual itself. The position formed at the close of day $t$ earns $r_{i,t+1}$, which lies outside every estimation window, so no position uses information about the return it earns; the convention is shared by all 14 arms.\footnote{Ending the window at $t-1$ instead, with every partition held fixed and the trained component not rerun, moves each rule-based book's Sharpe ratio by less than $0.04$, well inside the dispersion of \secref{sec:field}. The volatility reduction from clustering is unchanged to the first decimal and the alpha advantage over either control is marginally larger, so the convention retained here is conservative.}
+
+\eqnref{eq:residual} involves no $\Zmat_t$ and is computed
+once. The residual panel $\widetilde{\Rmat} = (\tilde r_{it})$ is therefore a common input: every
+clusterizer is the map $\widetilde{\Rmat} \mapsto \Zmat_t$
+evaluated at the same argument. The residuals drive the clustering and the trading signal, but the book
+is settled in raw returns: $\pi_t$ in \eqnref{eq:estimand} accumulates
+$r_{it}$, not $\tilde r_{it}$.
+
+
+\subsection{The Clusterizers}
+\label{sec:methods}
+
+We compare the 12 clusterizers, using a common 60-day estimation window wherever the partition is estimated from returns or correlations.
+\tabref{tab:methods} lists them by
+family, with what each clusterizer reads and how each is
+constructed.\footnote{The list omits density-based clustering (DBSCAN, OPTICS), standard in
+pairs selection since \citet{SARMENTO2020113490}, because it returns a variable number of clusters and discards unclustered names, which a design matching $\K$ across arms cannot accommodate; \appref{app:singleton} finds the cost of discarding names inside the noise of a single refit. Modularity-based community detection also chooses its own $\K$, and single-linkage clustering is omitted for chaining.} Each clusterizer receives the same
+$\widetilde{\Rmat}$, targets the same $\K$, and passes its $\Zmat_t$ to the same trading stage. $\K$ is $30$ throughout, the fixed-$\K$ benchmark of \citet{Jinetal2023}; \appref{app:ksweep} sweeps it. We do not tune any clusterizer's settings to its trading results. Each runs at one pre-specified setting,
+because the question is how much a downstream Sharpe ratio can tell apart different partitions, not which setting of any one method is
+best. \appref{app:rules} gives each clusterizer's construction, and
+\appref{app:sizes} the partitions it produces.
+
+\begin{table}[htbp]
+\centering
+\caption{The 12 clusterizers}
+\label{tab:methods}
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{0.96}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{2.6cm}c>{\raggedright\arraybackslash}p{4.65cm}@{}}
+\toprule
+Clusterizer & Reads & Window (days) & Construction \\
+\midrule
+\multicolumn{4}{@{}l}{\emph{Geometric}}\\
+$k$-means on returns & $\widetilde{\Rmat}$ directly & $60$
+  & $k$-means on the residual return vectors in Euclidean space;
+    forms no correlation matrix \\
+\addlinespace
+\multicolumn{4}{@{}l}{\emph{Hierarchical} \citep{Mantegna1999, TOLA2008235}}\\
+Average linkage & $\Cmat$ & $60$
+  & agglomerative clustering on $\Dmat = 1 - \Cmat$ \\
+Complete linkage & $\Cmat$ & $60$
+  & the same, complete rather than average linkage \\
+\addlinespace
+\multicolumn{4}{@{}l}{\emph{Eigenstructure} \citep{macmahon2015community, cucuringu2019sponge}}\\
+Spectral (unsigned) & eigenvectors of $|\Cmat|$ & $60$
+  & spectral clustering on the unsigned correlation \\
+PCA loadings & eigenvectors of $\Cmat$ & $60$
+  & $k$-means on the 10 leading eigenvector coordinates \\
+\textsc{sponge} & a signed-Laplacian pencil & $60$\tnote{a}
+  & the symmetric variant \textsc{sponge}$_{\text{sym}}$, on the positive
+    and negative parts of $\Cmat$; unlike the row above it uses the
+    sign\tnote{b} \\
+\addlinespace
+\multicolumn{4}{@{}l}{\emph{Learned} \citep{he2022sssnet}}\\
+\textsc{sssnet} & $\Cmat$, as a signed graph & $60$
+  & a signed-graph network trained on a clustering objective,
+    warm-started from \textsc{sponge}\tnote{c} \\
+\addlinespace
+\multicolumn{4}{@{}l}{\emph{Trading-driven}}\\
+Sharpe & $\Cmat$ and the payoff & $60$
+  & a soft assignment optimized against the realized Sharpe ratio of
+    the book it produces, hardened by $\arg\max$ \\
+Sortino & $\Cmat$ and the payoff & $60$
+  & the same, downside deviation replacing the standard deviation \\
+Sharpe (EW) & $\Cmat$ and the payoff & $60$
+  & the same objective exponentially weighted, decay $0.99$\tnote{d} \\
+Sharpe (graph) & $\Cmat$ and the payoff & $60$
+  & the assignment comes from a signed-graph network, and the objective
+    matches the trading signal's 30-day horizon \\
+\addlinespace
+\multicolumn{4}{@{}l}{\emph{Taxonomy} \citep{bhojraj2003whats}}\\
+\textsc{gics} & nothing, on the names it
+  covers & --- & a static sector classification; names outside the table are
+    placed by correlation\tnote{e} \\
+\addlinespace
+\midrule
+\multicolumn{4}{@{}l}{\emph{Controls}}\\
+No clustering ($\K=1$) & nothing & ---
+  & one all-market group, so the trading rule demeans against the whole
+    cross-section \\
+Random partition & nothing & ---
+  & a uniform random partition redrawn each day, matched to the real partitions in $\K$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\footnotesize
+\item \emph{Notes.} This table lists the 12 clusterizers, the object each reads, its estimation window, and its construction. Every clusterizer receives the same $\widetilde{\Rmat}$ and targets the
+same $\K$. Identifiers used in the runs are given in \appref{app:names}.
+\item[a] Every clusterizer that forms a correlation matrix reads the same
+60 trading days. \textsc{sponge} is estimated at 21 days in its
+original implementation; the arm carried here is its 60-day variant, so that a comparison across clusterizers is not a comparison of windows.
+The substitution does not disadvantage \textsc{sponge}
+(\appref{app:names}). The three arms
+marked --- form no correlation matrix at all.
+\item[b] Groups of fewer than two members are handled differently:
+\textsc{sponge}, Sharpe, and Sortino reassign such a member to its most
+correlated group, while the other nine clusterizers leave it and the trading
+stage drops it. For the three that reassign this is immaterial; under $k$-means on returns, the one clusterizer with a material singleton rate, the deletion changes the traded book, and \appref{app:singleton} measures its cost.
+\item[c] Run once to produce a fixed set of daily partitions used by all five seeds, like the other stochastic clusterizers (\appref{app:sssnet}).
+%% v3-VERIFIED 2026-08-20 (coverage 54-73%, fill ~35%, exactly 10 groups):
+%% measured from partitions_v3/labelcache_gics vs labelcache_kmeans_ret over the
+%% 6,944 OOS days. Do NOT restore the old-panel 48-68 / 40 / 10.9 in the number pass.
+\item[d] Sharpe (EW) differs from Sharpe in more than the weighting, so the
+clean contrast is Sharpe against Sortino.
+\item[e] The table is a single snapshot covering roughly $54\%$ to $73\%$ of the
+universe by era, so it carries survivorship and coverage bias by construction.
+The names it does not cover, about $35\%$ of the book on a given
+day, are assigned to the group they correlate with most strongly, so the arm that is
+actually traded is a taxonomy--correlation hybrid; the \emph{Reads} column records the taxonomy alone. 
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Three features of the list matter later. First, the families differ in the information they use as well as in the algorithm, and the window experiment of \secref{sec:window} finds sensitivity to the length of the estimation window concentrated in the clusterizers that read individual eigenvectors of the correlation matrix. Second, the four trading-driven clusterizers optimize the
+partition against the Sharpe or Sortino ratio itself rather than against any other measure of
+cluster quality. Whether using the payoff helps is then an empirical question, and with our design it does not: one of the four finishes near the top of the ranking and three in the lower half (\secref{sec:field}). Third, we include \textsc{gics} to give the
+comparison a non-statistical reference point, and carry its coverage
+caveat (\tabref{tab:methods}, note e) wherever it appears.
+
+
+\subsection{The Two Trading Components}
+\label{sec:components}
+
+We trade every partition twice: once by a fixed cross-sectional rule
+with no fitted parameter, and once by a neural trading head fitted on a Sharpe ratio loss. Both components begin by demeaning within the same partition: on each day we
+subtract from every stock's residual the average residual of its own
+group,
+%
+\begin{equation}\label{eq:relsig}
+  s_{it} \;=\; \tilde r_{it} \;-\; \frac{1}{|C_{k(i)}|}
+               \sum_{j \in C_{k(i)}} \tilde r_{jt},
+\end{equation}
+%
+where $C_{k(i)}$ is the group holding stock $i$. \eqnref{eq:relsig} is the second of two residualizations in the design: the first, in
+\eqnref{eq:residual}, removes the market; this one removes the peer group.
+
+The rule-based component sums \eqnref{eq:relsig} over the past five days and holds every stock with a negative sum long and every stock with a positive sum short, equally weighted within each side:
+%
+\begin{equation}\label{eq:naivew}
+  w_{it} \;=\;
+  \begin{cases}
+    +1/n^{+}_{t}, & \text{if } \displaystyle\sum_{v=t-4}^{t} s_{iv} < 0,\\[6pt]
+    -1/n^{-}_{t}, & \text{if } \displaystyle\sum_{v=t-4}^{t} s_{iv} > 0,
+  \end{cases},
+\end{equation}
+%
+with $n^{+}_{t}$ and $n^{-}_{t}$ the number of stocks on each side. The
+rule is adapted from \citet{Jinetal2023}, who trade the same
+within-cluster reversal on raw returns, with weights normalized within
+each cluster rather than across the book. The book is long what has recently fallen behind its peers, the mean-reversion bet. Writing $\sum_i |w_{it}|$ for its gross exposure and
+$\sum_i w_{it}$ for its net, \eqnref{eq:naivew} gives $2$ and $0$
+respectively: dollar neutrality holds by construction here, and will
+not hold at the trained component. The book is fully determined by the partition.
+
+The trained component replaces that rule with a \emph{neural trading
+head} in the design of \citet{guijarro2025deep}: a convolutional
+extractor applied to the residual path, followed by a scoring network,
+with every parameter fitted to maximize the Sharpe ratio of the book
+itself. We replace their transformer with the long convolution of
+\citet{fu2023simple}, as \citet{epstein2025attention} do. For each stock the head reads the 30-day path of running sums of \eqnref{eq:relsig} and returns a weight through a fixed chain,
+%
+\[
+  x_{it}\ \xrightarrow{\ \mathrm{Conv}_{2,4,8}\ }\ u_{it}\ \xrightarrow{\ \mathrm{LongConv}\ }\ h_{it}
+  \ \xrightarrow{\ \mathrm{FFN}\ }\ g_{it}
+  \ \xrightarrow{\ c\tanh(\,\cdot\,/c)\ }\ f_{it}
+  \ \xrightarrow{\ /\sum_j |f_{jt}|\ }\ w_{it},
+\]
+%
+a multi-scale convolution, a long convolution with one kernel weight per step, a two-layer scoring network, and a soft clamp followed by a rescaling to gross exposure one. The parameters maximize the in-sample
+Sharpe ratio of the payoff \eqnref{eq:payoff}, less three
+regularization penalties, and are refit as the sample rolls forward: pre-trained once on the first $1{,}000$ days, then refit every $125$ trading days on the trailing thousand. Every arm uses the same head, with constants fixed in advance. The only choices made within a run, early stopping and the learning-rate schedule, are confined to the trailing training window; the seeds of \secref{sec:seeds} vary this fitting and nothing else.
+\appref{app:head} gives the architecture, the objective, and the schedule. Beyond the fitted model, the head also reads a longer signal window, $30$ days against the rule's five. \secref{sec:head} separates the model from the window by rerunning the fixed rule on a $30$-day signal.
+
+The rescaling fixes gross exposure and leaves $\sum_i w_{it}$ free, so unlike \eqnref{eq:naivew} it is not
+dollar neutral: mean absolute net exposure runs $0.06$ to $0.18$.
+Runs are screened for one-sided books, a day holding no long or no
+short position; no run reported in this article fails the screen. The
+head's objective
+also divides by a standard deviation, so the trained component targets the second moment directly, while
+the rule-based component does not.
+
+Either component turns weights into the payoff of \eqnref{eq:estimand},
+%
+\begin{equation}\label{eq:payoff}
+  \pi_t \;=\; \sum_i w_{it}\, r_{i,t+1},
+\end{equation}
+%
+and the return on the right is the \emph{raw} return of \eqnref{eq:residual}: residuals build the partition and the signal, but the payoff is earned on raw returns.
+
+
+%%---------------------------------------------------------------------
+%%  §3.5 DRAFT, 2026-08-16. Yours to edit.
+%%
+%%  ATTRIBUTION, verified 2026-08-16 against literature.md:
+%%    "Signal extraction: CNN+Transformer (following Ordonez et al.)"
+%%    "Betting: Sharpe ratio loss (following Ordonez et al.)"
+%%  i.e. Guijarro-ORDONEZ, Pelger & Zanotti -- so "follows
+%%  \citet{guijarro2025deep} in its two design choices" is supported by
+%%  the project's own record. Both bib entries are complete.
+%%  ⚠ THE SAME literature.md LINE ALSO SAYS "multi-scale 4-channel
+%%    input", which is the four-month-old WRONG description CLAUDE.md
+%%    corrects: the input is ONE channel and "multi-scale" means three
+%%    parallel kernel widths. Cite the lineage from that file; do NOT
+%%    carry its architecture description.
+%%  ⚠ epstein2025attention (ICAIF '25, Epstein-Wang-Choi-Pelger) is
+%%    listed in literature.md but NOTHING records the head being designed
+%%    after it. It is therefore cited as a RELATED alternative at the
+%%    same stage, not as a source. If the head did in fact follow it,
+%%    upgrade the wording -- but only on the author's own knowledge, not
+%%    on anything in this repository.
+%%
+%%  WHY THIS SUBSECTION EXISTS AND WHY IT SITS HERE: §4 opens by
+%%  comparing the two layers, and until now the manuscript described the
+%%  trained head nowhere -- §3.6 said "trained three times" without
+%%  saying what was trained. The venue audit's words: "no econometrics
+%%  referee will pass a paper that omits this [the walk-forward
+%%  protocol]". Placed AFTER the controls and BEFORE the seeds because
+%%  the seed discussion is about this head's initialization.
+%%
+%%  EVERY NUMBER READ FROM AN EXECUTED WORKING COPY, not the shared
+%%  source: sssnet_seed_sweep/runs/family_pca_load/pipeline_work.py
+%%  lines 79-96 --
+%%    SIGNAL_WINDOW 30 | CNN_FILTERS 8 | CNN_KERNEL_SIZES [2,4,8]
+%%    TRANS_HDN 16 | TRANS_DROPOUT 0.25 | BET_LR 5e-4 | 1e-4 finetune
+%%    BET_WEIGHT_DECAY 5e-4 | BET_BATCH_DAYS 125 | PRETRAIN 80 epochs
+%%    FINETUNE 40 epochs | PRETRAIN_DAYS 1000 | FINE_TUNE_DAYS 1000
+%%    RE_ESTIMATE_FREQ 125 | EARLY_STOP_PATIENCE 15 / 10 | VAL_RATIO .15
+%%
+%%  ⚠ "one channel" is deliberate and load-bearing. CLAUDE.md records a
+%%    four-month-old description claiming FOUR channels and cumsum
+%%    windows of 60/5/10/20; it matches no code. The pipeline's own
+%%    comment says "Single-channel cumsum input (NOT multi-channel)", and
+%%    "multi-scale" refers to the three PARALLEL KERNEL SIZES, not to
+%%    input channels. A model built to the wrong description cannot be
+%%    compared to any arm here.
+%%
+%%  ⚠ THE L1 STEP IS NOT DOLLAR NEUTRALITY. It fixes gross at 1 and
+%%    preserves whatever long/short ratio the head produces; measured
+%%    mean|NetExposure| is 0.06-0.13 on healthy runs and 1.0 on failed
+%%    ones, which is why the validity screen of §3.6 exists. Do not write
+%%    "dollar-neutral" anywhere.
+%%
+%%  ⚠ THE RULE-BASED BOOK'S MEDIAN SPLIT: stated here from the naive
+%%    route-A construction (+1/n_long, -1/n_short, gross 2.0). VERIFY the
+%%    median-vs-mean threshold against run_naive_routeA.py before this
+%%    goes out -- the gross convention and the +/-1/n weights are
+%%    confirmed (audit block B), the exact long/short criterion is not.
+%%
+%%  ⚠ \appref{app:head} does not exist yet. Add the hyperparameter table
+%%    to A_supplementary.tex with \label{app:head}, or the build warns.
+%%---------------------------------------------------------------------
+
+\subsection{Two Controls}
+\label{sec:controls}
+
+To measure what a partition is worth, we compare every result below against two control arms. The first sets $\K = 1$, a single group, so the cluster-relative
+signal is measured against the whole cross-section rather than a peer
+group. This control answers whether clustering is worth performing at
+all. The second assigns each stock to one of $\K$ groups uniformly at
+random, independently across stocks and redrawn every trading day,
+reading nothing from
+$\widetilde{\Rmat}$. The random control removes only the
+\emph{information}:
+30 groups, the same cluster-relative construction, the same trading model, and the same signal window all remain, so it separates the
+mechanics of grouping from the information in the groups. It differs from the placebo of \citet{brutti2026orthogonal}, which
+permutes long and short assignments within clusters and so tests the signal rather than the partition.
+
+
+
+\subsection{Seeds and Conventions}
+\label{sec:seeds}
+
+We train each configuration five times, at seeds $\{1, 2, 3, 4, 5\}$. The seed varies only the initialization of the trading head, so dispersion across seeds is dispersion in the fitted model at a fixed clustering; every dispersion figure below, including the pooled benchmark of \secref{sec:invariance}, is computed across a configuration's own fits.
+
+Nine of the 12 clusterizers are stochastic. Each has its daily partitions generated once, from a fixed partition seed, and used by all five runs, so a training seed moves only the fit; \textsc{sssnet}, which in its original form computes its partition at run time, is run once to produce such a fixed set (\appref{app:sssnet}). The partition seed itself is redrawn only in \secref{sec:pseed}.
+
+Throughout, the Sharpe ratio of a payoff series is $\sqrt{252}$ times
+its mean divided by its standard deviation, with no risk-free
+subtraction: the books are self-financing and long-short, so their return is already an excess return. Tables report either the mean of the per-seed Sharpe ratios or the
+Sharpe ratio of the seed-averaged payoff, as each note states.
+Averaging the payoffs first cancels part of the variation between
+fits, so the second is larger, by $0.16$ to $0.22$.
+%%---------------------------------------------------------------------
+%%  §3.5 SCOPE DECISION, 2026-08-15 (author's call).
+%%  Lead with the three head fits, which are real, and state the scope of
+%%  the dispersion figure because a reader who does not know it will
+%%  over-read every +/- in the paper. Do NOT dramatize the single
+%%  partition draw beyond that -- partition-level replication has been
+%%  requested from the compute branch and this passage gets rewritten
+%%  when it lands.
+%%  HELD BACK, deliberately, until those runs exist:
+%%    - "the design draws once from the distribution of partitions and
+%%      three times from the distribution of model initializations"
+%%    - the random control's own limitation: its labels are redrawn every
+%%      trading day, so the sequence averages 6,941 draws, but the
+%%      SEQUENCE is one realization and is not replicated across seeds,
+%%      so there is no interval around "what a random clustering is worth"
+%%  Both are true and neither is concealed by the current wording; they
+%%  are simply not foregrounded. If the runs do not land before
+%%  submission, put the second one back -- it bears on a printed number.
+%%
+%%---------------------------------------------------------------------
+%%  §3.5 PROVENANCE, 2026-08-15. All verified here, not quoted.
+%%
+%%  "for every arm but one the partition is byte-identical across seeds"
+%%  is a CATEGORICAL claim and was checked as one: md5 of the partition
+%%  named in each run's own MANIFEST, over every multi-seed arm in
+%%  ne_gate.discover(). All identical within arm -- family_random
+%%  d4f9224fb881, kmeans de84a8c4a97c, family_sharpe_fixed 080c77e116d7,
+%%  family_sortino 5d2143ab5a33, family_spectral_unsigned 62e17a50e224,
+%%  family_sponge fa26a2c57329, k1 0bd502304693, and the w21/w60/w120/
+%%  w252 twins of each. SSSNET's three persisted partitions differ:
+%%  sssnet_labels/parts/ gives 4b2ebf13ff34 / ffac2204dfdd / 2a2a4cbb9344
+%%  for seeds 42 / 1 / 123.
+%%  ⚠ SSSNET's MANIFEST "refined pkl" line points at its SPONGE WARM
+%%    START, not its output, so an md5 of that line makes SSSNET look
+%%    seed-invariant. It is not. Read sssnet_labels/parts/ instead.
+%%
+%%  THE 0.026 FLOOR: recomputed from DailyPnL on the three replicates of
+%%  kmeans_ret K=30 seed 42 -- a2_reruns 2.5443, netcost 08-09 2.5933,
+%%  netcost 08-10 2.5832, all 6,941 days. sd 0.0259, range 0.0490.
+%%  Matches CORRECTIONS.md N20(f). Note this is 3x TIGHTER than the
+%%  |dSR| <= 0.08 reproduction tolerance CLAUDE.md records; if you want
+%%  that comparison in the text it is defensible, but it needs a clause
+%%  saying the 0.08 is a documented tolerance and not a measurement.
+%%
+%%  THE GATE: ne_gate.discover() + gate_ok() over 151 runs, four fail --
+%%  family_gics_seed7, family_random_seed7, kmeans_seed7, sssnet_seed7.
+%%  ⚠ I have written "four runs fail it" WITHOUT a denominator on
+%%    purpose. 151 is the whole campaign including the window and K
+%%    sweeps, which is not the set this section describes. If you want a
+%%    denominator, scope it to the arms in Table 1 and recount.
+%%
+%%  THE COLLAPSE: CLAUDE.md "Known Failed Approaches" item 6 -- under a
+%%  short training budget even a zero-drift control collapses to the
+%%  degenerate short book (NE -0.998, SR -1.34), with escape at epochs
+%%  ~25-50. That is the documented mechanism the last sentence refers to.
+%%---------------------------------------------------------------------
+
+%%---------------------------------------------------------------------
+%%  §3.4 NOTES.
+%%  ⛔ "not-good-enough clustering" was the first draft's phrase for
+%%     the random arm and it is the wrong model: random is not a poor
+%%     attempt on a quality continuum, it is the ZERO-INFORMATION point.
+%%     The machinery/content separation is the whole reason the arm
+%%     exists; keep that sentence.
+%%  ⛔ Do not call these "nulls" -- in this venue a null is a hypothesis.
+%%     They are control arms. Used consistently as "control" throughout.
+%%  Numbers: 1.4107 (n=3, sd 0.1198) and 1.2662 (n=4, sd 0.1249),
+%%     SR_mean, recomputed from DailyPnL 2026-08-15, all 6,941 days.
+%%     Regularity figures from NUMBERS.md N13.2.
+%%  ⚠ THE SIGNIFICANCE IS DELIBERATELY NOT STATED HERE. Seed-level Welch
+%%     gives p = 0.187 (not resolvable); the seed-averaged daily series
+%%     under a circular block bootstrap gives p = 0.016 (resolvable).
+%%     The two answer different questions. §7 is where the test belongs;
+%%     if you would rather settle it here, state BOTH or neither.
+%%  ⚠ VERIFIED 2026-08-15: the random arm's partition is byte-identical
+%%     across its four seeds (md5 d4f9224fb8813387), as is k1's
+%%     (0bd502304693c32e). So the four seeds vary the head only. The
+%%     partition IS redrawn daily inside the day loop, so the sequence
+%%     averages over 6,941 independent draws -- but it is ONE sequence,
+%%     and there is no confidence interval over random partitions, only
+%%     over head initializations. Say so in §3.5 with the other seed
+%%     material rather than here.
+%%---------------------------------------------------------------------
+
+%%---------------------------------------------------------------------
+%%  §3.3 DRAFT, 2026-08-15. YOURS TO REWRITE -- this is a first pass.
+%%  Every construction below was read from source, not from a memo:
+%%    gen_daily_partitions.py:102-121  kmeans_ret, random, spectral_unsigned,
+%%                                     agglo_avg/complete, pca_load
+%%    gen_daily_partitions.py:124-133  sponge_labels
+%%    gen_daily_partitions.py:136-148  load_gics + the coverage caveat, verbatim
+%%    variant_f_v2a_clusterizer.py:1-10  the fv2a docstring (Sinkhorn soft
+%%                                     assignment, EW099-Sharpe loss, cohesion
+%%                                     floor, Adam, argmax)
+%%    run_naive_routeA.py:54-92        the PARTS registry -- the authority on
+%%                                     which twelve exist and where they live
+%%
+%%  ⚠ THE SECOND "FEATURE" NEEDS ITS NUMBERS BEFORE IT CAN STAND. The
+%%    claim "seeing the payoff does not help" is the falsification test:
+%%    the four objective-driven rules average 6.885 %/yr alpha against
+%%    6.928 for the rest, and rank 4th / 9th / 13th / 16th of nineteen.
+%%    PUT THOSE IN §5, not here -- here it is only a forward pointer.
+%%    ⛔ Do NOT write "the clusterizer never sees a payoff". It is
+%%       false and was caught once already.
+%%
+%%  ⚠ 9.22 (names dropped/day) and 0.61 (the next largest) are recorded
+%%    in _reference/NEWSTATS_book_dropped.md. They are NOT the same
+%%    quantity as the 10.3 singletons/day in note (c): singletons count
+%%    GROUPS in the partition, 9.22 counts NAMES removed from the traded
+%%    book. Do not substitute one for the other.
+%%
+%%  ⚠ THE SPONGE ROW'S NOTE (c) IS A NEW MEASUREMENT, 2026-08-15, not
+%%    from any prior reference file. Full record and method in
+%%    _reference/NEWSTATS_sponge_repair.md; probe script kept in the
+%%    session scratchpad. Headline: SPONGE's raw solve gives 0.20-0.34
+%%    sub-minimum groups/day (0.042-0.068% of the book) against
+%%    kmeans_ret's 10.80, and the repair is inert on 76-85% of days, so
+%%    the asymmetry is real but does not need a rerun. It also showed the
+%%    run_sponge acceptance tolerance (len(unique) >= k-5) NEVER binds at
+%%    K=30 -- 363 of 363 solves returned exactly 30 groups.
+%%    ⛔ Reading 2 is K=30 ONLY. Do not extend it to the K sweep; there
+%%       is no SPONGE arm in that sweep.
+%%
+%%  ⚠ K FOR gics IS NOT 30. Realized mean 10.926 (NUMBERS.md N13).
+%%    Stated in note (b).
+%%
+%%  NAMING, decided 2026-08-15. Internal identifiers are replaced by
+%%  readable names throughout; the mapping is the last table note.
+%%  Family name for fv2a/fv3sm/sortino/sharpe_fixed is TRADING-DRIVEN.
+%%
+%%  ALL FOUR GENERATORS NOW READ (tier2/work/<name>/work.py):
+%%    sharpe_fixed -> "Sharpe"        plain Sharpe; STE + L1
+%%    sortino      -> "Sortino"       -mean/downside_deviation; same fixes
+%%                                    => THE clean objective contrast, and
+%%                                    sharpe_fixed's own docstring says so:
+%%                                    "Sharpe loss baseline for fair
+%%                                    comparison vs Sortino daily variant"
+%%    fv2a         -> "Sharpe (EW)"   EW(0.99) over T=251 (MR_LOOKBACK=252,
+%%                                    R_today=R[:-1]). Oldest day carries
+%%                                    8.1% of the newest day's weight;
+%%                                    effective sample 169 of 251, so the
+%%                                    weighting is NOT cosmetic.
+%%    fv3sm        -> "Sharpe (graph)" ⚠ CORRECTION: this is NOT an fv2a
+%%                                    variant. Its docstring reads
+%%                                    "signed-GCN + 30-day cumsum naive bet
+%%                                    Sharpe loss"; the assignment comes
+%%                                    from a signed graph network, not from
+%%                                    free logits, and it carries a seed
+%%                                    anchoring loss (weight 10, decaying
+%%                                    over 200 steps). The earlier draft
+%%                                    called it "a variant of the same",
+%%                                    which was wrong.
+%%
+%%  ⚠ fv2a IS A SUPERSEDED IMPLEMENTATION. sharpe_fixed's docstring:
+%%    "Bug fixes (vs original fv2a): STE + L1 + plain (no EW099)". So the
+%%    twelve-arm field contains a pre-fix and a post-fix build of the same
+%%    method. Note (d) says the pair is not a clean weighting contrast.
+%%    ⛔ UNRESOLVED, FOR THE COAUTHORS: whether fv2a should stay among the
+%%       twelve at all, or move to the appendix as a robustness row. It
+%%       changes the number "twelve". My reading that "no EW099" is a
+%%       simplification for comparability rather than a defect is a
+%%       READING of that docstring, not something it states.
+%%
+%%  ⚠ This family runs CORR_LOOKBACK = 21 with a 252-day objective window
+%%    -- part of the "the correlation window is not common" discount.
+%%---------------------------------------------------------------------
+
+%%---------------------------------------------------------------------
+%%  P3 PROVENANCE, 2026-08-15. All read from source, not from a summary.
+%%
+%%  THE MARKET FACTOR IS SPY, THE ETF -- not the index. Source:
+%%  May_15_Meeting/MR_clustering/pipeline_v21_tourney_kmeans_ret.py:156,
+%%    mkt = raw_returns["SPY"] if "SPY" in raw_returns.columns else ...
+%%  The draft said "the S&P 500 index"; corrected above. If you prefer,
+%%  name the ticker explicitly -- "the S&P 500 ETF (SPY)".
+%%
+%%  THE ESTIMATOR, verbatim from :154-160:
+%%    roll_cov = raw_returns.rolling(60).cov(mkt)
+%%    roll_var = mkt.rolling(60).var()
+%%    residuals = raw_returns - (roll_cov.div(roll_var, axis=0)).multiply(mkt)
+%%  pandas .rolling(60) ends at and INCLUDES the current row, which is
+%%  why the window in eq:residual is [t-59, t] and not [t-60, t-1].
+%%
+%%  THE 0.041-0.057: AUDIT.md:210-215. Exact wording there -- "isolating
+%%  the leak raises every naive Sharpe by +0.041 to +0.057, changes no
+%%  naive rank, and shrinks every §3 lift by the same. The bias is
+%%  conservative -- it understates the baseline."
+%%  ⚠ I have stated ONLY the baseline half above. The lift half is more
+%%    delicate: a leak that lowers the baseline INFLATES a lift measured
+%%    against it, and the §3 lift values are separately flagged
+%%    WRONG BASIS in CORRECTIONS.md. Do not extend the word
+%%    "conservative" to the lifts without re-reading AUDIT.md §G.
+%%
+%%  ⚠ THE ESTIMATOR IS THE WITH-INTERCEPT OLS SLOPE, THE RESIDUAL IS
+%%    NOT AN OLS RESIDUAL. Verified numerically 2026-08-15: pandas
+%%    cov/var matches the with-intercept least-squares slope to 1.1e-15
+%%    (and differs from the no-intercept slope by a factor of three on a
+%%    test case). But the code forms r - beta*m without subtracting
+%%    alpha, so the series retains each stock's drift -- on a synthetic
+%%    check the residual mean equalled the intercept exactly, against a
+%%    machine-zero mean for the true OLS residual. eq:residual prints
+%%    what is actually computed, so nothing is wrong; the clause in the
+%%    prose exists so that no later section can call it a "regression
+%%    residual" or an "alpha" without contradicting the equation.
+%%
+%%  ⚠ BETA_WINDOW = 60 in 88 of 88 executed working copies; no 252
+%%    anywhere. The clustering input and the naive leg use the same
+%%    function body, max|diff| 0.0. (CLAUDE.md §2, verified 2026-08-12.)
+%%---------------------------------------------------------------------
+
+\subsection{What the Design Can Resolve}
+\label{sec:resolution}
+
+
+
+
+
+We close the section by stating what the design can and cannot
+resolve. A
+comparison of trading strategies is a comparison of estimated moments,
+and the same sample estimates a volatility with $\sqrt{2}$ times the
+precision of a mean. For a return series of length $T$
+and volatility $\sigma$,
+%
+\begin{equation}\label{eq:twose}
+  \operatorname{se}(\hat\sigma) \;=\; \frac{\sigma}{\sqrt{2T}},
+  \qquad
+  \operatorname{se}(\hat\mu) \;=\; \frac{\sigma}{\sqrt{T}}.
+\end{equation}
+%
+A Sharpe ratio is therefore asymmetric in its own resolution before any
+data are seen: whatever a study of this kind can say about the denominator, it
+can say less firmly about the numerator. A comparison carries information only when the spread in a moment is
+large relative to the precision with which that moment is measured.
+
+The 19 arms of \appref{app:names}, the 14 above plus five 21-day window variants, trade the same names on the same days, so their payoffs correlate at $\bar\rho = 0.854$ on the seed-averaged books. The
+common component of the estimation error cancels between them, so the
+measurement error used below is
+the idiosyncratic part.\footnote{Estimates of a variance inherit the square of the correlation between the underlying series, so the shared component of the volatility error is $\bar\rho^{\,2} = 0.729$ and not $0.854$; carrying $\bar\rho$ through would raise the volatility ratios reported here by about a third. The correlation is measured on seed-averaged payoffs; on single runs it runs from $0.757$ to $0.799$.}
+
+%%  PROVENANCE for the two ratios in the paragraph below.
+%%  Audited: _reference/NUMBERS.md N5.1.3, three independent constructions.
+%%    era        mean A / B / in-draft     vol  A / B / in-draft
+%%    1997-2001      2.1 / 1.9 / 1.9         12.8 / 11.8 / 11.8
+%%    2002-2009      1.7 / 1.6 / 1.6         20.2 / 20.8 / 20.8
+%%    2010-2016      1.2 / 1.2 / 1.2         13.9 / 13.8 / 13.9
+%%    2017-2024      0.8 / 0.7 / 0.7         21.9 / 22.7 / 23.2
+%%  Sets A and B were supplied with the 2026-08-12 retraction; the in-draft
+%%  column is scripts/era_fast.py on SET19, gate-checked and seed-averaged as
+%%  in N1, over 6,941 common days. The in-draft column lands on B throughout.
+%%  ⛔ TWO GUARDS FROM N5.1.3, BOTH HONOURED IN THE TEXT BELOW:
+%%    (a) the first-moment lower end is 0.7x on B and in-draft, so the
+%%        defensible form is "at or below one in the final period", NOT a
+%%        bare "0.8".
+%%    (b) the ratios are NOT era-monotone in either moment. Read them as a
+%%        band; never write them as a trend.
+%%  ⚠ The arm set is SET19, not the fourteen described above. Say so, or the
+%%    row silently changes with the field.
+
+The two moments fall on opposite sides of what the design can resolve. Split the sample at $2001$, $2009$, and $2016$, and measure across
+the 19 arms of \appref{app:names}: differences in volatility run between $13$ and $21$ times their own measurement error in every period, with no trend across the four periods. Differences in mean return run from $2.2$ times theirs in the first period to below one in the last two periods ($0.98$ and $0.63$).
+
+%%---------------------------------------------------------------------
+%%  §4.1 DRAFT, 2026-08-15. STRUCTURE DECIDED WITH THE AUTHOR:
+%%  the two standard errors were going to be their own subsection and are
+%%  now two sentences, because as a subsection they opened the section on
+%%  textbook material and pushed the lead exhibit to second place.
+%%
+%%  ⚠ THE CLOSING PARAGRAPH CARRIES THE READING, NOT THE NUMBERS. The
+%%    table has the numbers; prose that restates them is dead weight, and
+%%    the first draft of that paragraph spent its second sentence telling
+%%    the reader that an asymmetry they could already see had survived.
+%%    What it says now is the thing the table cannot: the two moments sit
+%%    on OPPOSITE SIDES of the resolution limit, and in 2017-2024 the
+%%    return differences are BELOW their own measurement error. That last
+%%    fact is the license for §5 -- this design can speak about volatility
+%%    differences and cannot speak about return differences -- so if the
+%%    audit moves the 0.8x figure above 1.0, the sentence must change and
+%%    §5's framing has to be revisited with it.
+%%
+%%  ⛔ REGISTER RULE, agreed 2026-08-15 after the same note three times.
+%%     A JFEC referee knows the machinery. State the CHOICES, not the
+%%     derivations. Var(A-B) = Var(A) + Var(B) - 2Cov(A,B) and the paired
+%%     -comparison logic that follows from it are first-year statistics
+%%     and were cut from this subsection for that reason. What survives
+%%     is what a reader CANNOT guess: that rho-bar is 0.8132 here, that
+%%     the denominators use the idiosyncratic part rather than the total,
+%%     and the rho-squared subtlety -- which is the one place a careful
+%%     replication would diverge, since the analogy with the mean case
+%%     invites carrying rho through.
+%%
+%%  ⛔ FRAMING RULE, agreed after this happened twice. Do not write a
+%%     passage that raises an objection in order to answer it -- "a reader
+%%     might suspect we simply measure volatility better". State the fact
+%%     positively and let it do the defensive work: a Sharpe comparison is
+%%     asymmetric in its own resolution BEFORE any data arrive. Same
+%%     content, and it plants no doubt in a reader who did not have one.
+%%     The same edit was made to the random-control passage in §3.4.
+%%
+%%  ✓ RESOLVED: the era ratios are now IN THE PROSE (11-19x volatility,
+%%     2.2x -> 0.9x mean). The audit below returned and the numbers landed;
+%%     there is no longer a \TODO here. Do not re-add one.
+%%     Every figure in this subsection is under audit (workflow
+%%     w5eubr6mh, 2026-08-15) and §4 is the section where a wrong
+%%     precision number is worse than no section at all. The surrounding
+%%     prose states the ranges in words -- "twelve to twenty-three times"
+%%     -- so it can stand or be corrected without rewriting. Put the
+%%     table in when the audit returns.
+%%
+%%  SOURCES to check the audit against: NUMBERS.md N5.1 (the ratios),
+%%  N4.2 (rho-bar 0.8132 and the pooled yardstick),
+%%  JFEC_ML_Draft/scripts/era_fast.py (generator for N5.1-N5.3),
+%%  scripts/s04_corr_and_yardstick.py (generator for N4.2).
+%%
+%%  ⚠ rho^2 = 0.661: 0.8132^2 = 0.66129. Printed as 0.661.
+%%---------------------------------------------------------------------
+

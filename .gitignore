@@ -1,0 +1,26 @@
+# Derived data (Zenodo record; see README "Layer L1") — 9.5 GB, never in git
+data/derived/
+# Local build-site scratch
+runs/
+analysis/results_5seed/
+analysis/results_3seed_archive/
+slurm/*.log
+# Python / editor
+__pycache__/
+*.pyc
+.DS_Store
+# LaTeX build products in paper/
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.out
+paper/*.synctex.gz
+paper/main.pdf
+# Ken French factor files are fetched, not redistributed (data/fetch_ken_french.py)
+data/factors/*.csv
+# editor / harness backups
+*.bak
+*.bak_*
+# superseded by RELEASE_CHECKLIST.md (its text is appended there); deletion pending the user
+TODO.md

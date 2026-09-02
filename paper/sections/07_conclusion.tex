@@ -1,0 +1,27 @@
+%!TEX root = ../main.tex
+%%=====================================================================
+%%  §9  CONCLUSION                            target 1-1.5 pp.
+%%
+%%  REWRITTEN 2026-08-16 to match the final abstract/intro (user's
+%%  abstract structure: two goods -> family comparison -> head ->
+%%  factor -> costs). No new numbers; every sentence restates a
+%%  section, none more strongly than the section did.
+%%
+%%  ⛔ Do not introduce a result here. Bans that bite in this file:
+%%   - no post-2009 alpha edge over K=1 (era scope: pre-2009 only)
+%%   - "cannot rank" must stay at §5's strength ("not a resolvable
+%%     object"; the top and bottom gaps DO resolve)
+%%   - no tradability claim; no "largely absorbs" (only partly, and
+%%     only vs K=1)
+%%=====================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper separates the two decisions a clustering-based statistical arbitrage strategy makes: how to group stocks and what model to trade within the groups. It measures what the clustering contributes against a no-clustering control and a random-partition control, at a fixed trading rule and under a neural trading head. A real partition lowers the volatility of the book, by about $40\%$ relative to either control under the fixed rule, and raises its alpha. The volatility reduction belongs to the clustering and every clusterizer supplies it; the neural trading head widens the alpha advantage, most against the random partition, so a wrong partition costs more under a fitted model.
+
+Whether a partition is used matters far more than which one. The 12 clusterizers disagree about the partition but largely agree about the book, and their Sharpe ratios differ mainly through the volatility of their books. Their payoffs correlate with one another as strongly as with their own refits, most adjacent gaps in the Sharpe ranking lie within the run-to-run variation in the gap itself, and redrawing the partition seed changes the leader at both trading components. A downstream Sharpe ratio distinguishes changes in the information a clusterizer uses and in the number of groups it forms; given the same input, it discriminates much less sharply among algorithms. Holding all 12 books at equal weight is as good as selecting among them on their past performance.
+
+The comovement a partition captures is only partly absorbed by principal components or by the Fama--French factors in the cross-section, and its books are not spanned by either, by a short-term reversal factor, or by the same strategy traded without clustering. Per-stock peer regressions absorb much of what a partition explains in the cross-section, yet four of the 12 clusterizer books keep their alpha against the peer books and the peer books keep theirs against the equal weight of all 12. The two constructions appear to differ in the class of peer set, shared or per-stock, rather than in the choice within a class. None of these books survives realistic costs: break-even sits below four basis points one-way, and at five no book is net positive.
+
+Two rules for evaluating partitions follow. A comparison of partitions should include a trading component with no fitted parameter, so that what the partition contributes is not confounded with what the model fits; a fitted model narrows the volatility benefit and widens the alpha benefit. A ranking of partitions should first check its gaps against seed and partition-draw noise. The two controls, the two noise benchmarks, and the split of the Sharpe gap into its mean and volatility parts apply unchanged to the comparison between shared and per-stock peer sets, which is the open question this design leaves.
+

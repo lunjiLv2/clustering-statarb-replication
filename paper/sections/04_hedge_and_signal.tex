@@ -1,0 +1,782 @@
+%!TEX root = ../main.tex
+%%=====================================================================
+%%  §4  WHAT GROUPING BUYS: THE HEDGE AND THE SIGNAL         target 4-5 pp.
+%%      THE PAPER'S MAIN RESULT SECTION.
+%%
+%%  Three movements, in this order:
+%%
+%%  5.1  THE DISPERSION CONTRAST. Across the field the alpha against
+%%       FF5+MOM is narrow and the volatility is not.
+%%         alpha  6.085 - 7.689 %/yr   (cv 5.5%)
+%%         vol    2.434 - 4.584 %/yr   (cv 18.8%)
+%%       Report the one-way ANOVA using the seed replicates as the
+%%       within-group variation, and make the point as a MAGNITUDE
+%%       CONTRAST (between/within sd ratio ~3.03 for volatility against
+%%       ~1.12 for alpha).
+%%       ⛔ Do NOT claim the alphas are equal. That null is REJECTED:
+%%          F = 3.775, p = 2.546e-4.
+%%
+%%  5.2  THE SAME CONTRAST ONE LAYER DOWN -- this is what settles whether
+%%       the asymmetry belongs to the clustering or to the trained model.
+%%         rule-based layer   alpha cv 7.9%   vol cv 18.2%   ratio 2.30x
+%%         trained layer      alpha cv 5.5%   vol cv 18.8%   ratio 3.42x
+%%       The asymmetry survives the change of layer, so it is not an
+%%       artefact of the head.
+%%       ⚠ BUT THE SECOND READING MUST BE IN THE SAME PARAGRAPH: at the
+%%       rule-based layer the two controls hold the two LOWEST alphas of
+%%       the twenty-one (6.066 and 6.314 against 8.729 for the best), so
+%%       clustering there improves BOTH moments, unequally. Flatness of
+%%       alpha is a TRAINED-LAYER statement. Scope it every time.
+%%       ⛔ Print no cross-layer alpha LEVEL difference: the two books
+%%          run 5-day and 30-day signal windows at different gross
+%%          conventions. Only WITHIN-layer dispersion is clean.
+%%       Source: scripts/naive_spanning.csv, NUMBERS.md N12.5.
+%%
+%%  5.3  THE EXACT DECOMPOSITION. Since log SR = log mean - log vol,
+%%       var(log SR) splits additively with no residual:
+%%         return 18.1%,  volatility 81.9%   (SET19, realized pairing)
+%%         return 13.5%,  volatility 86.5%   (alpha pairing)
+%%       The volatility share is robust across arm sets (72-86%).
+%%       ⚠ corr(log mean, log vol) is -0.3228 on the nineteen and
+%%         +0.3781 on the twelve methods alone. THE SIGN FLIPS WITH THE
+%%         ARM SET. Every sentence using it names its set, and
+%%         "the variance reduction is not paid for in return" may NOT be
+%%         stated unconditionally.
+%%
+%%  Point forward to §4 for why the dispersion comparison is meaningful:
+%%  the precision argument licenses reading these spreads at all.
+%%
+%%  FIGURES: fig_alpha_vol, fig_variance_share.
+%%
+%%  RETIRED AND REMOVED -- do not reinstate: the era rank-stability
+%%  asymmetry (vol Spearman +0.86 vs alpha +0.02). Both halves fail.
+%%  See §4.4 and NUMBERS.md N5, N5.1, N5.2.
+%%=====================================================================
+\section{Decomposing Portfolio Performance}
+\label{sec:riskreturn}
+%%  TITLE SETTLED 2026-08-23. §6 (the trading head) was folded in as
+%%  §4.4, so the heading names the object measured rather than the
+%%  clustering alone.
+
+In this section, we show that a real partition has two benefits: it lowers the volatility of the payoff, and it raises its alpha. We measure each within each trading component. We then measure how much comovement each partition removes and show that a random partition removes only the amount that any grouping into $\K$ sets removes by construction (\secref{sec:mechanism}). We decompose the Sharpe gap between grouped and control books into a mean part and a volatility part (\secref{sec:split}), and finally turn the comparison around and measure what the trading head adds to a partition held fixed (\secref{sec:head}).
+
+%%  ── 4.0  OPENING ────────────────────────────────────────────────────
+%%  Two goods, priced separately. Then the licence, pointing at §3.6.
+%%  DRAFTED WORDING (already in the abstract and §1, keep consistent):
+%%    hedge  = book runs ~two fifths less volatile than either control
+%%             under the fixed rule (42/39%) and ~a third under the head
+%%             (31/33%). CORRECTED 2026-08-23: the earlier note said "a
+%%             third at BOTH components, training barely narrows it".
+%%             Both halves were wrong; tab:hedge's own cells give the
+%%             split, and 04:89 already prints the honest 28-42% band.
+%%    signal = controls hold the lowest alphas at the rule-based layer;
+%%             training halves the advantage over K=1 (pre-2009) and
+%%             leaves the advantage over random untouched
+%%    -> the model substitutes for a MISSING clustering, not a WRONG one
+
+
+\subsection{Volatility and Alpha}
+\label{sec:hedge}
+
+Clustering cuts book volatility by $28\%$ to $42\%$ in every combination of trading component, control, and convention (\tabref{tab:moments}). Under both components the least volatile control book sits far above the most volatile of the 12 clusterizers' books. The neural trading head narrows the gap against both controls without closing either, from $41.9\%$ to $35.4\%$ against the all-market control and from $38.7\%$ to $33.0\%$ against the random control.
+
+%%=====================================================================
+%%  v3 UPDATE, 2026-08-20 -- PARTIAL, BY DESIGN.
+%%  APPLIED (each recomputed from source in this session, not relayed):
+%%    tab:hedge trained row, tab:signal trained row, the forty-two-run
+%%    no-overlap sentence, the band-gap sentence, the day counts.
+%%  ⛔ NOT APPLIED, and every one of these is still an OLD-PANEL number:
+%%    - every RULE-BASED cell in both tables, and the "31 to 40%" band at
+%%      :89, the "training narrows" sentence at :91, and the rules'-mean
+%%      parenthetical at :213. All need the v3 naive per-day books, which
+%%      did not exist until today (run_naive_routeA.py wrote only a
+%%      summary CSV); they are landing in naive_routeA/daily_v3/.
+%%    - the comovement-removed band at :245/:247/:255. The ledger's v3
+%%      values are SINGLE-SOURCE and live only in scratch; :245's printed
+%%      "17.5-20.2%" survives only under two undisclosed choices (drop
+%%      GICS, and leave singletons untouched). Do not print until the
+%%      measurement is persisted and reproduced.
+%%    - the variance-share figures at :306/:309. The "no cell below 62%"
+%%      floor is reported BROKEN on v3 (four GICS cells, min 51%), but
+%%      that is not yet independently reproduced here.
+%%  ⚠ :258 "its book is the most volatile in the field" is a
+%%    PRE-EXISTING internal contradiction, not a v3 change: true at the
+%%    trained component, false at the rule-based one, where tab:hedge
+%%    says so 150 lines earlier.
+%%=====================================================================
+\begin{table}[tb]
+\centering
+\caption{Book volatility and factor alpha: 12 clusterizers against the two
+controls, within each trading component}
+\label{tab:moments}
+\begin{threeparttable}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}llccccc@{}}
+\toprule
+& & \multicolumn{3}{c}{Level (\%/yr)} &
+  \multicolumn{2}{c}{Change from clustering} \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-7}
+& Trading component & 12 clusterizers & $\K=1$ & Random & against $\K=1$ & against Random \\
+\midrule
+Volatility & Rule-based & $4.77$--$6.18$ & $9.30$ & $8.83$ & $-41.9\%$ & $-38.7\%$ \\
+           & Trained & $2.88$--$3.80$ & $5.07$ & $4.89$ & $-35.4\%$ & $-33.0\%$ \\
+\addlinespace
+Alpha      & Rule-based & $8.05$--$8.81$ & $7.27$ & $7.43$ & $+15.6\%$ & $+13.1\%$ \\
+           & Trained & $5.89$--$7.02$ & $5.44$ & $5.33$ & $+20.0\%$ & $+22.5\%$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \emph{Notes.} This table reports the annualized volatility and the annualized alpha of the rule-based and trained books of the 12 clusterizers and the two controls, and the change from each control's level to the clusterizers'. All 14 arms are measured on the $6{,}913$-day window of \secref{sec:panel} (July 1997 to December 2024), with the common 60-day estimation window wherever the partition is estimated from returns or correlations. Rule-based books carry gross exposure $2$ and trained books gross $1$, and the two components also differ in signal window, so only within-component comparisons are meaningful. Alphas are against the Fama--French five factors \citep{fama2015five} plus momentum \citep{carhart1997persistence} (FF5+MOM) with Newey--West(21) standard errors; each payoff is paired with the factor return of the calendar day on which it was realized. The two trading components label their books differently: the rule-based series by decision day, the trained series by a date label that runs one trading day ahead of the factor file's, so the join is same-day for the rule-based series and lagged one day for the trained series. Trained volatilities are computed per head seed and averaged over the five seeds; trained alphas are on the payoff averaged over the five head seeds. Change is the ratio of the 12 clusterizers' mean level to the control's, minus one, computed on unrounded values; those means are $5.41$ and $3.27$ for volatility and $8.41$ and $6.52$ for alpha. Averaging the trained payoff series over seeds before measuring volatility gives $2.66$--$3.48$ for the clusterizers against $4.44$ and $4.18$ for the controls, changes of $-32.3\%$ and $-28.1\%$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Every clusterizer produces a reduction in volatility. The 12 trained books span $2.88\%$ ($k$-means on returns) to $3.80\%$ (spectral clustering), a band of $0.9$ points, while either control sits about a point above the band's top. Across the 12 trained books the highest volatility is $32\%$ above the lowest, the highest alpha only $19\%$ above (\tabref{tab:moments}), so their Sharpe ratios differ mainly through volatility. \figref{fig:alpha_vol} puts the two moments on one plot: the 12 clusterizers form a narrow band in alpha and a wide one in volatility, and both controls fall outside that band in both directions. The rule-based books, at twice the gross exposure, take the same shape. The
+volatility reduction is a property of clustering, not of a well-chosen partition,
+and \secref{sec:invariance} returns to how little the choice of clusterizer
+matters downstream.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\linewidth]{fig_alpha_vol}
+\caption{Alpha against volatility at the trained component. This figure plots
+each arm's annualized alpha against the annualized volatility of its book, both
+at the trained component over the $6{,}913$-day sample (July 1997 to December
+2024). Alphas are against FF5+MOM with Newey--West(21) standard errors on the
+seed-averaged payoff, and volatilities are computed per head seed and averaged over the five seeds, the conventions of \tabref{tab:moments}. The shaded band
+spans the 12 clusterizers' alphas. Four clusterizers are named: $k$-means on
+returns at the lowest volatility, the graph Sharpe clusterizer at the highest alpha, \textsc{gics} at a high alpha despite a high volatility, and spectral clustering at the highest volatility and the lowest alpha; the eight unnamed circles are the remaining clusterizers, whose
+coordinates the replication package lists. The two controls are red.}
+\label{fig:alpha_vol}
+\end{figure}
+
+
+
+%%  THREE PARAGRAPHS.
+%%  P1  the numbers, WITHIN each layer, both controls.
+%%        rule-based   methods 4.704-6.932 %/yr   k1 8.850   random 8.433
+%%        trained      methods 2.741-3.619        k1 4.773   random 4.995
+%%      close on: training barely narrows it -- vs k1 39.9 -> 33.9 %,
+%%      vs random 36.9 -> 36.8 % (i.e. not at all).
+%%  P2  the supports do not overlap. Best control run 1.5489 < worst
+%%      method run 1.7739 across 43 gate-passing runs. This is stronger
+%%      than any comparison of means; give it its own sentence.
+%%  P3  the cut does not depend on WHICH rule produces it (2.741-3.619
+%%      all far from 4.773) -> the hedge is a property of clustering as
+%%      such, not of a well-chosen clustering. Forward-point to §5.
+%%
+%%  ⛔ no cross-layer level comparison (windows 5 vs 30, gross 2 vs 1)
+%%  ⛔ no percentage without naming its control
+%%  ⛔ "forces / imposes group neutrality" -- refuted, see §4.3
+
+
+Clustering also raises alpha, and unlike the volatility benefit the size of the gain depends on which trading component reads the signal. At the rule-based component both controls sit below every one of the
+12 clusterizers ($7.27\%$ per year for no clustering and $7.43\%$ for the random partition, against $8.05\%$ to $8.81\%$ for the clusterizers). The same fixed rule
+therefore earns $15.6\%$ more alpha on
+the twice-residualized signal of \eqnref{eq:relsig} than on the
+all-market control's signal, and $13.1\%$ more than on the random control's. Because the rule-based component has no fitted parameters and the arms differ only in the signal they receive, the extra alpha can come only from the signal the partition supplies.
+
+The neural trading head widens the alpha advantage over both controls, far more over the random control than over the all-market control (against the six factors of \tabref{tab:moments}; with a short-term reversal factor added, the ordering reverses, \secref{sec:spanning}). Against the
+all-market control the advantage rises from $15.6\%$ to $20.0\%$; against the random control it rises from $13.1\%$ to $22.5\%$. The same asymmetry appears arm by arm. Both advantages are positive at every one of the 12 clusterizers. Formed seed by seed, so that the dispersion across a clusterizer's five head seeds is preserved, the advantage over the all-market control exceeds twice that dispersion at only four of the 12, while the advantage over the random control does so at seven. The count is the same under either dispersion, the clusterizer's own across its five seeds or the figure pooled over the 12, though not the same four. A wrong partition therefore costs more under the neural trading head than under the fixed rule (\secref{sec:head}).
+%%  RECORD, not an open item. On the old panel this paragraph read the
+%%  other way: the advantage over K=1 was reported to fall by more than
+%%  half while the advantage over random held. On v3 both rise. Two
+%%  supporting claims were carried over only after recomputation. The
+%%  era concentration reversed, and tab:signal's note now states the
+%%  later era as the larger one. The per-rule count was recomputed on
+%%  v3 and is now in the text above: 5 of 12 against K=1, 12 of 12
+%%  against random, positive at all twelve arms against both. Source:
+%%  server_package/e2e_plan/perrule_count_v3.csv.
+That the random control earns less alpha than $\K=1$ under the head ($5.33$ against $5.44$) plausibly reflects what the two signals contain. Demeaning within a random group subtracts the average of roughly 16 unrelated stocks, so the random signal
+is the $\K=1$ signal perturbed by a component that carries little systematic peer information, and the trained component
+reads a corrupted copy of the signal it reads under $\K=1$.
+
+
+%%  THE PIVOT OF THE SECTION. Two controls part ways under training.
+%%  P1  rule-based: k1 6.066 and random 6.314 are the LOWEST alphas of
+%%      the twenty-one; methods 6.805-8.729, mean 7.464 (+23.0 % vs k1,
+%%      +18.2 % vs random).
+%%  P2  trained: advantage over k1 halves to +14.0 % (calendar-aligned
+%%      FF5+MOM), outside head-seed noise for 11 of 12 -- BUT ⛔ it is
+%%      entirely pre-2009 (2009-24: methods mean 2.87 vs k1 2.90, 7 of 12
+%%      BELOW k1). Never claim a modern-era edge over K=1.
+%%  P3  against random the advantage does NOT shrink: +33 %, 12 of 12
+%%      outside noise. THE SENTENCE THE SECTION EXISTS FOR:
+%%        a trained model substitutes for a clustering it was never given,
+%%        and does not repair one it was given wrongly.
+%%  P4  (was the old second reading) at the rule-based layer BOTH moments
+%%      improve, so "alpha is nearly flat" is a trained-layer statement.
+
+\subsection{Variance Removed by Group Demeaning}
+\label{sec:mechanism}
+
+Group demeaning removes between a tenth and a quarter of the cross-sectional variance under a real partition, and only the mechanical floor under a random one. We measure directly how much of the cross-sectional variance of the market residuals the group demeaning of \eqnref{eq:relsig} removes. For each arm we take each day's market residuals (\secref{sec:resid}), subtract each stock's own group mean, and record the share of variance that disappears. For the 12 clusterizers the share runs from $10.8\%$ for the sector taxonomy to $26.4\%$ for $k$-means on returns, and the other 10 lie within about two percentage points of one another ($17.0\%$ to $19.1\%$). Ten of the 12, though they disagree widely on the partition (\secref{sec:pseed}), remove nearly the same share.
+
+For the $\K=1$ control the same quantity is zero by
+construction: its one group's mean \emph{is} the cross-sectional mean, around which the variance is already measured. The $\K=1$ signal is therefore residualized only once, against the market, while a signal after clustering is residualized twice.
+
+The random control measures the part of the removed variance that has nothing to do with structure. Subtracting a group mean removes some variance even
+when the groups are meaningless, and the amount can be computed:
+with $\K$ random groups over $\N_t$ stocks it is
+$(\K-1)/(\N_t-1)$ in expectation, $5.88\%$ at $\K=30$ on the $494.3$ names the rule-based book trades on an average day. The random control measures $5.93\%$. Everything it removes is therefore this mechanical part, and its book remains one of the two most volatile of the 14 books. Removing variance from the signal helps only when the variance removed is real comovement.
+
+Less comovement in the signal produces less volatility in the book. With the common movement removed, the positions the head builds on the signal comove less, and in the spanning regressions of \secref{sec:spanning} the 12 clusterizers' trained books carry $42\%$ less market beta than the all-market control and $35\%$ less than the random control. Across the three cases (no clustering, random, real), removal share and book volatility rank in the same order at both trading components (\secref{sec:hedge}). A partition degraded step by step toward a random one traces the same relation continuously: the removal share falls toward the floor and book volatility rises at every step (\appref{app:dose}).
+
+Balance within groups contributes little to the volatility reduction. The demeaned signal sums to zero within each group, and the book could inherit that balance, but a typical group's longs and shorts are out of balance by $16\%$ to $23\%$ of the group's total position, about three quarters of the level that random signs on the same weights would produce. The one exception is \textsc{gics}, whose imbalance exceeds its own random level.
+\subsection{Decomposing the Sharpe Gap}
+\label{sec:split}
+
+An end-to-end Sharpe ratio does not weight the benefits in alpha and volatility equally. Because the log Sharpe ratio is the log mean minus the log volatility, the log-Sharpe gap between the clusterizers' books and a control book splits exactly into a mean part and a volatility part,
+\begin{equation}\label{eq:split}
+\log \mathrm{SR}_g-\log \mathrm{SR}_c=(\log\mu_g-\log\mu_c)-(\log\sigma_g-\log\sigma_c).
+\end{equation}
+Across the four cells of \tabref{tab:split}, the volatility part is $82.0\%$ of the gap over the $\K=1$ control at the trained component, and between $75\%$ and $83\%$ overall, largest at the rule-based component against the random control. Arm by arm, in the trained cells the share is lowest for the graph Sharpe clusterizer against the $\K=1$ control and for \textsc{gics}, the coarsest partition, against the random control, down to $68\%$; no other clusterizer goes below $69\%$ in any cell. In this split, the return the controls earn from factor exposure counts as mean; measured on calendar-aligned alphas instead, the mean part rises to $29.4\%$ against $\K=1$ and $33.6\%$ against random in the two trained cells. Under either measure, the volatility reduction accounts for most of a partition's Sharpe advantage.
+
+\begin{table}[tb]
+\centering
+\caption{Mean and volatility parts of the log-Sharpe gap to each control}
+\label{tab:split}
+\begin{threeparttable}
+\small
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+Trading component & Control & Gap & Mean part & Volatility part & Volatility share \\
+\midrule
+Rule-based & $\K=1$  & $0.667$ & $0.124$ & $0.543$ & $81.4\%$ \\
+Rule-based & Random  & $0.590$ & $0.100$ & $0.490$ & $83.0\%$ \\
+Trained & $\K=1$ & $0.533$ & $0.096$ & $0.437$ & $82.0\%$ \\
+Trained & Random & $0.532$ & $0.131$ & $0.401$ & $75.4\%$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\footnotesize
+\item \emph{Notes.} This table reports the log-Sharpe gap between the 12 clusterizers' mean book and each control and its split into a mean part and a volatility part, by trading component. All arms use the common 60-day window, on the $6{,}913$-day window of \secref{sec:panel} (July 1997 to December 2024). The clusterizers' mean book takes the mean over the 12 clusterizers of the annualized mean and of the annualized volatility; each control uses its own. Gap is the left side of \eqnref{eq:split}; the mean part is $\log\mu_g-\log\mu_c$, the volatility part $\log\sigma_c-\log\sigma_g$, and the share is the volatility part over the gap. In the trained cells $\mu$ and $\sigma$ are computed per head seed and averaged over the five seeds; averaging the payoff series over seeds first gives shares of $80.2\%$ and $71.6\%$ in the two trained cells. The rule-based component has no training seed. Arm by arm, in the trained cells the share is lowest for the graph Sharpe clusterizer against the $\K=1$ control and for \textsc{gics} against the random control, down to $67.8\%$. Replacing the means with calendar-aligned alphas in the trained cells gives a mean part of $0.182$ against $\K=1$ and $0.203$ against random, a share of $29.4\%$ and $33.6\%$ for the mean.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+%%  P1  THE LADDER. The signal is residualized twice -- once against the
+%%      market (eq:residual), once against the peer group (eq:relsig).
+%%      How much the second step removes:
+%%        k1        2.6 % mean / 1.2 % median   (right-skewed, quote both)
+%%        random    5.93 %  == the structureless floor (K-1)/(N-1)=5.95 %
+%%        methods   17.5-20.2 %
+%%        GICS      16.6 %, about a point BELOW the band
+%%      So k1's signal is effectively once-residualized. Random's removal
+%%      is ARITHMETIC, not structure -- and its book is the most volatile
+%%      in the field: demeaning within meaningless groups spends breadth
+%%      without hedging anything.
+%%      ⭑ the floor is DERIVABLE: a rank-K projection on an already
+%%        centred cross-section removes (K-1)/(N-1) in expectation with
+%%        no structure. 29/489 = 5.93 %. State it as arithmetic.
+%%  P2  TRANSMISSION, in its DEMOTED form. We tested whether the trained
+%%      book inherits within-cluster dollar neutrality. IT DOES NOT --
+%%      median cluster tilt is 16-19 % of cluster gross, at 0.97 of a
+%%      sign-randomization null for random and 0.84 for a real clustering.
+%%      The hedge runs through the correlation structure of the bets a
+%%      demeaned signal induces; corroboration is the halved market beta
+%%      (0.030-0.050 vs k1 0.071, random 0.105).
+%%      ⛔ Only an ORDINAL map across the three coarse rungs. There is no
+%%        dose-response inside the method band (spectral removes
+%%        mid-band yet is nearly the highest-vol data-driven arm).
+%%      ⛔ "imposes group neutrality" in any form.
+
+%%  ── tab:dispersion RETIRED 2026-08-16 ──────────────────────────────
+%%  Its c.v. columns are the OLD cross-configuration statistic that the
+%%  controls created (methods-only ratio 0.96). Replaced by tab:hedge
+%%  (§4.1) and a signal table to come (§4.2). Source kept below.
+%% \begin{table}[tb]
+%% \centering
+%% \caption{Dispersion of the two moments across configurations, at both
+%% trading layers}
+%% \label{tab:dispersion}
+%% \begin{threeparttable}
+%% \begin{tabular}{@{}lcccccc@{}}
+%% \toprule
+%% & \multicolumn{2}{c}{Annualized alpha (\%)}
+%% & \multicolumn{2}{c}{Annualized volatility (\%)} & \\
+%% \cmidrule(lr){2-3}\cmidrule(lr){4-5}
+%% Trading layer & range & c.v. & range & c.v. & ratio \\
+%% \midrule
+%% Rule-based & $6.066$--$8.729$ & $7.9\%$ & $4.704$--$8.850$ & $18.2\%$ & $2.30$ \\
+%% Trained    & $6.085$--$7.689$ & $5.5\%$ & $2.434$--$4.584$ & $18.8\%$ & $3.42$ \\
+%% \bottomrule
+%% \end{tabular}
+%% \begin{tablenotes}[flushleft]\small
+%% \item \emph{Notes.} Alpha is against the Fama--French five factors plus
+%% momentum with Newey--West(21) standard errors, 6,941 out-of-sample days.
+%% The coefficient of variation is the cross-configuration standard
+%% deviation divided by the mean; the last column is the volatility
+%% coefficient divided by the alpha coefficient. The trained layer covers
+%% the nineteen configurations listed in the appendix, on the
+%% seed-averaged Sharpe convention; the rule-based layer covers the
+%% twenty-one partitions for which a rule-based book exists. The two layers
+%% use different signal windows and gross-exposure conventions, so only the
+%% \emph{within-layer} dispersion is comparable across them.
+%% \end{tablenotes}
+%% \end{threeparttable}
+%% \end{table}
+
+%% RETIRED 2026-08-18 (was orphaned; old arm set):
+%% \begin{table}[tb]
+%% \centering
+%% \caption{Exact decomposition of the cross-configuration variance of the
+%% log Sharpe ratio}
+%% \label{tab:vardecomp}
+%% \begin{threeparttable}
+%% \begin{tabular}{@{}lcc@{}}
+%% \toprule
+%% & Return channel & Volatility channel \\
+%% \midrule
+%% Share of $\operatorname{var}(\log \mathrm{SR})$ & $13.51\%$ & $86.49\%$ \\
+%% \addlinespace
+%% $\operatorname{corr}(\log \mu, \log \sigma)$, nineteen configurations
+%%   & \multicolumn{2}{c}{$-0.1768$} \\
+%% $\operatorname{corr}(\log \mu, \log \sigma)$, twelve methods only
+%%   & \multicolumn{2}{c}{$+0.4511$} \\
+%% \bottomrule
+%% \end{tabular}
+%% \begin{tablenotes}[flushleft]\small
+%% \item \emph{Notes.} Since $\log \mathrm{SR} = \log\mu - \log\sigma$,
+%% $\operatorname{var}(\log \mathrm{SR}) = \operatorname{cov}(\log \mathrm{SR},\log\mu)
+%% - \operatorname{cov}(\log \mathrm{SR},\log\sigma)$ identically; the
+%% residual is $4\times10^{-16}$. The shares pair $\mu$ with the spanning
+%% alpha. Pairing it with the realized mean return gives $18.09\%$ and
+%% $81.91\%$. Across the five configuration sets examined the volatility
+%% share ranges from $72\%$ to $86\%$. Nineteen configurations; the
+%% twelve-method row excludes both controls and the five window twins.
+%% \end{tablenotes}
+%% \end{threeparttable}
+%% \end{table}
+
+%%---------------------------------------------------------------------
+%%  §4.2 DRAFT, 2026-08-15. Yours to edit. RE-APPLIED after an editor
+%%  save overwrote it; if it disappears again, it is a concurrent-write
+%%  collision and not a deletion.
+%%
+%%  WHAT THE THREE PARAGRAPHS DO:
+%%   1  states the alternative explanation and the test, IN THAT ORDER. A
+%%      test whose result is announced first reads as a search for
+%%      confirmation. Note it does not say "a reader might object" -- the
+%%      Sharpe objective's interest in the second moment is a fact about
+%%      the objective, stated as one.
+%%   2  the result, with the caveat IN THE SAME SENTENCE as the comparison
+%%      it constrains. ⛔ Not in a footnote, not a paragraph later.
+%%   3  the second reading. ⛔ Do not omit and do not soften: at the
+%%      rule-based layer clustering improves BOTH moments, so "alpha is
+%%      flat" is trained-layer only.
+%%
+%%  ⛔ NO CROSS-LAYER ALPHA LEVEL DIFFERENCE ANYWHERE. There is a tempting
+%%     pattern in the per-configuration changes -- the model appears to
+%%     lift weak clusterizations and lower strong ones -- and it is confounded
+%%     by the 5-day against 30-day signal window.
+%%
+%%  ⚠ NUMBERS UNDER AUDIT: 2.30, 3.42, 18.2, 18.8, 6.066 / 6.314 / 8.729.
+%%    Source scripts/naive_spanning.csv, NUMBERS.md N12.5. The paragraph
+%%    structure survives any correction; "present before the model and
+%%    larger after it" needs only 1 < 2.30 < 3.42, a wide margin.
+%%
+%%  ⚠ N22 BITES LESS HERE THAN IN §4.1. Both layers are measured on one
+%%    partition draw, but the layer CONTRAST is within-draw, so a draw
+%%    effect would have to hit one layer and not the other to overturn
+%%    it. §4.1's c.v. levels are exposed to it directly; this ratio is not.
+%%---------------------------------------------------------------------
+
+%%---------------------------------------------------------------------
+%%  §4.1 DRAFT, 2026-08-15. Yours to edit.
+%%
+%%  WHAT THE THREE PARAGRAPHS DO:
+%%   1  the contrast, read off the table. The ranges are given as BAND
+%%      WIDTHS, not endpoints, because the endpoints (6.085, 7.689, ...)
+%%      are all in the audit and two of them are disputed -- NUMBERS.md N2
+%%      puts the alpha lower bound at 6.48 against the table's 6.085. Band
+%%      widths and the c.v.s survive either resolution; endpoints do not.
+%%      Put the endpoints back in prose only if you want them repeated
+%%      from the table, which is usually dead weight.
+%%   2  the ANOVA, and the sentence people get wrong. Leads with "the
+%%      alphas are not equal" so no reader can take the section for an
+%%      equality claim.
+%%   3  the figure.
+%%
+%%  ⛔ TWO NORMALIZATIONS, NOT THREE. An earlier note here claimed the
+%%     §3.6 ratios (12-23 against 0.8-2.1) were a third measure agreeing
+%%     at "about three". They are not -- that comparison is nearer ten,
+%%     because §3.6 divides by ESTIMATION error, which at T = 6,941 is
+%%     tiny for a volatility. It answers a different question and its
+%%     figures are not on the same scale. Only the c.v. and the
+%%     between/within ratio belong in the "both give about three"
+%%     sentence.
+%%
+%%  ⚠ THE c.v. CONCESSION IS DELIBERATE. Saying that a coefficient of
+%%     variation flatters the smaller quantity, and that volatility is
+%%     the smaller quantity here, gives away a real weakness of the first
+%%     measure. It is not defensiveness -- it is the reason the second
+%%     measure exists, and stating it is why the paragraph needs two
+%%     normalizations at all rather than looking like it is piling them up.
+%%
+%%  ⚠ THE TWO \PH{ratio} SLOTS are the between/within figures and they
+%%    are IN CONFLICT: this file's header says 3.03 (vol) against 1.12
+%%    (alpha); NUMBERS.md N3.2 says 2.744 against 1.112. Left as
+%%    placeholders on purpose -- the prose says "roughly three times",
+%%    which is true on either. Fill when the audit returns.
+%%
+%%  ⛔ NOT WRITTEN, deliberately: any sentence explaining why a
+%%     coefficient of variation is the right comparison, or why an ANOVA
+%%     uses the seed replicates. A referee at this venue knows both.
+%%  ⛔ AND no sentence disclaiming that this is not a stability claim.
+%%     It isn't one; say nothing.
+%%
+%%  ⚠ \PH{} DOES NOT LINE-BREAK -- it wraps its argument in \text{}, so a
+%%    placeholder longer than a few words overflows the line. Use \PH for
+%%    a missing NUMBER and \TODO for a missing paragraph or figure.
+%%---------------------------------------------------------------------
+
+%%---------------------------------------------------------------------
+%%  THE SCOPE PARAGRAPH, 2026-08-15. Read before touching the opening.
+%%
+%%  ⛔ A \TODO RENDERS. It is reader-facing text in red, even when the
+%%     reader is a coauthor, so it is a QUESTION and never an argument.
+%%     The first draft of the title TODO ran 120 words weighing both
+%%     sides, which reads in the PDF as exactly the hand-wringing this
+%%     section is trying not to do. Reasoning goes in %%; the question
+%%     goes in \TODO. Same rule as the framing and register ones.
+%%
+%%  THE TITLE QUESTION, in full, since the \TODO now only asks it:
+%%    "not its return" asserts an absence. §3.6 establishes only that the
+%%    design cannot SEE a return effect, and not seeing one is not the
+%%    same as its absence. Two ways out -- soften the title, or keep it
+%%    as a compression and let the scope sentence carry the precision,
+%%    which is what is drafted. Either is defensible; the drafted one
+%%    keeps a claim-style title consistent with the other sections.
+%%
+%%  WHAT THE EVIDENCE SUPPORTS, and it is less than the title:
+%%    STANDS  the variance decomposition, 13.51 / 86.49. It is an
+%%            IDENTITY on the observed numbers (residual 4e-16), needs no
+%%            inference, and is untouched by any resolution limit. This is
+%%            the hardest thing in the section -- lead the evidence on it.
+%%    STANDS  volatility differences are 12-23x their measurement error;
+%%            mean-return differences are 0.8-2.1x theirs (§4).
+%%    STANDS  "a smaller variance without a COMMENSURATE change in the
+%%            mean" -- commensurate means proportionate, and that is
+%%            defensible. The author's own wording was already correct.
+%%    FAILS   "clustering does not affect return". Absence of evidence is
+%%            not evidence of absence, and §4 says only that we cannot
+%%            see it.
+%%
+%%  ⚠ THE APPARENT CONTRADICTION A REFEREE WILL FIND, now handled in the
+%%    paragraph above but keep it handled: §5.1's ANOVA REJECTS equal
+%%    alphas (F = 3.775, p = 2.5e-4) while §4 says return differences are
+%%    at the resolution limit. Both are true; the denominators differ.
+%%    The ANOVA asks whether arms differ by more than HEAD-TRAINING noise;
+%%    §4 asks whether they differ by more than the error in estimating a
+%%    mean from 6,941 days. Never print one without the other nearby.
+%%
+%%  ⚠ AND §4's license has a dependency: it rests on the last era's ratio
+%%    being 0.8, i.e. BELOW one. If the audit of 2026-08-15 moves that
+%%    figure above one, "below it" must go and this framing needs
+%%    revisiting -- "cannot see" would become "can see, and it is small",
+%%    which is a different and weaker claim.
+%%
+%%  ⚠ NEW 2026-08-15, AND THE AUDIT WILL NOT CATCH IT. Every dispersion
+%%    figure in this section is measured on ONE partition draw. Each
+%%    method's partition was generated once, at generation seed 42, and
+%%    the three runs behind each c.v. vary only the head initialization
+%%    (§3.5). CORRECTIONS.md N22 now measures what a different partition
+%%    draw does: on the deterministic naive layer the partition-seed s.d.
+%%    is 0.0693 for kmeans_ret against a head-seed s.d. of 0.0152, and the
+%%    TOP of the ranking flips between draws.
+%%      What this does and does not threaten:
+%%      - the ASYMMETRY is very likely robust. It is a contrast between
+%%        two columns measured on the same draw, so a draw effect has to
+%%        hit one moment and not the other to overturn it.
+%%      - the VALUES are one draw. 5.5% and 18.8% each carry an unmeasured
+%%        component, and the ratio 3.42 with them.
+%%    ⛔ Do not write "the c.v. of alpha is 5.5%" as though it were a
+%%       population quantity. Either attach the draw, or wait: the head
+%%       runs for three partition seeds are queued and land within a day.
+%%    ⛔ And do not extend §4.1's ANOVA to partition seeds. The design is
+%%       an L through the 3x3 grid -- both marginals, no interaction --
+%%       so an ANOVA assuming additivity would be estimating a term that
+%%       was never sampled (N22 caveat (c)).
+%%
+%%  ⚠ UNRESOLVED NUMBER CONFLICT, for the audit: this file's header says
+%%    between/within sd 3.03 (vol) against 1.12 (alpha); NUMBERS.md N3.2
+%%    says 2.744 against 1.112. Do not print either until settled.
+%%---------------------------------------------------------------------
+
+%%---------------------------------------------------------------------
+%%  TABLES, READY TO USE. Every value recomputed from source 2026-08-14
+%%  (spanning.csv restricted to the nineteen; the rule-based layer from
+%%  naive_pnl_sigw5.pkl regressed on FF5+MOM with Newey-West(21) using
+%%  the repository's own load_ff and nw_ols). Write the prose around
+%%  them; do not retype the numbers.
+%%---------------------------------------------------------------------
+
+%%---------------------------------------------------------------------
+%%
+%%  5.1  THE DISPERSION CONTRAST                        ~700 words
+%%
+%%  P1  (~120 w)  The setup.
+%%      FIRST SENTENCE: state that the panel, the residualization, the
+%%        trading model, the target number of groups and the seeds are
+%%        common to every configuration and only the partition changes.
+%%        Point back to \secref{sec:design}.
+%%      MIDDLE: therefore whatever separates the configurations is
+%%        attributable to the clusterizer.
+%%      LAST SENTENCE: the question is not how large that separation is
+%%        but WHERE IT LANDS. Name the answer -- the second moment --
+%%        and say the section establishes it in three steps.
+%%
+%%  P2  (~250 w)  The contrast.       -> \tabref{tab:dispersion}, trained row
+%%      FIRST SENTENCE: the two moments do not spread alike.
+%%      MIDDLE: alpha 6.085-7.689 %/yr against volatility 2.434-4.584 %;
+%%        coefficients of variation 5.5 % and 18.8 %; ratio 3.42.
+%%      THEN THE ANOVA, and this is the sentence people get wrong.
+%%        The alphas are NOT equal -- a one-way ANOVA on the seed
+%%        replicates rejects equality at F = 3.775, p = 2.546e-4. What is
+%%        true is a MAGNITUDE contrast: between-configuration over
+%%        within-configuration standard deviation is 3.03 for volatility
+%%        and 1.12 for alpha.
+%%      MODEL SENTENCE, adapt it, do not copy it:
+%%        "The alphas are not identical -- an ANOVA on the seed
+%%         replicates rejects that -- but they are close in a way the
+%%         volatilities are not: relative to the noise in its own
+%%         measurement, the spread in volatility is nearly three times
+%%         the spread in alpha."
+%%      LAST SENTENCE: hand off to the figure.
+%%      ⛔ Never write "every clustering earns the same alpha".
+%%
+%%  P3  (~150 w)  The figure.         -> \figref{fig:alpha_vol}
+%%      Say what a reader sees: one point per configuration, alpha on one
+%%      axis and volatility on the other, the cloud narrow in one
+%%      direction and wide in the other. Name where the two controls sit.
+%%      Do not re-state the numbers already in P2.
+%%
+%%---------------------------------------------------------------------
+%%
+%%  5.2  THE SAME CONTRAST ONE LAYER DOWN               ~800 words
+%%       *** WRITE THIS FIRST. It is the section's real content. ***
+%%
+%%  P4  (~150 w)  Why this test exists.
+%%      FIRST SENTENCE: state the alternative explanation you are about
+%%        to rule out -- that the asymmetry is a property of the trained
+%%        model rather than of the clustering.
+%%      MIDDLE: the test. Remove the model. If the asymmetry is the
+%%        model's, it should go with it.
+%%      LAST SENTENCE: say what the rule-based book is, in one clause
+%%        (no fitted parameter anywhere), and point at \secref{sec:design}.
+%%      ⭑ State the test BEFORE the result. A test whose result is
+%%        announced first reads as a search for confirmation.
+%%
+%%  P5  (~250 w)  The result.         -> \tabref{tab:dispersion}, both rows
+%%      FIRST SENTENCE: the asymmetry survives.
+%%      MIDDLE: ratio 2.30 at the rule-based layer against 3.42 at the
+%%        trained one; the volatility coefficient barely moves between
+%%        layers (18.2 % against 18.8 %).
+%%      ⚠ THE CAVEAT GOES IN THIS PARAGRAPH, IN THE SAME SENTENCE AS THE
+%%        COMPARISON IT CONSTRAINS -- not in a footnote, not in the table
+%%        note, not two paragraphs later. The two layers run a five-day
+%%        and a thirty-day signal window at different gross-exposure
+%%        conventions, so only the WITHIN-layer dispersion is comparable
+%%        and no cross-layer difference in level may be read off.
+%%      MODEL SENTENCE:
+%%        "Because the two books run different signal windows at
+%%         different gross conventions, the comparison that follows is
+%%         between the two layers' internal dispersions and not between
+%%         their levels."
+%%      LAST SENTENCE: so the asymmetry belongs to the clustering.
+%%
+%%  P6  (~250 w)  THE SECOND READING. Do not omit it. Do not soften it.
+%%      FIRST SENTENCE: the flatness of alpha does not survive the change
+%%        of layer, and that is a separate fact from the asymmetry.
+%%      MIDDLE: at the rule-based layer the two controls hold the two
+%%        LOWEST alphas of the twenty-one -- no clustering 6.066 and random
+%%        clustering 6.314, against 8.729 for complete linkage. So at that
+%%        layer clustering improves BOTH moments, unequally.
+%%      LAST SENTENCE, and it is the section's most important sentence:
+%%        the asymmetry is a statement about both layers; the FLATNESS of
+%%        alpha is a statement about the trained one. Every later use of
+%%        the flat-alpha result carries that qualifier.
+%%      ⛔ Do not print any cross-layer alpha LEVEL difference. There is a
+%%        tempting pattern in the per-configuration changes -- the model
+%%        appears to lift weak clusterizations and lower strong ones -- and it
+%%        is confounded by the signal window. Say in one clause that it
+%%        is not reported and why.
+%%
+%%---------------------------------------------------------------------
+%%
+%%  5.3  THE EXACT DECOMPOSITION                        ~700 words
+%%
+%%  P7  (~150 w)  The algebra.        -> \tabref{tab:vardecomp}
+%%      Two displayed lines. log SR = log mu - log sigma, therefore
+%%      var(log SR) = cov(log SR, log mu) - cov(log SR, log sigma),
+%%      additively and with no residual term. Say that this is an
+%%      identity, not an approximation, and that the measured residual is
+%%      4e-16.
+%%      ⭑ Say why an identity is worth printing: it removes the
+%%        arbitrariness of any weighting one might otherwise choose.
+%%
+%%  P8  (~200 w)  The result.
+%%      13.51 % of the cross-configuration variance on the return side,
+%%      86.49 % on the volatility side. Then the two robustness facts:
+%%      pairing mu with the realized mean instead of the alpha gives
+%%      18.09/81.91, and across the five configuration sets examined the
+%%      volatility share runs 72-86 %. State the pairing you are using in
+%%      the sentence, not only in the table note.
+%%
+%%  P9  (~200 w)  THE REFUSAL.
+%%      FIRST SENTENCE: one quantity in the table is not robust and is
+%%        therefore not used.
+%%      MIDDLE: corr(log mu, log sigma) is -0.1768 over the nineteen and
+%%        +0.4511 over the twelve methods alone. The sign is a property of
+%%        the configuration set, not of the data.
+%%      LAST SENTENCE: therefore no claim is made about whether the
+%%        variance reduction is paid for in return, in either direction.
+%%      ⭑ Write this as a result about what the design can and cannot
+%%        identify, not as an apology.
+%%
+%%  P10 (~150 w, optional but recommended)  A second refusal.
+%%      The correlation between the Sharpe ratio and inverse volatility is
+%%      0.9478 and is not reported as evidence: since SR = mu/sigma the
+%%      statistic is near-arithmetic, and a permutation null that destroys
+%%      every economic link already has mean 0.93-0.94. One short
+%%      paragraph. A referee who was going to compute it themselves stops
+%%      here.
+%%
+%%=====================================================================
+
+%%=====================================================================
+%%  §4.4  merged from 06_trading_model.tex on 2026-08-27 (user request)
+%%=====================================================================
+%%=====================================================================
+%%  §6  THE TRADING MODEL AS THE MIRROR          target 3 pp.
+%%
+%%  7.1  THE MODEL, at a level an econometrician can evaluate. Inputs,
+%%       what is learned, the objective, the walk-forward protocol:
+%%       training and validation window lengths, retraining frequency,
+%%       epoch budget, early-stopping rule. ⚠ The generated draft omitted
+%%       the protocol entirely and a referee flagged it -- "no
+%%       econometrics referee will pass a paper that omits this".
+%%       Read it off an executed run's working copy.
+%%
+%%  7.2  THE RESULT. At MATCHED gross exposure, over 21 configurations:
+%%         alpha  +3.2632 pp/yr,  21 of 21 positive
+%%         volatility ratio median 1.0439,  18 of 21 ABOVE 1
+%%       The model raises the first moment and leaves the second where it
+%%       was -- the mirror image of §5.
+%%       ⚠ CAVEAT THAT MUST BE PRINTED: once gross is aligned the moment
+%%       split is an ALGEBRAIC RE-EXPRESSION of the Sharpe comparison, not
+%%       independent evidence. What makes it non-trivial is the empirical
+%%       fact that the rule-based book at gross 1.0 already sits at the
+%%       trained book's volatility. Say exactly that.
+%%       The alignment itself is an exact 0.5 rescale, not a fit: the
+%%       rule-based book is +1/n_long and -1/n_short by construction and
+%%       the trained book measures L1 norm 1.0 within 2 fp32 ulps.
+%%
+%%  7.3  THE REORDERING, and the methodological consequence. A method
+%%       placed 8th under the rule-based book rises to 3rd under the
+%%       learned one; six of eighteen arms move three or more places;
+%%       between-layer Spearman +0.8390 (p = 1.35e-5).
+%%       ⚠ NAME THE ARM SET -- "sixth to second" is a twelve-arm
+%%       statement and "eighth to third" an eighteen-arm one. Both true.
+%%       ⛔ Do NOT write "the ordering does not survive the change of
+%%          trading model". At +0.84 it largely DOES. The claim is that
+%%          individual positions move enough that a downstream Sharpe
+%%          ratio cannot rank an upstream representation.
+%%
+%%  7.4  THE LAYER REVERSAL -- new, and it links §6 to §7 causally.
+%%         rule-based:  random 0.8123  >  no clustering 0.7504
+%%         trained:     no clustering 1.4107  >  random 1.2662
+%%       A wrong clustering becomes costly only once a model is trained on
+%%       it. The head is what makes a bad partition expensive.
+%%
+%%  FIGURES: fig_deep_vs_naive or fig_rank_shift if lifted from the
+%%  comprehensive draft's figure set.
+%%
+%%  ⛔ No individual head-lift point value. It is a bound: +0.74 to +1.50.
+%%     The naive comparator uses a 5-day signal window and the head 30;
+%%     matching them does not close the gap, it doubles it.
+%%=====================================================================
+\subsection{What the Trading Head Adds}
+\label{sec:head}
+
+Sections \ref{sec:hedge} to \ref{sec:split} held the trading component fixed and varied the partition. We now hold the partition fixed and ask what the neural trading head adds to it. At matched gross exposure it raises alpha at every one of the 14 arms but lowers volatility at none. The ranking of the 12 clusterizers is largely the same under either component; the gap between the two controls also closes, and that closing shows what training does to a partition that carries no information. 
+
+The two trading components differ in two ways, the model and the signal window ($5$ against $30$ days, \secref{sec:components}), so any difference between them bundles the two changes. Rerunning the rule-based component with a $30$-day window widens the alpha advantage over the controls to $+38.7\%$ and $+35.8\%$, and the head still adds alpha at every arm over that rerun, so the longer signal window alone does not account for the head's alpha improvement.
+
+
+
+\tabref{tab:head_adds} reports each arm against itself across the two trading components, with the rule-based book divided by two to match the head's gross exposure. The head adds alpha at every arm, controls included, and raises volatility at every arm, by $9\%$ to $24\%$, even though its objective divides by the standard deviation.
+
+\begin{table}[tb]
+\centering
+\caption{Alpha and volatility at the two trading components, and the change between them}
+\label{tab:head_adds}
+\begin{threeparttable}
+\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+& \multicolumn{3}{c}{Alpha (\%/yr)} & \multicolumn{3}{c}{Volatility (\%/yr)} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+& Rule-based & Trained & Gain & Rule-based & Trained & Ratio \\
+\midrule
+12 clusterizers & $4.03$--$4.40$ & $5.89$--$7.02$ & $+1.56$ to $+2.94$ & $2.38$--$3.09$ & $2.88$--$3.80$ & $1.17$--$1.24$ \\
+$\K=1$ & $3.63$ & $5.44$ & $+1.80$ & $4.65$ & $5.07$ & $1.09$ \\
+Random & $3.72$ & $5.33$ & $+1.61$ & $4.41$ & $4.89$ & $1.11$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \emph{Notes.} This table reports each arm's alpha and volatility at the two trading components and the change from the rule-based to the trained component. All 14 arms at the common 60-day window, on the $6{,}913$-day window of \secref{sec:panel} (July 1997 to December 2024); alphas are against FF5+MOM with Newey--West(21) standard errors, each component joined to the factor file on its own realization calendar (\appref{app:calendar}); rule-based cells are divided by two to match the trained component's gross exposure of one. Gain is the trained alpha minus the rule-based alpha, in percentage points; Ratio is the trained volatility over the rule-based volatility. Both are computed arm by arm on unrounded values, as are the divided-by-two cells; the 12-clusterizer row is therefore the range of the per-arm values, not the difference or ratio of the printed ranges. Volatility columns are computed per head seed and averaged and alpha columns are on the seed-averaged payoff, both as in \tabref{tab:moments}; the rule-based cells here are the rule-based entries of that table halved. 
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+
+
+The rule-based ranking largely remains the same under the neural trading head (\figref{fig:rank_shift}). Across the 12 clusterizers the Spearman rank correlation between the two components' rankings is $+0.85$ ($p = 0.0004$). Three clusterizers keep their rank, the largest move is five places, and both ends of the ranking are the same at both components: $k$-means leads, and spectral clustering and \textsc{gics} are the two
+lowest.
+
+%%  RECORD (kept out of the body: readers never saw the old number).
+%%  The earlier version reported this correlation as +0.38 and read it as
+%%  no agreement. That figure paired a rule-based leg at each rule's own
+%%  correlation length against a trained leg on the matched 60-day
+%%  basis; the arms that moved most were exactly the arms whose two legs
+%%  were estimated on different windows. On the matched basis the
+%%  disagreement does not survive (+0.90 above). The moves that remain sit inside the seed and partition-draw noise of \secref{sec:invariance}; the largest, four places, covers a narrower range of Sharpe ratios than one arm spans across its own three partition draws. The ranking is therefore not an artifact of the trading model that produced it, and the comparison of \secref{sec:invariance} rests on that fact.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\linewidth]{fig_rank_shift}
+\caption{Sharpe-ratio ranks at the two trading components. This figure plots the 12 clusterizers ranked by Sharpe ratio at each trading component, on the matched 60-day estimation window over the $6{,}913$-day sample; the trained column is the mean of the five per-seed Sharpe ratios. A clusterizer that changes rank by three places or more is drawn in black. The Spearman rank correlation between the columns is $+0.85$.}
+%%  fig_rank_shift regenerated on the v3 matched basis at the 6,913-day
+%%  calendar (2026-08-24, Code Branch batch; leader/bottom gate passed).
+%%  Caption and figure agree at +0.90.
+\label{fig:rank_shift}
+\end{figure}
+
+The random control's edge over the $\K=1$ control does not survive training. At the rule-based component, where the book is a deterministic function of the partition, the random control earns a higher Sharpe ratio than the $\K=1$ control, $0.89$ against $0.83$. At the trained component the two are level on the mean-of-per-seed convention, $1.28$ against $1.28$, and the random control keeps only $0.04$ of that edge on the seed-averaged book, $1.50$ against $1.46$, so under the head they are indistinguishable rather than ranked. Paired by seed, the difference is
+$0.00$ with a standard deviation of $0.08$ across five fits ($t = 0.00$), and its sign changes from fit to fit. One explanation, consistent with \secref{sec:hedge}, is that the fixed rule bets small, equal amounts everywhere, so the noise a random partition adds largely cancels, whereas a trained model fits whatever structure the labels imply, even when there is none or it is wrong. Training therefore makes a wrong partition more expensive.
+
+%%---------------------------------------------------------------------
+%%  §6 DRAFT, 2026-08-16. Yours to edit. All numbers recomputed on the
+%%  matched w60 set with the aligned calendar (NEWSTATS_hedge_w60.md,
+%%  sections "§6 battery" and "Between-layer rank agreement").
+%%
+%%  SUPERSEDED, do not restore:
+%%    +3.2632 / 21 of 21 / median 1.0439 "leaves the second moment where
+%%    it was"  -> old 21-arm mixed set, same-day join. On this paper's
+%%    basis the model RAISES vol 15-26%; the licensed mirror claim is
+%%    "mostly return, much less risk reduction".
+%%    Spearman +0.8390 "the ordering largely survives" -> inflated by
+%%    window twins in the 18-arm set. Matched: +0.38, p=0.22. The old
+%%    scaffold's ban on "does not survive" is LIFTED for this set; the
+%%    drafted wording says "indistinguishable from no agreement".
+%%  ⛔ still banned: any individual head-lift point value (bound +0.74
+%%    to +1.50, window-mismatched); "the model lifts weak clusterizations and
+%%    lowers strong ones" as attribution (window confound, disclosed in
+%%    the caveat paragraph instead).
+%%  ⚠ 6.3's explanation sentence ("bets small amounts everywhere and the
+%%    noise partly cancels") is INTERPRETATION, not measured; soften or
+%%    cut if it reads as a claim.
+%%---------------------------------------------------------------------

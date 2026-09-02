@@ -1,0 +1,9 @@
+resample,stat,level,n_retained,retained,spread_point,spread_boot_mean,twin_diff,twin_se,twin_p
+overlap_cbb,Tmax,90%,6,kmeans_ret|fv3sm_w60|agglo_complete|sssnet_w60|pca_load|sponge_w60,0.8758450086013321,0.8758450086013321,,,
+overlap_cbb,Tmax,75%,1,kmeans_ret,0.8758450086013321,0.8758450086013321,,,
+overlap_cbb,TR,90%,2,kmeans_ret|fv3sm_w60,0.8758450086013321,0.8758450086013321,,,
+overlap_cbb,TR,75%,1,kmeans_ret,0.8758450086013321,0.8758450086013321,0.007938408544636594,0.005788950005426362,0.22615476904619075
+nonoverlap_21d_agg,Tmax,90%,11,kmeans_ret|fv3sm_w60|agglo_avg|agglo_complete|sssnet_w60|pca_load|sortino_w60|sharpe_fixed_w60|sponge_w60|fv2a_w60|gics,0.8758450086013321,0.40443299958928036,,,
+nonoverlap_21d_agg,Tmax,75%,11,kmeans_ret|fv3sm_w60|agglo_avg|agglo_complete|sssnet_w60|pca_load|sortino_w60|sharpe_fixed_w60|sponge_w60|fv2a_w60|gics,0.8758450086013321,0.40443299958928036,,,
+nonoverlap_21d_agg,TR,90%,9,kmeans_ret|fv3sm_w60|agglo_avg|agglo_complete|sssnet_w60|pca_load|sortino_w60|sponge_w60|gics,0.8758450086013321,0.40443299958928036,,,
+nonoverlap_21d_agg,TR,75%,8,kmeans_ret|fv3sm_w60|agglo_complete|sssnet_w60|pca_load|sortino_w60|sponge_w60|gics,0.8758450086013321,0.40443299958928036,0.012994053223713165,0.0213235241971365,0.5432913417316537
