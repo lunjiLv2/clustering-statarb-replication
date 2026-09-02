@@ -5891,3 +5891,59 @@ returns 6.3–7.6%, 5 bp cost 9.6–11.8%, rule loadings 0.05–0.06 vs 0.07. Pr
 §5.2 does not say that the five partition draws {1..5} exclude the main partition (seed 42); main.tex still carries the Data
 Availability placeholder (line 87) — GitHub URL known, Zenodo DOI pending; A.4's reproducibility trio names no arm/seed;
 corresponding e-mail lunji@math.ucla.edu vs the author's g.ucla.edu address needs the user's confirmation.
+
+### N99 (2026-09-01) — §4.4 scale sentences for the 30-day rerun (user: "看看甲乙能不能结合一下…没有更好的就甲吧"); N98's A.13 pair reverted — 1.47/1.62 was a 13-arm join artifact, the printed 1.46/1.63 is right
+(1) §4.4 sec:head_adds, after "…so the longer signal window alone does not account for the head's alpha improvement." APPENDED
+  (04_hedge_and_signal.tex:705; pre-edit md5 18f6c61d9d64baa1eff196991cdf1f75, backup in the Refine scratchpad n99_backup/):
+  "That rerun also settles the scale on which the head widens the advantage. At the head's gross exposure, the $30$-day window
+  moves the fixed rule's gap to either control by at most $0.04$ alpha points but lowers the alphas themselves to $1.4\%$ to
+  $2.3\%$ a year across the 14 arms, with neither control's distinguishable from zero ($t = 1.6$ and $1.7$). The larger relative
+  advantage therefore comes from the smaller base. In alpha points the head's gap to either control is roughly twice the fixed
+  rule's at either signal window, $1.9$ to $2.5$ times."
+  Why: the sentence before it prints +38.7%/+35.8% for the 30-day rule against the head's +20.0%/+22.5% (N77 addendum 1), which
+  reads as if the rule widened the advantage more than the head does; the new sentences give the reader the base (rule alphas
+  of 1.4–2.3% at the head's exposure, both controls' t below 2) and the comparison in alpha points, where the head's gap is
+  1.9–2.5 times the rule's. Two drafts were offered (甲: numbers only; 乙: the gap-is-unchanged point with six per-control gap
+  numbers); the applied text is 甲's numbers with 乙's point stated as a bound ("at most $0.04$ alpha points") rather than six
+  more tokens. "Roughly twice" is quantified by the range that follows it; "either" is used because the four ratios (two
+  windows × two controls) all fall in 1.9–2.5 — the PER-ARM ratios run 0.65–13.2, so the sentence is about the 12-arm mean
+  minus the control, never arm by arm.
+  New tokens (declare.sh, baseline = N97 state, reports exactly these and nothing else): 30, 0.04, 1.4, 2.3, 14, 1.6, 1.7, 1.9, 2.5.
+  Recomputed from the producer CSVs (rule30: rule_sigw30_spanning_cal6913.csv, job 62284473, deterministic; head and rule at the
+  five-day window: rule_spanning_era_v3_cal6913.csv era=full — the rule30 CSV's own alpha_head / gain_* columns are on the
+  superseded head-seed set and are NOT used; SSSNET joined through the sssnetpre→sssnet_w60 legacy name, 14 arms):
+    rule30/2 across the 14 arms 1.3726–2.2660 → "1.4% to 2.3%"; t_rule30 k1 1.587, random 1.722 → "1.6 and 1.7";
+    gap = mean of the 12 clusterizers − control, rule sides divided by two: head 1.0880 / 1.1971 (k1 / random),
+    rule5 0.5679 / 0.4871, rule30 0.5312 / 0.5024 → |gap30 − gap5| = 0.0367 / 0.0152 → "at most 0.04";
+    head/rule ratios 1.916, 2.457 (five-day) and 2.048, 2.383 (30-day) → "1.9 to 2.5", "roughly twice";
+    relative advantages (unchanged, already printed) head +20.0/+22.5%, rule5 +15.6/+13.1%, rule30 +38.7/+35.8%.
+  Seed dependence: rule30 and rule5 are seed-invariant; the head side is the five-seed mean. All four ratios lie inside the
+  quoted range, so a redraw would have to move a head gap by >0.05 to change a printed digit.
+(2) A.13 (A_supplementary.tex:505; pre-edit md5 762a042dd938d7c8174c7ec1d0da51de, backup in n99_backup/): N98's "$1.47$ times …
+  $1.62$ times" REVERTED to "$1.46$ times as much per unit of exposure and earns $1.63$ times as much". Diagnosis: the N98
+  recompute intersected turnover_v3_mean_cal6913.csv (head, arm name sssnet_w60) with naive_turnover_v3_cal6913.csv (rule, arm
+  name sssnetpre) without the legacy map, so the join silently dropped SSSNET and the "14-arm means" were 13-arm means:
+  13 arms 1.4722 / 1.6243 → 1.47 / 1.62; 14 arms 1.4643 / 1.6335 → 1.46 / 1.63. Every other number in the paragraph (23.1–30.8%,
+  38.2–46.9%, 3.9–4.6%, 6.3–7.6%, 0.46, 27%, 2.75–3.74 vs 2.66–3.79, controls first and third / ninth and thirteenth) is a
+  14-arm statistic, and "thirteenth" needs 14 arms, so the 14-arm ratios are the paragraph's own convention. The same arm-name
+  trap is in N83 addendum 1 ("the 13 arms … sssnetpre has no rule-based book" — it has one; it is the SSSNET rule book under
+  its legacy name), which is how 1.47 was first printed; the later change to 1.46/1.63 (present at snapshot commit 4c31022) was
+  applied without a ledger entry, which is why N98 read it as unsourced. This entry is that source. Lesson filed: a check that
+  encodes the join artifact passes the wrong number — assert the arm count in every cross-file join.
+(3) verify_printed.py (105 → 110 checks, 0 FAIL): the N77 30-day check now takes the head side from the five-seed spanning
+  file (it read the rule30 CSV's alpha_head column, which is on the superseded seed set — the claim "widens at all 14 arms and
+  stays positive" holds at five seeds too); four §4.4 checks added (+38.7/+35.8%; the 1.4–2.3% band and control t 1.6/1.7;
+  |Δgap| ≤ 0.04; the four ratios round to 1.9–2.5 and all sit in (1.5, 3)); the N98 A.13 check now renames sssnetpre→sssnet_w60,
+  asserts len(_cm)==14, and expects (1.46, 1.63). check_seed_language flagged the first wording of my own comment ("retired
+  three-seed set") — reworded to name the history; the gate is doing its job.
+Verification: comment-stripped numeric multisets vs backups — 04: added {14, 30, 0.04, 1.4, 2.3, 1.6, 1.7, 1.9, 2.5}, removed {};
+A: added {1.46, 1.63}, removed {1.47, 1.62}. Rebuilt (logs build_n99_{1,bib,2,3}.log): 0 errors, 0 undefined refs, 45 pages, only
+the title-block hbox (log line 1038), no Float too large; the last page is now 79% full (was 41%: the added lines shifted floats),
+so any further main-text addition, including the pending fig:reversal, makes 46 pages. All four new sentences and the 1.46/1.63
+sentence found once in the PDF text layer; "1.47 times"/"1.62 times" absent. Nine gates 9/9 (check_pseed_5ps, verify_printed
+110 PASS, check_pseed_flip_literals, check_seed_language, check_printed_5seed, check_field_window_5seed, check_note_maxw,
+check_calendar_bypass, check_figures_text 10/10). paper/ synced by hand (paper-sync still trips on the unadopted figure):
+04_hedge_and_signal.tex and A_supplementary.tex copied and cmp-identical; the other six sections, main.tex, refs.bib,
+preamble-oup.tex verified byte-identical. Uncommitted in replication_repo (Code Branch to commit, as the follow-up to 90935bf):
+audit/verify_printed.py, paper/sections/04_hedge_and_signal.tex, paper/sections/A_supplementary.tex. Figure decision (fig:reversal)
+still with the user.

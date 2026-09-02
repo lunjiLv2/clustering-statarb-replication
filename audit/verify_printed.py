@@ -174,7 +174,19 @@ print("== LM null-imposed block bootstrap p (lm_boot_v3_cal6913_s42) [N77] ==")
 _lb = pd.read_csv(E+"lm_boot_v3_cal6913_s42.csv"); chk("[diagnostic, not printed since N78-8] LM bootstrap p at most 0.001", len(_lb)==28 and _lb.p_boot.max() <= 0.001)
 
 print("== rule at the head's 30-day signal window (rule_sigw30_spanning_cal6913) [N77] ==")
-_r30 = pd.read_csv(E+"rule_sigw30_spanning_cal6913.csv"); chk("head-minus-rule/2 alpha gain widens at all 14 arms with a 30-day rule", len(_r30)==14 and (_r30.gain_vs_rule30 > _r30.gain_vs_rule5).all() and (_r30.gain_vs_rule30 > 0).all())
+_r30 = pd.read_csv(E+"rule_sigw30_spanning_cal6913.csv").set_index("arm")
+# N99: the CSV's alpha_head / gain_* columns were computed at the superseded head-seed set (CORRECTIONS N77); the head side is taken from the five-seed spanning file instead.
+_r30h = pd.read_csv(E+"rule_spanning_era_v3_cal6913.csv"); _r30h = _r30h[_r30h.era=="full"].set_index(["component","arm"]).alpha
+_r30 = _r30.rename(index={"sssnetpre":"sssnet_w60"}); _r30["head5"] = [_r30h[("head",a)] for a in _r30.index]; _r30["rule5"] = [_r30h[("rule",a)] for a in _r30.index]
+_g5 = _r30.head5 - _r30.rule5/2; _g30 = _r30.head5 - _r30.alpha_rule30/2
+chk("head-minus-rule/2 alpha gain widens at all 14 arms with a 30-day rule [five-seed head]", len(_r30)==14 and (_g30 > _g5).all() and (_g30 > 0).all())
+_c12 = [a for a in _r30.index if a not in ("k1","random")]
+chk("§4.4: 30-day rule widens the relative advantage to +38.7/+35.8%", tuple(round(100*(_r30.loc[_c12,"alpha_rule30"].mean()/_r30.loc[c,"alpha_rule30"]-1),1) for c in ("k1","random")) == (38.7, 35.8))
+chk("§4.4: 30-day rule alphas at the head's gross run 1.4-2.3% across the 14 arms; control t = 1.6 and 1.7", band(_r30.alpha_rule30/2, 1.4, 2.3, 1) and (round(_r30.loc["k1","t_rule30"],1), round(_r30.loc["random","t_rule30"],1)) == (1.6, 1.7))
+_gap = {(w,c): (_r30.loc[_c12,col].mean() - _r30.loc[c,col])/div for w,col,div in (("head","head5",1),("rule5","rule5",2),("rule30","alpha_rule30",2)) for c in ("k1","random")}
+chk("§4.4: 30-day window moves the rule's gap to either control by at most 0.04 points", max(abs(_gap[("rule30",c)]-_gap[("rule5",c)]) for c in ("k1","random")) <= 0.04)
+_rat = [_gap[("head",c)]/_gap[(w,c)] for w in ("rule5","rule30") for c in ("k1","random")]
+chk("§4.4: head's gap is 1.9-2.5 times the rule's at either window (roughly twice)", (round(min(_rat),1), round(max(_rat),1)) == (1.9, 2.5) and all(1.5 < r < 3 for r in _rat))
 
 print("== §4.1 own-dispersion counts (perrule_count_v3_cal6913, paths.SEEDS) [N77-2, N83 add. 2] ==")
 # head_alpha_perseed_cal6913.csv is an orphan three-seed file (seeds 42/1/123, no producer in the repo); the printed counts come from perrule_count_v3.py.  3seed-ok: orphan file, documented not consumed
@@ -267,10 +279,10 @@ print("== §6.1 characteristics lens (lens_extras_v3) [N88] ==")
 _lx = pd.read_csv(E+"lens_extras_v3_cal6913.csv").set_index("arm"); _lc = [a for a in _lx.index if a not in ("k1","random")]
 chk("characteristics span: real partitions keep 77-85% of their share; Z alone explains 0.13; random at its floor", (round(100*_lx.loc[_lc,"ret_spanZ"].min()), round(100*_lx.loc[_lc,"ret_spanZ"].max()), round(_lx.R2_expl_spanZ.mean(),2)) == (77, 85, 0.13) and abs(_lx.loc["random","ret_spanZ"]-1) < 0.01)
 print("== app:costs (A.13) head vs rule per unit of gross (turnover_v3_mean, naive_turnover_v3) [N98] ==")
-_tv = pd.read_csv(E+"turnover_v3_mean_cal6913.csv").set_index("arm"); _nv3 = pd.read_csv(E+"naive_turnover_v3_cal6913.csv").set_index("arm")
+_tv = pd.read_csv(E+"turnover_v3_mean_cal6913.csv").set_index("arm"); _nv3 = pd.read_csv(E+"naive_turnover_v3_cal6913.csv").set_index("arm").rename(index={"sssnetpre": "sssnet_w60"})  # N99: the rule file names the SSSNET arm sssnetpre; without the rename the join silently drops it and the 13-arm ratios are 1.47/1.62
 _cm = [a for a in _tv.index if a in _nv3.index]; _row = _nv3.loc[_cm, "turnover_twoway_per_unit_gross"] / 2; _rret = _nv3.loc[_cm, "ann_ret"] / _nv3.loc[_cm, "gross_book"]
-chk("A.13: head trades 1.47x per unit of exposure and earns 1.62x (ratios of the 14-arm means); rule return 3.9-4.6%, break-even rule 2.75-3.74 vs head 2.66-3.79",
-    (round(_tv.loc[_cm, "daily_turnover_oneway_N6_convention"].mean() / _row.mean(), 2), round(_tv.loc[_cm, "ann_ret"].mean() / _rret.mean(), 2)) == (1.47, 1.62)
+chk("A.13: head trades 1.46x per unit of exposure and earns 1.63x (ratios of the 14-arm means); rule return 3.9-4.6%, break-even rule 2.75-3.74 vs head 2.66-3.79",
+    len(_cm) == 14 and (round(_tv.loc[_cm, "daily_turnover_oneway_N6_convention"].mean() / _row.mean(), 2), round(_tv.loc[_cm, "ann_ret"].mean() / _rret.mean(), 2)) == (1.46, 1.63)
     and (round(100*_rret.min(), 1), round(100*_rret.max(), 1)) == (3.9, 4.6) and (round(_nv3.loc[_cm, "breakeven_bps"].min(), 2), round(_nv3.loc[_cm, "breakeven_bps"].max(), 2)) == (2.75, 3.74))
 _pa = pd.read_csv(E+"pos_autocorr_naive_cal6913.csv"); _pc = _pa[~_pa.arm.isin(["k1", "random"])]
 chk("A.13: rule positions correlate with the previous day's at 0.46, 27% of names change sign (clusterizer means)", (round(_pc["corr"].mean(), 2), round(_pc["flip"].mean())) == (0.46, 27))
