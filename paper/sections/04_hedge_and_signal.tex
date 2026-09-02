@@ -58,7 +58,7 @@
 %%  §4.4, so the heading names the object measured rather than the
 %%  clustering alone.
 
-In this section, we show that a real partition has two benefits: it lowers the volatility of the payoff, and it raises its alpha. We measure each within each trading component. We then measure how much comovement each partition removes and show that a random partition removes only the amount that any grouping into $\K$ sets removes by construction (\secref{sec:mechanism}). We decompose the Sharpe gap between grouped and control books into a mean part and a volatility part (\secref{sec:split}), and finally turn the comparison around and measure what the trading head adds to a partition held fixed (\secref{sec:head}).
+In this section, we show that a real partition has two benefits: it lowers the volatility of the payoff, and it raises its alpha. We measure both benefits within each trading component. We then measure how much comovement each partition removes and show that a random partition removes only the amount that any grouping into $\K$ sets removes by construction (\secref{sec:mechanism}). We decompose the Sharpe gap between grouped and control books into a mean part and a volatility part (\secref{sec:split}), and finally turn the comparison around and measure what the trading head adds to a partition held fixed (\secref{sec:head}).
 
 %%  ── 4.0  OPENING ────────────────────────────────────────────────────
 %%  Two goods, priced separately. Then the licence, pointing at §3.6.
@@ -177,7 +177,7 @@ therefore earns $15.6\%$ more alpha on
 the twice-residualized signal of \eqnref{eq:relsig} than on the
 all-market control's signal, and $13.1\%$ more than on the random control's. Because the rule-based component has no fitted parameters and the arms differ only in the signal they receive, the extra alpha can come only from the signal the partition supplies.
 
-The neural trading head widens the alpha advantage over both controls, far more over the random control than over the all-market control (against the six factors of \tabref{tab:moments}; with a short-term reversal factor added, the ordering reverses, \secref{sec:spanning}). Against the
+The neural trading head widens the alpha advantage over both controls, far more over the random control than over the all-market control (against the six factors of \tabref{tab:moments}; with a short-term reversal factor added, the rule-based advantage exceeds the trained one, \secref{sec:spanning}). Against the
 all-market control the advantage rises from $15.6\%$ to $20.0\%$; against the random control it rises from $13.1\%$ to $22.5\%$. The same asymmetry appears arm by arm. Both advantages are positive at every one of the 12 clusterizers. Formed seed by seed, so that the dispersion across a clusterizer's five head seeds is preserved, the advantage over the all-market control exceeds twice that dispersion at only four of the 12, while the advantage over the random control does so at seven. The count is the same under either dispersion, the clusterizer's own across its five seeds or the figure pooled over the 12, though not the same four. A wrong partition therefore costs more under the neural trading head than under the fixed rule (\secref{sec:head}).
 %%  RECORD, not an open item. On the old panel this paragraph read the
 %%  other way: the advantage over K=1 was reported to fall by more than
@@ -188,7 +188,7 @@ all-market control the advantage rises from $15.6\%$ to $20.0\%$; against the ra
 %%  v3 and is now in the text above: 5 of 12 against K=1, 12 of 12
 %%  against random, positive at all twelve arms against both. Source:
 %%  server_package/e2e_plan/perrule_count_v3.csv.
-The random control earns less alpha than $\K=1$ under the head ($5.33$ against $5.44$), which plausibly reflects what the two signals contain. Demeaning within a random group subtracts the average of roughly 16 unrelated stocks, so the random signal
+The random control earns less alpha than $\K=1$ under the head ($5.33$ against $5.44$), a gap that plausibly reflects what the two signals contain. Demeaning within a random group subtracts the average of roughly 16 unrelated stocks, so the random signal
 is the $\K=1$ signal perturbed by a component that carries little systematic peer information, and the trained component
 reads a corrupted copy of the signal it reads under $\K=1$.
 
@@ -227,7 +227,7 @@ Balance within groups contributes little to the volatility reduction. The demean
 \subsection{Decomposing the Sharpe Gap}
 \label{sec:split}
 
-An end-to-end Sharpe ratio does not weight the benefits in alpha and volatility equally. Because the log Sharpe ratio is the log mean minus the log volatility, the log-Sharpe gap between the clusterizers' books and a control book splits exactly into a mean part and a volatility part,
+Most of a partition's Sharpe advantage over either control comes through volatility. Because the log Sharpe ratio is the log mean minus the log volatility, the log-Sharpe gap between the clusterizers' books and a control book splits exactly into a mean part and a volatility part,
 \begin{equation}\label{eq:split}
 \log \mathrm{SR}_g-\log \mathrm{SR}_c=(\log\mu_g-\log\mu_c)-(\log\sigma_g-\log\sigma_c).
 \end{equation}
@@ -700,9 +700,9 @@ Trained & Random & $0.532$ & $0.131$ & $0.401$ & $75.4\%$ \\
 \subsection{What the Trading Head Adds}
 \label{sec:head}
 
-Sections \ref{sec:hedge} to \ref{sec:split} held the trading component fixed and varied the partition. We now hold the partition fixed and ask what the neural trading head adds to it. At matched gross exposure it raises alpha at every one of the 14 arms but lowers volatility at none. The ranking of the 12 clusterizers is largely the same under either component; the gap between the two controls also closes, and that closing shows what training does to a partition that carries no information. 
+Sections \ref{sec:hedge} to \ref{sec:split} held the trading component fixed and varied the partition. We now hold the partition fixed and ask what the neural trading head adds to it. At matched gross exposure it raises alpha at every one of the 14 arms and raises volatility at every arm by proportionally less. The ranking of the 12 clusterizers is largely the same under either component; the gap between the two controls also closes, and that closing shows what training does to a partition that carries no information. 
 
-The two trading components differ in two ways, the model and the signal window ($5$ against $30$ days, \secref{sec:components}), so any difference between them bundles the two changes. Rerunning the rule-based component with a $30$-day window widens the alpha advantage over the controls to $+38.7\%$ and $+35.8\%$, and the head still adds alpha at every arm over that rerun, so the longer signal window alone does not account for the head's alpha improvement. That rerun also fixes the scale of the head's advantage. At the head's gross exposure, the $30$-day window moves the fixed rule's gap to either control by at most $0.04$ alpha points but lowers the alphas themselves to $1.4\%$ to $2.3\%$ a year across the 14 arms, with neither control's alpha distinguishable from zero ($t = 1.6$ and $1.7$). The larger relative advantage therefore comes from the smaller base. In alpha points the head's gap to either control is roughly twice the fixed rule's at either signal window, $1.9$ to $2.5$ times.
+The two trading components differ in two ways, the model and the signal window ($5$ against $30$ days, \secref{sec:components}), so any difference between them bundles the two changes. Rerunning the rule-based component with a $30$-day window widens the alpha advantage over the controls to $+38.7\%$ and $+35.8\%$, and the head still adds alpha at every arm over that rerun, so the longer signal window alone does not account for the head's alpha improvement. That rerun also sets the base against which the head's advantage is measured. At the head's gross exposure, the $30$-day window moves the fixed rule's gap to either control by at most $0.04$ alpha points but lowers the alphas themselves to $1.4\%$ to $2.3\%$ a year across the 14 arms, with neither control's alpha distinguishable from zero ($t = 1.6$ and $1.7$). The larger relative advantage therefore comes from the smaller base. In alpha points the head's gap to either control is roughly twice the fixed rule's at either signal window, $1.9$ to $2.5$ times.
 
 
 
@@ -755,8 +755,8 @@ lowest.
 \label{fig:rank_shift}
 \end{figure}
 
-The random control's edge over the $\K=1$ control does not survive training. At the rule-based component, where the book is a deterministic function of the partition, the random control earns a higher Sharpe ratio than the $\K=1$ control, $0.89$ against $0.83$. At the trained component the two are level on the mean-of-per-seed convention, $1.28$ against $1.28$, and on the seed-averaged book the random control's edge is only $0.04$, $1.50$ against $1.46$, so under the head they are indistinguishable rather than ranked. Paired by seed, the difference is
-$0.00$ with a standard deviation of $0.08$ across five fits ($t = 0.00$), and its sign changes from fit to fit. One explanation, consistent with \secref{sec:hedge}, is that the fixed rule bets small, equal amounts everywhere, so the noise a random partition adds largely cancels, whereas a trained model fits whatever structure the labels imply, even when there is none or it is wrong. Training therefore makes a wrong partition more expensive.
+The random control's edge over the $\K=1$ control does not survive training. At the rule-based component, where the book is a deterministic function of the partition, the random control earns a higher Sharpe ratio than the $\K=1$ control, $0.89$ against $0.83$. At the trained component the two are level on the mean-of-per-seed convention, $1.28$ against $1.28$, and on the seed-averaged book the random control's edge is only $0.04$, $1.50$ against $1.46$, so under the head they are indistinguishable. Paired by seed, the difference is
+$0.00$ with a standard deviation of $0.08$ across five fits ($t = 0.00$), and its sign changes from fit to fit. Training therefore makes a wrong partition more expensive. One explanation, consistent with \secref{sec:hedge}, is that the fixed rule bets small, equal amounts everywhere, so the noise a random partition adds largely cancels, whereas a trained model fits whatever structure the labels imply, even when there is none or it is wrong.
 
 %%---------------------------------------------------------------------
 %%  §6 DRAFT, 2026-08-16. Yours to edit. All numbers recomputed on the

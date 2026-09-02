@@ -6308,3 +6308,52 @@ p.13 (Table 2 note). Gates: verify_printed 0 FAIL (112), check_pseed_5ps, check_
 check_seed_language, check_printed_5seed, check_field_window_5seed, check_note_maxw,
 check_calendar_bypass, check_figures_text all PASS. No number changed. Backups
 `scratchpad/n110_backup/` (01, 04). Code Branch to commit 01 + 04 (paper-sync done).
+
+### N111 (2026-09-01) — §6.2:137 / §1:106 "roughly half" replaced by the sourced alpha-share bands (user ruling C3 "按你来", the N110 C item); cover letter v5 (one page)
+**Manuscript.** §6.2:137 "Roughly half of each clusterizer's alpha is orthogonal to the same strategy traded on the
+whole market; it is relative value within the group, and a random grouping supplies almost none of it." → "The alpha
+each clusterizer keeps against the $\K=1$ book is $52\%$ to $68\%$ of its FF5+MOM alpha in \tabref{tab:spanning} at the
+rule-based component and $41\%$ to $68\%$ under the head; this alpha is relative value within the group, and a random
+grouping supplies almost none of it." §1:106 "every clusterizer's book keeps roughly half of its alpha" → "keeps between
+two fifths and two thirds of its alpha" (no numeral in §1, as ruled). Source: k1_regressor_v3_cal6913 `alpha_on_k1`
+(tab:k1span, first column) divided by strev_spanning_v3_cal6913 `alpha6` (tab:spanning FF5+MOM alpha, era full), 12
+arms per component after the join (arm names agree across the two producers, sssnetpre in both): rule 51.7–68.5%
+(kmeans 68.5, agglo_complete 65.1, fv3sm 63.2, pca 63.1, sssnetpre 60.7, agglo_avg 60.6, sponge 60.0, sharpe_fixed
+59.9, sortino 57.7, fv2a 57.0, spectral 52.1, gics 51.7), head 40.6–68.2% (kmeans 68.2, fv3sm 63.6, agglo_complete
+62.1, pca 60.2, sponge 59.6, sssnetpre 59.2, sortino 58.5, agglo_avg 57.3, sharpe_fixed 55.1, fv2a 53.0, gics 50.1,
+spectral 40.6). The same bands (52–68, 41–68) come from dividing the printed two-decimal cells of tab:k1span by those of
+tab:spanning, so a reader can recover them from the two tables. Random keeps 9% (rule) and 8% (head), "almost none".
+Denominator choice: the FF5+MOM alpha (the paper's headline alpha, named in the sentence); against the FF5+MOM+Rev alpha
+the shares are 69–85% / 46–75% and against the raw mean return they are not what the old sentence meant. "Two fifths" now
+also appears at §1:104 ("a different number of groups by more than two fifths of it", Code Branch's wording of the same
+hour) — two paragraphs apart, different quantities; left for the user.
+**Harness.** verify_printed.py: one chk() per component after the tab:k1span loops (join on arm, `assert len==12`,
+`(round(min), round(max)) == (52,68)` rule / `(41,68)` head): 112 → 114 checks.
+**Build.** 46 pages, 0 errors, 0 undefined, Overfull only main.log:1038 (title block). PDF: p.3 (§1 sentence), p.28
+(§6.2 sentence, "Table 7" = tab:spanning); "roughly half of its alpha", "Roughly half of each" and "orthogonal to the
+same strategy traded on the whole market" absent. Nine gates pass (verify_printed 0 FAIL, 114). Backups
+`scratchpad/n111_backup/` (01, 06).
+**Concurrency note.** The two files were written at 22:13:41, four seconds after the Code Branch's bulk write of
+01/03/06/07 (22:13:37; a wording pass across 01–07 and A not in the N110 paper/ snapshot: §1:49, :95, :104, :111 "eight of
+the 12" → "most of the 12", §4.3 opener, §5 sec:riskreturn → sec:hedge, §6.3:269, §6.4, A "All but gics", …). My edit
+read the file after that write, so both sets are on disk; the Code Branch ran declare.sh at 22:13:52, which absorbed
+this entry's diff into the shared baseline (declare.sh prints nothing for N111). The Code Branch's pass is its own entry;
+paper-sync/commit left to the Code Branch (message sent 22:16).
+
+**Cover letter (`Cover_Letter/cover_letter.tex`, v4 → v5; v4 kept as `cover_letter_v4_2026-09-01.tex`, its Overleaf
+render as `cover_letter_v4_overleaf_2026-09-01.pdf`).** Why v4 spilled: the Overleaf PDF puts the body's last line at
+y = 694 pt on page 1 (text block x 71.7–540.3, 13.5 pt pitch, 7.7 pt paragraph gap, greeting at y = 180) and page 2
+carries only "Sincerely," and the names (40.7 pt apart); newlfm's closing tabular (blank + closeskipbefore 1em,
+"Sincerely,", blank + closeskipafter 1em, signature space 2pt + skips, names) is about 79 pt, and the class's text-area
+bottom is about y = 709 (792 − footer margin 72 − bottommarginskip 5 − bottommarginskipbelow 5 − rule 1; defaults read
+from newlfm.cls on CTAN), so a body ending at 694 plus the 42.7 pt `\vspace{15mm}` could not fit. Cuts, 393 → 311 words:
+"and have selected the special issue in the submission system" (true — user C8 — but recorded by the system), the
+corresponding author's department, "is included in the submitted PDF and", "this version and", "as stated in the
+manuscript", the five reviewer affiliations (they go in the form), "that recompute printed values from those files" →
+"the audit scripts", "checksums that identify the panel" → "checksums of the panel", `\vspace{3mm}` and `\vspace{15mm}`
+removed; `\setlength{\emergencystretch}{2em}` and `\allowbreak` after the slashes in both links. Checked in an
+article/charter proxy calibrated to reproduce v4's 34 Overleaf lines exactly (offset +4.6 pt): v5's body ends at y = 604,
+names at about 691, 18 pt inside the limit (`scratchpad/cl_check/cal_v4.*`, `cal_v5b.*`, 0 errors/overfull). Fallback if
+Overleaf still spills: `\newlfmP{closeskipbefore=0pt,closeskipafter=0pt}` (−22 pt). AI-use disclosure (user C1): not
+added — JFEC's instructions ask the cover letter only for the replicability-exemption request; survey recorded in the
+session report and in memory `cover-letter-standards`.

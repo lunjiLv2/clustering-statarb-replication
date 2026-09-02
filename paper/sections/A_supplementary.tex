@@ -36,7 +36,7 @@ This appendix has two parts. \appref{app:rules} to \appref{app:calendar} give th
 All clusterizers receive the same input: the day's universe of $\N_t$ stocks
 (\secref{sec:panel}) and the trailing window of market residuals
 $\mathbf{R}_{\mathrm{tr}} \in \real^{60 \times \N_t}$, 60 days ending
-at $t$. All target $\K = 30$ groups. Where a correlation matrix appears
+at $t$. All but \textsc{gics} target $\K = 30$ groups. Where a correlation matrix appears
 it is $\Cmat = \operatorname{corr}(\mathbf{R}_{\mathrm{tr}})$, the
 $\N_t \times \N_t$ sample correlation of the window's columns.
 
@@ -332,9 +332,7 @@ for the 21-day original, so the common window does not disadvantage it. At the t
 $\K$ is fixed at $30$ throughout the body. Five clusterizers were rerun at
 $\K = 10$ and $\K = 50$, five seeds each, everything else identical
 (\tabref{tab:ksweep}). Three of the five rise monotonically in $\K$; $k$-means and spectral clustering peak at $\K=30$, falling by $0.09$ and $0.14$ from $30$ to $50$. The sweep does not include a random control at the new $\K$ values.
-The mechanical component of the gain, the extra cross-sectional
-variance that a finer partition removes from any panel, structured or
-not ($(\K-1)/(\N_t-1) = 1.8\%$, $5.9\%$, and $9.9\%$ at $\K = 10, 30, 50$ on the $494.3$ names of \secref{sec:mechanism}), therefore cannot be separated from the structural component with
+A finer partition removes extra cross-sectional variance from any panel, structured or not: $(\K-1)/(\N_t-1) = 1.8\%$, $5.9\%$, and $9.9\%$ at $\K = 10, 30, 50$ on the $494.3$ names of \secref{sec:mechanism}. This mechanical component of the gain therefore cannot be separated from the structural component with
 the controls that were run. A random partition moves $0.39$ between draws of its own randomness at $\K=30$ (\secref{sec:pseed}, trained component, head seed pinned) and $0.41$ across the five head seeds (\figref{fig:field_ruler}), so a subtraction from one run per $\K$ would have no valid replication unit. 
 
 \begin{table}[htbp]
@@ -375,7 +373,7 @@ after the Fama--French date of the same move, and every panel date is
 a Fama--French trading day, so the offset is in the labels, not the
 holidays.
 
-The two trading components then label their payoffs differently. The rule-based component books a payoff under the day the position
+The two trading components also label their payoffs differently. The rule-based component books a payoff under the day the position
 was formed; the trained component books it under the label of the day it
 was realized. With the panel's labels one day ahead, the same calendar day's payoff is matched to the factor file same-day
 at the rule-based component and with a one-day lag at the trained component. Every regression in
@@ -407,8 +405,7 @@ comovement the labels carry.
 \caption{Corrupting a real partition, one fraction of labels at a time. This figure plots book volatility against the share of cross-sectional variance the corrupted partition removes. Each point is a full $6{,}913$-day rule-based backtest of the
 PCA-loadings partition with a fraction $q$ of each day's labels
 redrawn uniformly; two independent corruption draws per $q$ nearly
-coincide. The horizontal axis is the share of cross-sectional
-variance the corrupted partition removes; the dashed verticals mark
+coincide. The dashed verticals mark
 the degrees-of-freedom floor $(\K-1)/(\N-1)$ and the intact partition's
 share. The cross is the random control itself.}
 \label{fig:dose}
@@ -419,8 +416,7 @@ share. The cross is the random control itself.}
 
 
 
-Random matrix theory supplies a reason the two clusterizers that gain should be the
-sensitive ones: both read individual eigenvectors of the sample
+\secref{sec:window} finds that a longer estimation window raises the Sharpe ratio of spectral clustering and of PCA loadings and leaves average linkage where it was. Random matrix theory supplies a reason the two clusterizers that gain should be the sensitive ones: both read individual eigenvectors of the sample
 correlation matrix, and at $\N = 500$ a population eigenvalue must exceed $1 + \sqrt{\N/T}$ to be recoverable at all \citep{baik2005phase}. The threshold is $5.9$ at $T = 21$, under which only the market mode survives, against $2.4$ at $T = 252$, under which sector-scale structure does. A rival explanation, however, fits the same six observations, three clusterizers at two windows. The largest gains go to the clusterizers that started lowest, and a regression of the gain on the $21$-day starting level fits with $r = -0.93$. The two explanations make the same prediction on every arm in the sweep. We therefore registered, in advance, three arms on
 which they differ by construction, and ran them. Average linkage at
 $\K=10$ starts low, so the rival predicts a large gain and the
@@ -431,7 +427,7 @@ generator that cannot read the window; the observed gain is $-0.11$, negative in
 and the two arms that use no eigenvector do not move. The account misses the sign of the interaction with $\K$: for PCA loadings the same 60-to-$252$-day move is worth
 $+0.27$ at $\K=30$ against $+0.33$ at $\K=50$, so the window effect strengthens as the partition is refined. We have no account of that.
 
-\figref{fig:window_twin} shows the $60$-to-$21$-day step of the same sweep against seed noise. That step shows the account's one exception: complete linkage, which reads the same correlation matrix as average linkage and no eigenvector, loses $0.31$, outside its across-seed band. No $p$-value is quoted for the window responses: a paired test across five fits rests on four degrees of freedom, so each step is judged against its arm's own across-seed band instead. Average linkage, which moves $-0.00$ over the whole sweep (\secref{sec:window}), peaks at 120 days, mid-sweep.
+\figref{fig:window_twin} shows the $60$-to-$21$-day step of the same sweep against seed noise. That step contains the account's one exception: complete linkage, which reads the same correlation matrix as average linkage and no eigenvector, loses $0.31$, outside its across-seed band. No $p$-value is quoted for the window responses: a paired test across five fits rests on four degrees of freedom, so each step is judged against its arm's own across-seed band instead. Average linkage, which moves $-0.00$ over the whole sweep (\secref{sec:window}), peaks at 120 days, mid-sweep.
 
 \begin{figure}[tb]
 \centering
@@ -443,7 +439,7 @@ $+0.27$ at $\K=30$ against $+0.33$ at $\K=50$, so the window effect strengthens 
 \subsection{Robustness of the Cross-Sectional Projection}
 \label{app:lensrobust}
 
-The measurement depends on how many principal components to project
+The measurement of \secref{sec:lens} depends on how many principal components to project
 out and which floor to judge the result against. Estimating
 the number of factors is a literature of its own \citep{bai2002determining,
 onatski2010determining, ahn2013eigenvalue}, and we do not enter it.
@@ -501,6 +497,6 @@ full traded notional at the stated one-way rate. Break-even is the one-way rate,
 
 The reordering reported in \secref{sec:costs} is not an artifact of the trading head. We run the same measurement on the rule-based component, whose book carries gross exposure two rather than one, and normalize both to the same exposure. Its five-day signal window is rebuilt daily, and its positions correlate with the previous day's at $0.46$ on average across the clusterizers, with $27\%$ of names changing sign. Counted one-way and per unit of gross exposure, the rule-based books turn over $23.1\%$ to $30.8\%$ of their exposure a day against the head's $38.2\%$ to $46.9\%$, and earn $3.9\%$ to $4.6\%$ a year against the head's $6.3\%$ to $7.6\%$. The head trades $1.46$ times as much per unit of exposure and earns $1.63$ times as much, and the two nearly cancel: break-even at the rule-based component is $2.75$ to $3.74$ basis points against $2.66$ to $3.79$ at the trained component. The reordering is sharper without the head: on the rule-based component the two controls finish first and third at five basis points, against ninth and thirteenth at the trained component.
 
-The nearest published comparison runs the other way, and we cannot reconcile the two. \citet{brutti2026orthogonal} report that clustering cuts turnover sharply in their setup, from $87.9\%$ to between $24.2\%$ and $24.4\%$, and charge no costs; our configurations show a far smaller gap, the $\K=1$ control turning over $44.6\%$ against a clustered range of $38.2\%$ to $43.8\%$. Rebalancing frequency is the likely cause (our books are rebuilt every day), but we have not measured it, and we record the divergence as an open question rather than a finding.
+The nearest published comparison finds a much larger turnover reduction from clustering, and we cannot reconcile the two. \citet{brutti2026orthogonal} report that clustering cuts turnover sharply in their setup, from $87.9\%$ to between $24.2\%$ and $24.4\%$, and charge no costs; our configurations show a far smaller gap, the $\K=1$ control turning over $44.6\%$ against a clustered range of $38.2\%$ to $43.8\%$. Rebalancing frequency is the likely cause (our books are rebuilt every day), but we have not measured it, and we record the divergence as an open question rather than a finding.
 
 Five limitations apply. The cost model is a proportional one-way charge with no market-impact term, and a book rebuilt daily on 500 names is where market impact would be largest. Borrow costs on the short side are not modeled. The panel is US large capitalizations, the most liquid case available, so the break-even here is an upper bound for the same design on a broader universe. The cost figures are at $\K=30$ only; whether the ordering above survives the sweep of \appref{app:ksweep} is unmeasured. Finally, the books are rebuilt daily, and a longer holding period would lower turnover roughly in proportion; its effect on the break-even is left to future work.

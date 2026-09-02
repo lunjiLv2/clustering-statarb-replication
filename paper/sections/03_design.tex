@@ -123,7 +123,7 @@ group. We trade every partition under both a fixed cross-sectional rule and a
 neural trading head. Throughout, \emph{clusterizer} denotes the algorithm, \emph{clustering} the operation it performs, and \emph{partition} the grouping it produces. The two-stage design---extract a
 relative-value residual, then bet on it---follows the deep statistical
 arbitrage line of \citet{guijarro2025deep} and
-\citet{epstein2025attention}. Comparing partitions inside such a pipeline has precedents in \citet{Jinetal2023}, within the spectral family, and in \citet{brutti2026orthogonal}, whose no-clustering benchmark our rule-based results corroborate, though not its turnover (\secref{sec:costs}).
+\citet{epstein2025attention}. Comparing partitions inside such a pipeline has precedents in \citet{Jinetal2023}, within the spectral family, and in \citet{brutti2026orthogonal}, whose no-clustering benchmark our rule-based results corroborate, though not its turnover reduction (\secref{sec:costs}).
 
 Write the day-$t$ partition $\Part_t$ as a membership matrix
 %
@@ -743,8 +743,7 @@ the idiosyncratic part.\footnote{Estimates of a variance inherit the square of t
 %%  ⚠ The arm set is SET19, not the fourteen described above. Say so, or the
 %%    row silently changes with the field.
 
-The two moments fall on opposite sides of what the design can resolve. Split the sample at $2001$, $2009$, and $2016$, and measure across
-the 19 arms of \appref{app:names}: differences in volatility run between $13$ and $21$ times their own measurement error in every period, with no trend across the four periods. Differences in mean return run from $2.2$ times theirs in the first period to below one in the last two periods ($0.98$ and $0.63$).
+The two moments fall on opposite sides of what the design can resolve. We split the sample at $2001$, $2009$, and $2016$ and measure across the 19 arms of \appref{app:names}: differences in volatility run between $13$ and $21$ times their own measurement error in every period, with no trend across the four periods. Differences in mean return run from $2.2$ times theirs in the first period to below one in the last two periods ($0.98$ and $0.63$).
 
 %%---------------------------------------------------------------------
 %%  §4.1 DRAFT, 2026-08-15. STRUCTURE DECIDED WITH THE AUTHOR:

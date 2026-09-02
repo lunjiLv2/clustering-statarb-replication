@@ -234,6 +234,12 @@ for _c,(_b,_r2,_a6,_t6,_rn) in _k1c.items():
     chk(f"tab:k1span {_c}: beta {_b[0]}-{_b[1]}, R2 {_r2[0]}-{_r2[1]}, +FF6 alpha {_a6[0]}-{_a6[1]} t {_t6[0]}-{_t6[1]}; random beta {_rn[0]} R2 {_rn[1]} +FF6 {_rn[2]} ({_rn[3]})",
         band(_cc.beta_k1,*_b) and band(_cc.R2_k1,*_r2) and band(_cc.alpha_on_k1_ff6,*_a6) and band(_cc.t_on_k1_ff6,*_t6,1) and (round(_rr.beta_k1,2),round(_rr.R2_k1,2),round(_rr.alpha_on_k1_ff6,2),round(_rr.t_on_k1_ff6,1))==_rn)
 
+# N111: §6.2:137 / §1:106 share of the FF5+MOM alpha (tab:spanning, strev_spanning alpha6, era full) that a clusterizer keeps against the K=1 book (tab:k1span alpha_on_k1); §1 words it "between two fifths and two thirds"
+for _c,_lo,_hi in (("rule",52,68),("head",41,68)):
+    _sh = _k1[(_k1.component==_c)&(_k1.arm!="random")].merge(_stf[(_stf.component==_c)][["arm","alpha6"]], on="arm", how="inner"); assert len(_sh)==12, (_c, len(_sh))  # arm names agree across the two producers (sssnetpre in both)
+    _pct = 100*_sh.alpha_on_k1/_sh.alpha6
+    chk(f"§6.2 alpha kept against the K=1 book, {_c}: {_lo}%-{_hi}% of the FF5+MOM alpha (12 arms; §1 'two fifths'-'two thirds')", (round(_pct.min()), round(_pct.max()))==(_lo,_hi))
+
 print("== §6.2 principal-component factors (pc_spanning_v3 / pc_spanning_rule_shiftm1_v3) [N81] ==")
 _H = pd.read_csv(E+"pc_spanning_v3_cal6913.csv"); _Rm = pd.read_csv(E+"pc_spanning_rule_shiftm1_v3_cal6913.csv"); _Rm["component"] = "rule"
 _P = pd.concat([_H[_H.component=="head"], _Rm]).pivot_table(index=["component","arm"], columns="design", values=["alpha","R2"])
