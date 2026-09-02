@@ -52,7 +52,7 @@ make audit                               # every gate in audit/ (see below)
 | `analysis/` | one producer per result CSV (`*_v3.py`), the shared loader `books.py` (calendar, Sharpe, positions), `factors.py` (Newey–West spanning), `print_tables.py`, `run_all.py`; `results/` holds the shipped CSVs |
 | `audit/` | the gates (next section) and the error ledger `CORRECTIONS.md` (N1–N89), a copy of the authors' ledger |
 | `figures/scripts/` | `fig_*_v3.py`, one per figure, all through `books.py` and `style.py`; PNG previews in `figures/previews/` |
-| `paper/` | snapshot of the manuscript sources (sections, bibliography, the 10 figures) that the gates read; `make paper-sync` refreshes it from the working manuscript |
+| `paper/` | snapshot of the manuscript sources (sections, bibliography, the class and style files, the 10 generated figures and the TikZ pipeline figure with its insets) that the gates read; it compiles to the submitted 46-page PDF on its own, and `make paper-sync` refreshes it from the working manuscript |
 | `rule_engine/` | the rule-based trading component (`run_naive_routeA.py`, kernel `p1_inversion/p1_lib.py`), layer L2 |
 | `partitions/` | the daily partition generators (`gen_daily_partitions_v3.py`, `gen_sssnet_partitions_w60.py`), layer L2 |
 | `head/` | the neural trading head (`run_head.py`) and the validity gate `ne_gate.py`, layer L3 |

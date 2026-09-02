@@ -1,0 +1,197 @@
+% =====================================================================
+%  Section 3, Figure 1 -- the design as a stratigraphic column.
+%  Requires: tikz (arrows.meta, decorations.pathreplacing), graphicx,
+%            amsmath, amssymb, xcolor, lmodern.
+%  The four insets are resolved through \figinsetdir; leave it empty to
+%  let \graphicspath{{figures/}} find them.
+% =====================================================================
+\providecommand{\figinsetdir}{figures/pipeline/}
+\definecolor{figink}{HTML}{1A1A1A}
+\definecolor{figrule}{HTML}{909090}
+\definecolor{figgray}{HTML}{5C5C5C}
+\definecolor{figvary}{HTML}{9A5410}
+\definecolor{figvaryfill}{HTML}{FAF1E3}
+\definecolor{figraw}{HTML}{1D5B8F}
+\providecommand{\figfs}{\fontsize{7.5bp}{8.6bp}\selectfont}% body text of the figure; \scriptsize (6.5bp) kept only in the estimand stratum, whose box is fixed
+\begin{tikzpicture}[x=1pt,y=1pt,
+    every node/.style={inner sep=0pt,outer sep=0pt},
+    tx/.style={font=\figfs\linespread{0.96}\selectfont,align=left,
+               anchor=north west,text=figink},
+    gu/.style={font=\figfs\linespread{0.96}\selectfont,align=right,
+               anchor=east,text=figink},
+    gun/.style={font=\figfs\linespread{0.96}\selectfont,align=right,
+               anchor=north east,text=figink},
+    rb/.style={font=\figfs,anchor=base west,text=figink},
+    fb/.style={font=\figfs\itshape,anchor=base east,text=figink},
+    ic/.style={font=\figfs,align=right,anchor=north east,
+               text=figgray},
+    hair/.style={draw=figrule,line width=0.3pt},
+    edge/.style={draw=figink,line width=0.45pt},
+    tip/.style={-{Straight Barb[length=2.7pt,width=3.2pt]}}]
+% ---------- horizontal geometry --------------------------------------
+\def\GX{84}\def\MB{87}\def\SP{97}\def\CL{105}\def\CR{441}
+\def\XL{90}\def\XR{447}\def\RW{435}
+\def\IX{423}\def\IL{351}\def\IW{72}
+\def\TR{326}
+% ---------- stratum boundaries ---------------------------------------
+\def\ya{0}\def\yb{-19}\def\yc{-39}\def\yd{-125}\def\ye{-265}
+\def\yf{-335}\def\yg{-431}\def\yh{-463}\def\yi{-497}
+% ---------- the one varied stratum, tinted ---------------------------
+\fill[figvaryfill] (\XL,\yd) rectangle (\XR,\ye);
+% ---------- stratum rules --------------------------------------------
+\draw[draw=figink,line width=0.9pt] (\XL,\ya) -- (\XR,\ya);
+\draw[hair] (\XL,\yb) -- (\XR,\yb);
+\draw[hair] (\XL,\yc) -- (\XR,\yc);
+\draw[draw=figvary,line width=0.8pt] (\XL,\yd) -- (\XR,\yd);
+\draw[draw=figvary,line width=0.8pt] (\XL,\ye) -- (\XR,\ye);
+\draw[hair] (\XL,\yf) -- (\XR,\yf);
+\draw[hair] (\XL,\yg) -- (\XR,\yg);
+\draw[hair] (\XL,\yh) -- (\XR,\yh);
+\draw[draw=figink,line width=0.9pt] (\XL,\yi) -- (\XR,\yi);
+% ---------- margin bar, thickened over the varied stratum ------------
+\draw[draw=figrule,line width=0.5pt] (\MB,\ya) -- (\MB,\yi);
+\draw[draw=figvary,line width=2.4pt] (\MB,\yd) -- (\MB,\ye);
+% ---------- descent spine --------------------------------------------
+\draw[edge] (\SP,-4) -- (\SP,-465);
+\foreach \y in {-19,-38,-125,-265,-335,-431,-463}
+  {\draw[edge,tip] (\SP,\y+5.5) -- (\SP,\y-2.5);}
+\draw[edge,decorate,decoration={brace,amplitude=3.0pt,mirror}]
+      (101,-337.5) -- (101,-428.5);
+% ---------- the raw-return bypass ------------------------------------
+\draw[draw=figraw,line width=0.9pt,dash pattern=on 2.7pt off 1.9pt,tip]
+      (\RW,-3) -- (\RW,-437) -- (200,-437);
+\node[font=\figfs,text=figraw,rotate=90,anchor=center] at (443,-232)
+      {raw returns, untransformed};
+% ---------- the inset column, lightly ruled off ----------------------
+\draw[draw=figrule!50,line width=0.25pt] (341,\yc) -- (341,\yg);
+% =====================================================================
+%  gutter: how far the panel has been transformed
+% =====================================================================
+\node[gu]  at (\GX,-9.5)  {\textsc{panel} $r_{it}$};
+\node[gun] at (\GX,-20.5) {\textsc{market}\\ \textsc{residual} $\tilde r_{it}$};
+\node[gun] at (\GX,-41)   {\textsc{correlation} $\mathbf{C}$};
+\node[gun] at (\GX,-128)  {\textsc{partition} $\mathbf{Z}_t$\\[1.0pt]
+                           $K=30$, daily\\[3.0pt]
+                           \textcolor{figvary}{\bfseries the one stage}\\
+                           \textcolor{figvary}{\bfseries that varies}\\[1.0pt]
+                           \textcolor{figvary}{$12+2=14$ arms}};
+\node[gun] at (\GX,-268)  {\textsc{peer}\\ \textsc{demeaning} $s_{it}$};
+\node[gun] at (\GX,-338)  {\textsc{the book} $w_{it}$\\[1.0pt]
+                           fixed; two variants\\[1.0pt]
+                           $\times\,2 = 28$ books};
+\node[gun] at (\GX,-434)  {\textsc{payoff} $\pi_t$};
+\node[gun] at (\GX,-466)  {\textsc{moments} $\mu,\sigma$};
+% =====================================================================
+%  1. the panel
+% =====================================================================
+\node[tx] at (\CL,-1.5)
+ {Daily US equities, top $500$ by market capitalization: raw returns $r_{it}$ on $N_t$ names.\\
+  {\color{figgray}$6{,}913$ out-of-sample days, 8 July 1997--27 December 2024, shared by every arm.}};
+% =====================================================================
+%  2. market residualization
+% =====================================================================
+\node[tx] at (\CL,-20.0)
+ {$\tilde r_{it} = r_{it} - \hat\beta_{it}\,r_{mt}$,\quad
+  $\hat\beta_{it}$ from the $60$ days $[t-59,t]$,\quad market $=$ SPY, a traded instrument.\\
+  {\color{figgray}\itshape Computed once, before any partition exists: a common input, identical for every arm.}};
+% =====================================================================
+%  3. the correlation object
+% =====================================================================
+\node[tx,text width=228pt] at (\CL,-44)
+ {$\mathbf{C}$: the sample correlation of the residual
+  panel $\widetilde{\mathbf{R}} = (\tilde r_{it})$, formed each trading day on the
+  same $60$-day window that fixes $\hat\beta_{it}$.};
+\node[tx,text width=228pt] at (\CL,-78)
+ {{\color{figgray}\itshape Ten of the 14 read $\mathbf{C}$ or a function of it; one reads $\widetilde{\mathbf{R}}$ directly; three read nothing, though the sector table covers only part of the book and the rest is placed by correlation. Every arm receives the same $\mathbf{C}$.}};
+\node[anchor=north east] at (\IX,-42)
+ {\includegraphics[width=\IW pt]{\figinsetdir corr_2014-07-07.pdf}};
+\node[ic] at (\IX,-115.5) {$\mathbf{C}$ on 7 Jul 2014};
+% =====================================================================
+%  4. STAGE ONE -- the one object the article varies.
+%     Rows are the fourteen arms; the second column is what each reads.
+% =====================================================================
+\node[tx,text=figgray,font=\figfs\itshape] at (164,-129) {clusterizer};
+\node[tx,text=figgray,font=\figfs\itshape] at (262,-129) {reads};
+\draw[draw=figvary!60,line width=0.4pt] (\CL,-139) -- (\TR,-139);
+\draw[draw=figvary!45,line width=0.3pt]  (254,-140) -- (254,-262);
+\foreach \y in {-150.1,-167.3,-193.1,-201.7,-236.1}
+  {\draw[draw=figvary!35,line width=0.25pt] (\CL,\y) -- (\TR,\y);}
+\draw[draw=figvary!55,line width=0.3pt,dash pattern=on 1.3pt off 1.4pt]
+      (\CL,-244.7) -- (\TR,-244.7);
+\node[fb] at (156,-147.8) {Geometric};
+\node[fb] at (156,-160.7) {Hierarchical};
+\node[fb] at (156,-182.2) {Eigenstructure};
+\node[fb] at (156,-199.4) {Learned};
+\node[fb] at (156,-220.9) {Trading-driven};
+\node[fb] at (156,-242.4) {Taxonomy};
+\node[fb,text=figvary] at (156,-255.3) {Controls};
+\foreach \y/\r/\d in {%
+  -147.8/{$k$-means on returns}/{$\widetilde{\mathbf{R}}$},
+  -156.4/{average linkage}/{$\mathbf{C}$},
+  -165.0/{complete linkage}/{$\mathbf{C}$},
+  -173.6/{spectral, unsigned}/{$|\mathbf{C}|$},
+  -182.2/{PCA loadings}/{eig $\mathbf{C}$},
+  -190.8/{\textsc{sponge}$_{\mathrm{sym}}$}/{$\mathbf{C}^{+},\mathbf{C}^{-}$},
+  -199.4/{\textsc{sssnet}}/{signed $\mathbf{C}$},
+  -208.0/{Sharpe}/{$\mathbf{C}$ and the payoff},
+  -216.6/{Sortino}/{$\mathbf{C}$ and the payoff},
+  -225.2/{Sharpe (EW)}/{$\mathbf{C}$ and the payoff},
+  -233.8/{Sharpe (graph)}/{$\mathbf{C}$ and the payoff},
+  -242.4/{\textsc{gics}}/{nothing, where covered},
+  -251.0/{$K=1$ (all-market)}/{nothing},
+  -259.6/{random partition}/{nothing}}
+  {\node[rb] at (164,\y) {\r};
+   \node[rb] at (262,\y) {\d};}
+\fill[white] (\IL,-131.4) rectangle (\IX,-247.6);
+\node[anchor=north east] at (\IX,-131.9)
+ {\includegraphics[width=\IW pt]{\figinsetdir zmat.pdf}};
+\node[ic] at (\IX,-248.6) {$\mathbf{Z}_t$, the same day};
+% =====================================================================
+%  5. peer demeaning -- the second residualization
+% =====================================================================
+\node[tx] at (\CL,-268)
+ {$s_{it} = \tilde r_{it} - |C_{k(i)}|^{-1}\sum\nolimits_{j \in C_{k(i)}} \tilde r_{jt}$};
+\node[tx,text width=228pt] at (\CL,-285)
+ {{\color{figgray}\itshape The market is removed above; the peer group is removed here.
+   A group of size one leaves nothing to remove, and those names carry no position that day.}};
+\node[anchor=north east] at (\IX,-267.6)
+ {\includegraphics[width=\IW pt]{\figinsetdir demean.pdf}};
+\node[ic] at (\IX,-322.8) {peer means, 7 Jul 2014};
+% =====================================================================
+%  6. STAGE TWO -- pinned, run in two variants
+% =====================================================================
+\node[tx,text width=228pt] at (\CL,-338)
+ {\textbf{(a) Rule-based.} Five-day sum of $s_{it}$, sign flipped: long what has fallen
+  behind its peers, short what has run ahead, equal weight each side. Gross $2$, net $0$: dollar neutral by construction, with no fitted parameter.};
+\draw[draw=figrule,line width=0.25pt,dash pattern=on 1.2pt off 1.4pt]
+      (\CL,-378) -- (333,-378);
+\node[tx,text width=228pt] at (\CL,-380)
+ {\textbf{(b) Neural trading head.} Thirty-day path of running sums of $s_{it}$, one channel
+  per stock; parallel kernel widths $2,4,8$ into a long-convolution head, no attention.
+  $\sum\nolimits_i |w_{it}| = 1$ fixes gross and leaves net free, so the book is not dollar neutral. Refitted
+  walk-forward every $125$ days; five seeds.};
+\node[anchor=north east] at (\IX,-347.4)
+ {\includegraphics[width=\IW pt]{\figinsetdir signal.pdf}};
+\node[ic] at (\IX,-409.1) {$s_{it}$ paths, 7 Jul 2014};
+% =====================================================================
+%  7. the payoff -- settled in raw returns
+% =====================================================================
+\node[tx] at (\CL,-433)
+ {$\pi_t = \sum\nolimits_i w_{it}\, r_{i,t+1}$};
+\node[tx] at (\CL,-449)
+ {{\color{figgray}\itshape Residuals build the grouping and the signal; the payoff is earned on raw returns.}};
+% =====================================================================
+%  8. the estimand -- the pair, measured separately
+% =====================================================================
+\node[tx,font=\scriptsize\linespread{0.96}\selectfont] at (\CL,-465)
+ {The estimand is the pair $\mathbf{Z}\mapsto\bigl(\mu(\mathbf{Z}),\sigma(\mathbf{Z})\bigr)$,
+  reported as two numbers rather than as one Sharpe ratio.};
+\draw[draw=figink,line width=0.45pt] (\CL,-479) rectangle (\CR,-493);
+\draw[draw=figink,line width=0.45pt] (273,-479) -- (273,-493);
+\node[font=\scriptsize\selectfont,anchor=west,text=figink] at (112,-486)
+ {$\mu(\mathbf{Z}) = \mathbb{E}\bigl[\pi_t(\mathbf{Z})\bigr]$:
+  {\itshape\color{figgray}the mean of the payoff}};
+\node[font=\scriptsize\selectfont,anchor=west,text=figink] at (280,-486)
+ {$\sigma(\mathbf{Z}) = \operatorname{sd}\bigl[\pi_t(\mathbf{Z})\bigr]$:
+  {\itshape\color{figgray}its volatility}};
+\end{tikzpicture}

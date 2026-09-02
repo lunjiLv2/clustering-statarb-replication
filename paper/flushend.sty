@@ -1,0 +1,45 @@
+%%=====================================================================
+%%  flushend.sty — LOCAL SINGLE-COLUMN SUBSTITUTE, written 2026-08-23.
+%%
+%%  WHY THIS FILE EXISTS.  The OUP class loads flushend at cls:144 and
+%%  never calls any of its macros.  The current CTAN release, v4.3,
+%%  declares \NeedsTeXFormat{LaTeX2e}[2025/06/01] and uses 2020+ kernel
+%%  internals; this machine runs TeX Live 2018, so the real package
+%%  cannot be loaded here.  The real file is kept beside this one as
+%%  _flushend-v4.3-requires-2025-kernel.sty.keep.
+%%
+%%  WHAT flushend DOES.  It balances the columns on the last page of a
+%%  TWO-COLUMN document.  This manuscript is single column (the class is
+%%  loaded with `small', one of the two layouts the class leaves single
+%%  column, cls:2519-2523), so there is nothing to balance and the
+%%  package has no work to do.
+%%
+%%  THE GATE.  If a two-column layout is ever selected, this file raises
+%%  an error rather than silently doing nothing.  Delete it then and
+%%  compile where the real flushend is available — Overleaf, which the
+%%  journal's own instructions recommend, carries it.
+%%=====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{flushend}[2026/08/23 v0 single-column substitute (local)]
+
+\AtBeginDocument{%
+  \if@twocolumn
+    \PackageError{flushend}{%
+      This is the LOCAL single-column substitute for flushend, not the
+      real package.\MessageBreak
+      A two-column layout is active, so column balancing is needed and
+      this file cannot supply it.\MessageBreak
+      Delete flushend.sty from the manuscript directory and compile
+      where the real package is installed%
+    }{Restore the real flushend, or select the `small' or `mediumone'
+      layout, which are single column.}%
+  \fi}
+
+%% The public interface, as no-ops. Single column: nothing to balance.
+\providecommand\flushend{}
+\providecommand\raggedend{}
+\providecommand\flushcolsend{}
+\providecommand\raggedcolsend{}
+\providecommand\atColsBreak[1]{}
+\providecommand\atColsEnd[1]{}
+\endinput
