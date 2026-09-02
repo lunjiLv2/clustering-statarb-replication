@@ -1,4 +1,4 @@
-# Data licence (draft — confirm before the Zenodo upload)
+# Data licence
 
 The derived data record (`derived/rule_books`, `derived/head_logs`, `derived/weights`,
 `derived/partitions`, `results`) is released under **Creative Commons Attribution 4.0

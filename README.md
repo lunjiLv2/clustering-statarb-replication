@@ -1,8 +1,7 @@
 # Quantifying the Contributions of Clustering in Statistical Arbitrage — replication package
 
 **Status: release candidate (2026-09-01).** Repository: <https://github.com/lzwbh/clustering-statarb-replication>. Every number, table and figure of the manuscript is
-reproduced by the code here and checked by the gates in `audit/`. Not yet done: the licence files (drafts in `LICENSE`, `data/LICENSE-DATA.md`), the author
-list in `CITATION.cff`, and the Zenodo record for the derived data (`RELEASE_CHECKLIST.md`).
+reproduced by the code here and checked by the gates in `audit/`. Not yet done: the Zenodo record for the derived data and its DOI (`RELEASE_CHECKLIST.md`).
 
 The paper trades 12 clusterizers and two controls (no clustering, `k1`; a random partition,
 `random`) on 27 years of large US equities under two trading components, a fixed cross-sectional

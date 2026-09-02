@@ -12,7 +12,7 @@ Updated 2026-09-01 (CORRECTIONS N91). Everything below the line is the build-sit
 
 ## Owed before the repository goes public
 - [x] Author list and order: Lunji Zhu (UCLA); Yixuan He (Arizona State University); Mihai Cucuringu (UCLA, Oxford) — in `CITATION.cff` and the `LICENSE` copyright line (2026-09-01).
-- [ ] **Licences confirmed**: code MIT, data CC BY 4.0 (proposed 2026-08-30; not yet approved). GICS shareability via Mihai — the `gics` partition cache ships in place of the classification.
+- [x] Licences confirmed by the user 2026-09-01: code MIT (`LICENSE`), data CC BY 4.0 (`data/LICENSE-DATA.md`). GICS: the `gics` partition cache ships in place of the classification (Mihai to object if needed).
 - [x] Repository `lzwbh/clustering-statarb-replication` created 2026-09-01; `git init` inside `replication_repo/` (nested in the parent `GNN_for_Trading` tree, which does not track it); first commit made, push by the user.
 - [ ] **Zenodo record**: `python tools/package_zenodo.py --out <dir>` (weights = the main runs + the two peer books, user decision 2026-08-30); paste the DOI into `README.md` and `CITATION.cff`.
 - [ ] **paper/ re-snapshot at the submitted tag** (`make paper-sync`), then rerun `make audit`.
