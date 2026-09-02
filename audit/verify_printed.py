@@ -303,6 +303,13 @@ chk("A.13: head trades 1.46x per unit of exposure and earns 1.63x (ratios of the
 _pa = pd.read_csv(E+"pos_autocorr_naive_cal6913.csv"); _pc = _pa[~_pa.arm.isin(["k1", "random"])]
 chk("A.13: rule positions correlate with the previous day's at 0.46, 27% of names change sign (clusterizer means)", (round(_pc["corr"].mean(), 2), round(_pc["flip"].mean())) == (0.46, 27))
 _n5 = _nv3["netSR_5bp"].rank(ascending=False); chk("A.13: at 5 bp the controls finish first and third on the rule-based component", (int(_n5["k1"]), int(_n5["random"])) == (1, 3))
+print("== app:window (A.9) rival account: gain (21->252) on the 21-day level over the three swept clusterizers [N103] ==")
+try:
+    _mp = lambda a, v="": np.mean([_bk.sharpe(_bk.head_book(a, s, v)) for s in _paths.SEEDS])
+    _x = np.array([_mp(a, "_w21") for a in ("spectral_unsigned", "pca_load", "agglo_avg")]); _g = np.array([_mp(a, "_w252") - _mp(a, "_w21") for a in ("spectral_unsigned", "pca_load", "agglo_avg")])
+    chk("A.9: regression of the window gain on the 21-day starting level fits with r = -0.93", round(float(np.corrcoef(_x, _g)[0, 1]), 2) == -0.93, f"r {np.corrcoef(_x, _g)[0, 1]:.4f}")
+except FileNotFoundError:
+    print("  SKIP  A.9 rival-account correlation  [needs the window-variant head logs in data/derived (layer L1)]")
 print("== tab:ksweep (ksweep_v3_cal6913) [A.ksweep] ==")
 _kw = pd.read_csv(E+"ksweep_v3_cal6913.csv"); _pv = _kw.pivot(index="arm", columns="K", values="sharpe_mps").round(2)
 _kp = {"kmeans_ret": (2.21, 2.57, 2.48), "agglo_avg": (1.95, 2.15, 2.37), "agglo_complete": (2.07, 2.34, 2.55), "pca_load": (1.99, 2.28, 2.32), "spectral_unsigned": (1.69, 1.74, 1.61)}  # five seeds {1..5}
