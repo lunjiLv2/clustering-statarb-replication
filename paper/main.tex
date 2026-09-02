@@ -82,10 +82,33 @@ volatility by $28\%$ to $42\%$, while the trading head adds primarily alpha. The
 The authors declare that they have no competing interests.
 
 \section*{Funding}
-Yixuan He is supported by an NVIDIA Academic Grant Award as well as a Jetstream2 AI Fellowship.
+This work was supported by an NVIDIA Academic Grant Award and a Jetstream2 AI Fellowship to Yixuan He.
 
-%% Data availability statement goes here once the replication
-%% repository is organized (user decision 2026-08-24: deferred).
+%% Zenodo DOI of the derived-data record (tools/zenodo_upload.sh in the
+%% replication repository prints the reserved DOI when the draft is created).
+%% Paste it here, e.g. 10.5281/zenodo.1234567; while empty the statement
+%% says the deposit is in progress and prints no placeholder.
+\providecommand*{\ZenodoDOI}{}
+
+\section*{Data availability}
+The CRSP daily data underlying this article were obtained under licence
+through Wharton Research Data Services and cannot be redistributed; the
+replication package contains the code that rebuilds the panel from the
+CRSP daily files and the checksums that identify the panel used here. The
+GICS sector memberships used by one arm are likewise licensed, and the
+partitions derived from them are provided in their place. The factor
+returns were derived from a source in the public domain, the Kenneth R.
+French data library
+(\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}).
+The derived data underlying the tables and figures---the daily return of
+every book, the positions of the trained runs, the partition caches, and
+the training logs---\ifx\ZenodoDOI\empty are being deposited on Zenodo
+under a CC BY 4.0 licence (DOI to follow)\else are available on Zenodo at
+\href{https://doi.org/\ZenodoDOI}{\texttt{https://doi.org/\allowbreak\ZenodoDOI}}
+under a CC BY 4.0 licence\fi. The code,
+with the checks that tie the printed values to these files, is available
+at \href{https://github.com/lzwbh/clustering-statarb-replication}{\texttt{https://github.com/lzwbh/\allowbreak clustering-statarb-replication}} under an
+MIT licence.
 
 \section*{Acknowledgments}
 The computations in this article were performed on an NVIDIA GPU
