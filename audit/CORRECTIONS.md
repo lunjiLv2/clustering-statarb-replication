@@ -6193,3 +6193,32 @@ N107 addendum (same day): item A14 had left §6.3's closing sentence as a one-se
 merged into the preceding "Regressed the other way…" paragraph, whose last clause ("rather than to the choice within a class")
 it continues. Words and numbers unchanged; rebuilt (46 pages, 0 errors/undefined), declare.sh XREF-only for 06, paper-sync
 rerun, nine gates rerun and pass (verify_printed 112 PASS).
+
+### N108 (2026-09-01) — whole-pass over abstract, §1 and §7 for cross-layer consistency (user: "整体再过一遍abstract、intro和conclusion吧"); two wording edits, abstract untouched
+Method: every quantitative and verdict claim in the abstract (100 words), §1 results paragraphs (L88–113) and §7 checked
+against the body section it summarises (§4.1–4.4, §5.2–5.5, §6.1–6.3, tab:moments, tab:gradient, tab:peer); a verbatim-overlap
+scan (runs ≥ 7 words) between the three layers: abstract~§1 0, abstract~§7 0, §1~§7 6 runs (one of 15 words, five of 7–9).
+Corrected: (A1) §1:107 "the variance share every real partition explains declines gently, and none nears the random control's
+floor" → "every real partition loses at most about half of the variance share it explains, and none nears the random control's
+floor" — §6.1 reports retention of 44–61% after five components and 50–68% after the Fama–French factors, and says "declines
+gently" only of the factor sequence; "loses at most about half" is what §6.1 supports at both projections. (A2) §7:22 the 15-word
+run "most adjacent gaps in the Sharpe ranking lie within the run-to-run variation in the gap itself, and redrawing the partition
+seed" (verbatim in §1:105) → "most adjacent clusterizers in the Sharpe ranking are closer together than the run-to-run variation in
+their gap, and redrawing the partition seed"; §1 keeps the original. The five 7–9-word repeats are shared refrains and stay.
+Verified and left as printed: abstract "28% to 42%" (§4.1 tab:moments), "primarily alpha" (§4.4: alpha up at all 14 arms, vol
+ratio 1.17–1.24), "closely correlated books"/"mainly through volatility" (§5.2, §4.1), "Most of the 12" (§6.3: eight of 12 on
+peer books + six factors; four of 12 on peer books alone); §1 "far more than which", "widens the alpha advantage", "87%", the
+tab:gradient 0.65/0.87/1.01 reading, §6.2 reversal (two fifths vs a quarter), §7's four-of-12 count. The abstract stays at 100
+words (General Instructions ≤100; submission system allows 150 — user withdrew the trimming request).
+Held for the user (judgment): §7 cites the four-of-12 peer-books-alone count where the abstract and §1 cite eight-of-12
+(peer books + factors together) — both true, emphasis differs; abstract S1 "makes two decisions" left; §1 P10 does not preview
+§7's window/K and equal-weight findings.
+Tokens: none (both edits carry words only; numeric multisets of 01/07/main identical to the pre-edit backup); declare.sh 01
+XREF-only (the line carries \secref{sec:lens}), 07 words only. Build 46 pages (main text to p.33, references pp.33–36, appendix
+pp.36–46), 0 errors/undefined, Overfull only at main.log:1038; both new sentences located in the PDF text (pp. 3, 32), both old
+wordings absent. Nine gates pass (verify_printed 112 PASS). paper-sync: sections 01/07 modified; Code Branch to commit.
+Cover letter (Cover_Letter/cover_letter.tex, outside the manuscript and the gates): shortened at the user's request from 446 to
+364 body words (v2 kept as cover_letter_v2_long_2026-09-01.tex); cut the fourth-finding sentence, the special-issue pitch
+sentence (now one clause), the computing-resources line (duplicates Acknowledgments), and two unverified statements ("no related
+paper of ours is in circulation", "no conflict with any member of the editorial board"); the interpretive "read off" removed.
+Numbers in the letter (12, two, 27, 500, 28%, 42%, DOI) match the manuscript.
