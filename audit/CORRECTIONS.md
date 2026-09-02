@@ -5839,3 +5839,7 @@ analysis/results/size5/` from commit 4c31022 (made 30 min earlier); tools/checks
 manifest written before the incident; verify_printed 0 FAIL. Rule added to my own practice: before deleting inside a directory, run
 `find <dir> -type l` — a symlink turns a scoped delete into an unscoped one. data/checksums/manifest.csv rewritten (the only other
 mismatches were the N91 renames peer_spanning_v3 / turnover_v3_mean). The user's questions on licences and Zenodo answered in chat.
+N96 addendum — licences confirmed by the user ("按你的想法办"): code MIT, data CC BY 4.0; LICENSE-DATA.md no longer a draft.
+Zenodo packaging approved ("可以打包"): slurm job 62472868 (slurm/zenodo_package.sh) writes runs/zenodo_out/{rule_books,head_logs,
+weights,partitions,results}.tar.gz + MANIFEST.csv + SHA256SUMS; dry run 6.28 GB (116 rule books, 397 head logs, 72 weight files =
+70 main + 2 peer, 103 partition caches incl. MANIFEST.json, 65 result files incl. size5/). Commit c46785b.
