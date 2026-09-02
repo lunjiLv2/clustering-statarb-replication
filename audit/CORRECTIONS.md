@@ -6012,3 +6012,54 @@ runs/zenodo_out/ of 18:44: rule_books / head_logs / weights / partitions / resul
 logs (N100) postdate the packaging and are not in the record; git's manifest.csv (582 rows) is one step ahead of Zenodo's. DOI written
 into README (status line, L1 row, citation line), CITATION.cff (identifiers), data/README.md, RELEASE_CHECKLIST.md; the Data
 Availability Statement in main.tex is Refine's.
+
+### N102 (2026-09-01) — Data availability section and Funding sentence in main.tex (user: "Data Availability 声明冲！，github已经公开"); Zenodo DOI pasted; §5.2 seed clause investigated (open)
+(a) Data availability. main.tex:87 placeholder replaced by `\section*{Data availability}` between Funding and Acknowledgments
+(renders p.33). Text composed from the OUP DAS templates (third-party-licence form for CRSP via WRDS; GICS "likewise licensed",
+the derived partitions provided in their place; public-domain form with URL for the Kenneth R. French library; repository form for
+the derived data on Zenodo, CC BY 4.0; code on GitHub, MIT). Sources read before drafting: OUP research-data-policy DAS templates
+(JPepsy/SPP/Brain pages), JFEC author instructions (Funding section precedes Acknowledgements and must begin "This work was supported
+by"; public datasets to be cited in the reference list with a DOI, "[dataset] Authors, Year, Title, Repository, Identifier"). GitHub
+public status verified by me before printing the URL: HEAD 200, api.github.com `private: false`, licence MIT.
+Mechanism: `\providecommand*{\ZenodoDOI}{...}` at main.tex:91; the statement branches on `\ifx\ZenodoDOI\empty` (empty → "are
+being deposited on Zenodo under a CC BY 4.0 licence (DOI to follow)", no placeholder printed; non-empty → `\href` to
+https://doi.org/<DOI>). Both branches built and inspected (empty branch in an isolated scratchpad build with the macro predefined;
+`\providecommand*` rather than `\newcommand*` so a predefinition wins). `\url{}` broke the GitHub URL after "https:"; the URL is
+set as `\href{...}{\texttt{https://github.com/lzwbh/\allowbreak clustering-statarb-replication}}`.
+(b) DOI pasted this turn after Code Branch reported the record published (N101). Verified by me: doi.org → 302 → zenodo.org;
+zenodo.org/api/records/22241254 → 302 → /api/records/22241255, status published, access open, licence cc-by-4.0, resource type
+Dataset, publication_date 2026-09-02 (Zenodo's clock), related identifier isSupplementTo → the GitHub URL, files head_logs /
+partitions / weights / rule_books / results tarballs + MANIFEST.csv + SHA256SUMS. 10.5281/zenodo.22241254 is the CONCEPT DOI
+(resolves to the latest version; v1 = 10.5281/zenodo.22241255) — printed deliberately so a v2 with the N100 replicate logs would
+not orphan the paper's link. Metadata defect seen in the record, not fixable from here: creators[0] = "Zhu" with no given name
+(the other two are "He, Yixuan", "Cucuringu, Mihai"); Zenodo allows a metadata edit without a new version — with the user.
+(c) Funding sentence: "Yixuan He is supported by an NVIDIA Academic Grant Award as well as a Jetstream2 AI Fellowship." →
+"This work was supported by an NVIDIA Academic Grant Award and a Jetstream2 AI Fellowship to Yixuan He." (JFEC-mandated opening).
+Reversible; with the user.
+(d) Tokens (declare.sh, two runs): DAS run +4.0 ×2 (CC BY 4.0), comment-only +10.5281/+1234567, −2026/−08/−24 (old comment);
+DOI run +22241254 (printed), comment-only +22241255/+2026/+09/+01/+1, −1234567. No printed result number touched.
+(e) Build 46 pages, 0 errors, 0 undefined, only the class's title-block overfull (log line 1038). Data availability p.33; hyperlinks
+on the page verified by pymupdf (French library, doi.org/10.5281/zenodo.22241254, GitHub). Nine gates pass after the edit
+(verify_printed 111 PASS / 0 SKIP; check_figures_text 10/10; check_note_maxw PASS; the rest 0 FAIL). `make paper-sync` — only
+paper/main.tex differs from HEAD d8c5239; Code Branch to commit.
+(f) OPEN — §5.2 clause "each redrawn under five partition seeds (1 to 5), none of them the seed of the paper's main partition"
+(user asked what it is). Origin: Code Branch's disclosure that the cached partitions of the rest of the paper were generated at
+gen_daily_partitions_v3.py --seed 42 (default; line 291 seed=42, n_init=4) while §5.2's five redraws are --seed 1..5, so the
+main partition is a sixth draw not among the five. Two findings while checking it. (1) The "seed" framing is imprecise for five of
+the nine stochastic arms: sponge and the four trading-driven clusterizers (fv2a, fv3sm, sharpe_fixed, sortino) take their SPONGE /
+LOBPCG warm start from numpy's unseeded global RNG in the live path (N22(f) withdrawal; N69: "the SPONGE warm start (signet
+k-means) is unseeded, so the re-run is a fresh partition draw (ARI to the published cache 0.14–0.18)"; SPONGE_PARTITION_SEED
+seeds it only for the ps twins). Their canonical partitions are reproducible from the shipped caches (L1), not from a named seed;
+§3.6:479 "generated once, from a fixed partition seed" and §5.2:288 "from one partition seed" therefore over-state for those five.
+Proposed draw-framed wording (not applied): §3.6 "generated once and cached, and used by all five runs"; §5.2 "were generated once
+and cached … each redrawn five times (partition seeds 1 to 5; the cached partition of the rest of the paper is a separate draw)".
+(2) Discriminating measurement (head seed 42, common calendar, from head_logs/{arm}_seed42.csv vs {arm}_ps{1..5}_seed42.csv;
+sssnet = sssnetpre_seed42.csv): main-draw Sharpe vs the five redraws — kmeans_ret 2.824 vs [2.555, 2.850] rank 2/6; pca_load
+2.450 vs [2.280, 2.478] 3/6; spectral_unsigned 1.972 vs [1.877, 2.075] 5/6; sponge_w60 2.461 vs [2.248, 2.624] 4/6; fv2a_w60
+2.334 vs [2.198, 2.493] 2/6; fv3sm_w60 2.531 vs [2.491, 2.719] 4/6; sharpe_fixed_w60 2.339 vs [2.338, 2.489] 5/6; sortino_w60
+2.209 vs [2.232, 2.423] below the range by 0.02, 6/6; sssnet 2.526 vs [2.398, 2.527] 2/6; random 1.325 vs [1.193, 1.587] 4/6.
+The paper's cached draw is inside the five-redraw range at eight of nine stochastic arms, never the best of six (mean rank 3.7):
+the disclosure is benign. Not printed; if the user wants the sentence, it enters verify_printed the same day.
+Disclosures: WebFetch/WebSearch of OUP/JFEC instruction pages (results cached under ~/.claude/projects/.../tool-results/); read-only
+curl HEAD/GET to github.com, api.github.com, doi.org and zenodo.org (the record JSON saved to scratchpad/zenodo_rec.json); the
+isolated test build wrote only into scratchpad/doitest/.

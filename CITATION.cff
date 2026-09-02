@@ -18,7 +18,7 @@ license: MIT
 identifiers:
   - type: doi
     value: 10.5281/zenodo.22241254
-    description: "Derived data record on Zenodo (rule books, head logs, positions, partition caches, result CSVs; CC BY 4.0)"
+    description: "Derived data record on Zenodo, concept DOI (resolves to the latest version; v1 = 10.5281/zenodo.22241255): rule books, head logs, positions, partition caches, result CSVs; CC BY 4.0"
 repository-code: "https://github.com/lzwbh/clustering-statarb-replication"
 preferred-citation:
   type: article
