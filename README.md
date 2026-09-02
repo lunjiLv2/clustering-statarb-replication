@@ -15,12 +15,12 @@ which every module loads through `analysis/books.py` and asserts against.
 
 | layer | what you need | what you get | command |
 |---|---|---|---|
-| **L0** | Python 3.11 + `environment/requirements-l0.txt` | every table and figure from the shipped result CSVs (`analysis/results/`, 61 files); the 103-check printed-number harness | `make verify tables` (`make figures` needs L1 data for 3 of the 10 figures) |
+| **L0** | Python 3.11 + `environment/requirements-l0.txt` | every table and figure from the shipped result CSVs (`analysis/results/`, 61 files); the 112-check printed-number harness | `make verify tables` (`make figures` needs L1 data for 3 of the 10 figures) |
 | **L1** | + the Zenodo data record [10.5281/zenodo.22241254](https://doi.org/10.5281/zenodo.22241254) (daily books, positions, partitions; see `data/README.md`) | the result CSVs, rebuilt from the daily series; every books-based gate | `make analysis` (`python analysis/run_all.py --slow` adds the Monte Carlo, turnover and position producers) |
 | **L2** | + CRSP daily data (licensed) → `data/build_panel.py`, `data/build_compat_panel.py` | the 102 partition caches and the 116 rule-based books | `rule_engine/`, `partitions/` |
 | **L3** | + one GPU per run (~1.5 h each) | the trained books: 70 main runs (14 arms × 5 seeds), the partition-seed runs, the variant runs | `head/run_head.py --arm kmeans_ret --seed 1` |
 
-Verified in the build site: L0 103/103 checks; L1 every producer reproduces its shipped CSV to
+Verified in the build site: L0 112/112 checks; L1 every producer reproduces its shipped CSV to
 1e-12 or better; L2 76/76 rule books of the main set reproduce (68 byte-identical, 8 identical on
 every common day) and the 40 partition-seed books were built here; L3 is not bit-exact — the same
 seed on the same code and GPU moves a Sharpe ratio by up to 0.07 (daily correlation 0.96–0.98),
@@ -31,7 +31,7 @@ which the paper reports and which no comparison tighter than that should be aske
 ```bash
 pip install -r environment/requirements-l0.txt
 python data/fetch_ken_french.py          # FF5, momentum, short-term reversal (Ken French library)
-make verify                              # audit/verify_printed.py: 0 FAIL expected (without data/derived, 5 of the 103 checks report SKIP)
+make verify                              # audit/verify_printed.py: 0 FAIL expected (without data/derived, 5 of the 112 checks report SKIP)
 make tables                              # analysis/print_tables.py: every table's cells
 python audit/check_seed_language.py      # no retired-seed-set leftovers in code or prose
 ```
@@ -68,7 +68,7 @@ well-formed, a number that was plausible. The gates therefore test properties, n
 
 | gate | property |
 |---|---|
-| `audit/verify_printed.py` | every printed value (103 checks) recomputes from the shipped CSVs at the printed rounding |
+| `audit/verify_printed.py` | every printed value (112 checks) recomputes from the shipped CSVs at the printed rounding |
 | `audit/check_printed_5seed.py` | the seed-dependent values recompute from the per-seed books at `paths.SEEDS` (L1) |
 | `audit/check_pseed_5ps.py` | §5.2, fig:pseed_flip, A.1, A.2 and the §5.4 partition-range clauses at the five partition draws (L1) |
 | `audit/check_field_window_5seed.py` | §5.1 field-ruler and §5.5 window sentences from the per-seed books (L1) |

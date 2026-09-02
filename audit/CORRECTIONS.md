@@ -6257,3 +6257,54 @@ Tokens: 01 +1 "12" (arm count in the new sentence); 06 −1 "2019" (the removed 
 refs.bib +19 DOI strings, none a result. Build 46 pages, 0 errors/undefined, Overfull only at main.log:1038; every new sentence
 located in the PDF text (pp. 3, 4, 24, 32), every old wording absent. Nine gates pass (verify_printed 112 PASS). paper-sync:
 refs.bib, sections 01/02/06/07 modified; Code Branch to commit.
+
+### N110 (2026-09-01) — cover letter v4 (conventions re-read + Mihai-template comparison; date fixed) + two mechanical fixes from Code Branch's final read-through
+
+**Cover letter (`Cover_Letter/cover_letter.tex`, v3 → v4; v3 kept as `cover_letter_v3_2026-09-01.tex`; not part of the manuscript build).**
+Conventions learned before editing (read-only): JFEC General Instructions (the only cover-letter
+requirement is the replicability-review exemption request; originality is implied by submission;
+funding named at submission); OUP journal instruction pages (contribution, authorship/approval,
+originality, funding; several OUP journals also ask that AI use be disclosed in the cover letter —
+JFEC's own page is silent); Springer Nature author guidance (title + background / what was done +
+findings / why this journal / mandatory not-elsewhere + all-authors-approve sentence / related
+manuscripts / prior editor contact / reviewer suggestions with reasons); JFE and JF (letter optional,
+disclosure and routing only). Compared with the 31 Aug version built from Mihai's template
+(summary / fit / declarations / suggested editors and reviewers / thanks).
+Changes: (1) the special-issue fit is a two-sentence paragraph again ("The special issue asks for
+machine learning that keeps its economic interpretability. The paper answers with controls rather
+than with a new model: the random partition is a placebo …, every gap is judged against the
+design's own replication noise, and each gain is attributed to a mean or a volatility channel."),
+replacing the one clause in v3; (2) Sha's guidance now carries its content ("that it does not count
+toward the page limit"); (3) replicability paragraph: "We can comply fully with the Journal's
+replicability review and request no exemption" → "We request no exemption from the Journal's
+replicability review", and CRSP is named as "The one input we cannot redistribute"; "the checks that
+tie each printed value to those files" → "the audit scripts that recompute printed values from
+those files" (the harness checks 112 values, not every value); (4) `\today` → "September 1, 2026"
+in `\addrfrom{}` (user, via Code Branch; class option `dateno`); (5) GitHub link text wrapped in
+`\nolinkurl{}` and the DOI moved to sentence end so the URL line no longer overflows; `CC~BY~4.0`
+tied. Body words 364 → 393 (v2 was 446); the ⚠ affiliations/no-coauthor note in the v2 header is
+marked confirmed (user, C5). Unchanged: greeting to the four guest editors, originality/approval
+sentence, funding, competing interests, the five suggested reviewers. Still out (unverified):
+"no related paper in circulation", "no conflict with the editorial board". Article-class body
+check compiles: 1 page, 0 errors, 0 overfull (`scratchpad/cl_check/body_v4.*`); newlfm build is
+Overleaf-only (newlfm.cls not on the server).
+
+**Manuscript (mechanical, from Code Branch's read of the 21:21 render; verified by Refine).**
+- `01_introduction.tex:96–98` — §1 P9 cited `\secref{sec:head}` in two consecutive sentences;
+  the second (mid-sentence, before "though the middle of the ranking moves…") is removed; the
+  first, at the end of the preceding sentence, stays.
+- `04_hedge_and_signal.tex:130` — Table 2 note: "plus momentum (Carhart, 1997), FF5+MOM below with
+  Newey–West(21) standard errors" → "…, FF5+MOM below, with Newey–West(21) standard errors" (the
+  label apposition needs the closing comma).
+Code Branch's three C items not applied (user's call): "roughly half" (§1:107, §6.2:137) —
+recomputed by Refine from k1_regressor_v3 / strev_spanning_v3 (era full): share of the FF5+MOM
+alpha that survives the K=1 regressor is 52–68% (mean 60%) at the rule-based component and 41–68%
+(mean 57%) under the head, so "roughly half" understates the centre but is not false (one arm,
+spectral_unsigned under the head, is below half; against the FF5+MOM+Rev alpha the shares are
+69–85% / 46–75%); §1 P5 60-word colon-and-semicolon sentence (a style split); §6.3:269 semicolon
+(kept).
+Build: 46 pages, 0 errors, 0 undefined, Overfull only main.log:1038 (title block). PDF: p.3 (§1),
+p.13 (Table 2 note). Gates: verify_printed 0 FAIL (112), check_pseed_5ps, check_pseed_flip_literals,
+check_seed_language, check_printed_5seed, check_field_window_5seed, check_note_maxw,
+check_calendar_bypass, check_figures_text all PASS. No number changed. Backups
+`scratchpad/n110_backup/` (01, 04). Code Branch to commit 01 + 04 (paper-sync done).
