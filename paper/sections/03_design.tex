@@ -476,7 +476,7 @@ permutes long and short assignments within clusters and so tests the signal rath
 
 We train each configuration five times, at seeds $\{1, 2, 3, 4, 5\}$. The seed varies only the initialization of the trading head, so dispersion across seeds is dispersion in the fitted model at a fixed clustering; every dispersion figure below, including the pooled benchmark of \secref{sec:invariance}, is computed across a configuration's own fits.
 
-Nine of the 12 clusterizers are stochastic. Each has its daily partitions generated once, from a fixed partition seed, and used by all five runs, so a training seed moves only the fit; \textsc{sssnet}, which in its original form computes its partition at run time, is run once to produce such a fixed set (\appref{app:sssnet}). The partition seed itself is redrawn only in \secref{sec:pseed}.
+Nine of the 12 clusterizers are stochastic. Each has its daily partitions generated once and cached, and used by all five runs, so a training seed moves only the fit; \textsc{sssnet}, which in its original form computes its partition at run time, is run once to produce such a fixed set (\appref{app:sssnet}). The partition itself is redrawn only in \secref{sec:pseed}.
 
 Throughout, the Sharpe ratio of a payoff series is $\sqrt{252}$ times
 its mean divided by its standard deviation, with no risk-free

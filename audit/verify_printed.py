@@ -303,7 +303,7 @@ chk("A.13: head trades 1.46x per unit of exposure and earns 1.63x (ratios of the
 _pa = pd.read_csv(E+"pos_autocorr_naive_cal6913.csv"); _pc = _pa[~_pa.arm.isin(["k1", "random"])]
 chk("A.13: rule positions correlate with the previous day's at 0.46, 27% of names change sign (clusterizer means)", (round(_pc["corr"].mean(), 2), round(_pc["flip"].mean())) == (0.46, 27))
 _n5 = _nv3["netSR_5bp"].rank(ascending=False); chk("A.13: at 5 bp the controls finish first and third on the rule-based component", (int(_n5["k1"]), int(_n5["random"])) == (1, 3))
-print("== app:window (A.9) rival account: gain (21->252) on the 21-day level over the three swept clusterizers [N103] ==")
+print("== app:window (A.9) rival account: gain (21->252) on the 21-day level across the swept clusterizers [N103] ==")
 try:
     _mp = lambda a, v="": np.mean([_bk.sharpe(_bk.head_book(a, s, v)) for s in _paths.SEEDS])
     _x = np.array([_mp(a, "_w21") for a in ("spectral_unsigned", "pca_load", "agglo_avg")]); _g = np.array([_mp(a, "_w252") - _mp(a, "_w21") for a in ("spectral_unsigned", "pca_load", "agglo_avg")])

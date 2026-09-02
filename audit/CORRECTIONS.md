@@ -6063,3 +6063,44 @@ the disclosure is benign. Not printed; if the user wants the sentence, it enters
 Disclosures: WebFetch/WebSearch of OUP/JFEC instruction pages (results cached under ~/.claude/projects/.../tool-results/); read-only
 curl HEAD/GET to github.com, api.github.com, doi.org and zenodo.org (the record JSON saved to scratchpad/zenodo_rec.json); the
 isolated test build wrote only into scratchpad/doitest/.
+
+### N104 (2026-09-01) — §3.6/§5.2 partition wording moved from "seed" to "draw" (user: "C1:乙"); Zenodo dataset cited in the reference list (user: "C3:加引用"); two DAS-consistency fixes. (N103 is the Code Branch's verify_printed A.9 entry.)
+(a) 乙 applied. 03_design.tex:479 "generated once, from a fixed partition seed, and used by all five runs" → "generated once and
+cached, and used by all five runs"; "The partition seed itself is redrawn only in §5.2" → "The partition itself is redrawn only in
+§5.2". 05_convergence.tex:288 "were generated once, from one partition seed, and all five training runs use the same partitions"
+→ "were generated once and cached, and …"; "Redrawing that seed measures how much the partition draw moves the results" →
+"Redrawing the partition measures how much that draw moves the results". :290 "each drawn under five partition seeds ($1$ to $5$)"
+→ "each redrawn five times (partition seeds $1$ to $5$; the cached partition of the rest of the paper is a separate draw)".
+Reason (N102(f)): the cached partitions of sponge and the four trading-driven clusterizers come from an unseeded SPONGE warm
+start, so "from a fixed seed" over-stated for five of nine arms; the redraws themselves ARE seeded (SPONGE_PARTITION_SEED = 1..5),
+so "seeds" stays wherever it refers to the redraws (§5.2 later sentences, fig:pseed_flip caption). The optional "inside the
+five-draw range at eight of nine" sentence was NOT added (no new printed number).
+(b) refs.bib: `@misc{zhu2026replicationdata}` — "[dataset] Quantifying the contributions of clustering in statistical arbitrage:
+Replication data", Zhu/He/Cucuringu, Zenodo, 2026, doi via `note={\doi{10.5281/zenodo.22241254}}` (oup-abbrvnat prints no doi
+field for @misc; title capitals brace-protected after the first build lower-cased them — the Code Branch's item 13). Cited in
+the DAS: "under a CC BY 4.0 licence \citep{zhu2026replicationdata}" → "(Zhu et al., 2026)"; reference list p.36 shows
+"[dataset] Quantifying … Replication data. Zenodo, 2026. doi: 10.5281/zenodo.22241254." The French library has no DOI and stays
+as a URL in the DAS only. Author order in the entry = the paper's.
+(c) DAS: "derived from a source in the public domain, the Kenneth R. French data library" → "derived from a publicly available
+source, …" (the library is free, not public domain — Code Branch item 2). A_supplementary.tex:31 "Data and code are submitted
+with the replication files." → "Data and code are available as described in the Data availability statement." (stale after
+N102 — Code Branch item 3). The rest of the Code Branch's 14-item wording list is with the user, not applied.
+(d) Tokens (declare.sh): main.tex +2026 (the \citep year, rendered); refs.bib +22241254 ×2, +2026 ×2, +10.5281 ×2 (one doi field,
+one note); 03/05/A_supplementary: no numeric change (XREF-only lines). Build 46 pages, 0 errors/undefined; only the class's
+title-block overfull. Gates: verify_printed 112 PASS / 0 SKIP (112 = 111 + Code Branch's A.9 r = −0.93 check, a4a2894);
+eight others pass; check_seed_language FAILS on the Code Branch's new print string in verify_printed.py:306 ("over the three swept
+clusterizers" matches the `\bover the three\b` prose regex — a false positive in code that is not a seed count; Code Branch to
+rephrase or mark). `make paper-sync`: paper/main.tex, refs.bib, sections/03_design.tex, 05_convergence.tex, A_supplementary.tex
+modified; Code Branch to commit.
+(e) Also answered this turn: whether to put the GitHub link in a title-page footnote — see the user report; two open-access JFEC
+articles inspected (Lönn–Schotman 2024 nbae002; Custodio João et al. 2023 nbac038) carry only "Address correspondence to …" in
+the title footnote; OUP's designated place is the Data availability section. Not added.
+Disclosures: WebSearch/WebFetch of academic.oup.com, github.com, cris.maastrichtuniversity.nl (cached under
+~/.claude/projects/…/tool-results/); one read-only curl GET to academic.oup.com returned 403 (5.6 kB HTML saved to
+scratchpad/jfec_nbac038.html).
+
+### N103 (2026-09-01) — A.9 rival-account correlation gated
+A.9 prints "a regression of the gain on the 21-day starting level fits with r = −0.93" (three swept clusterizers, gain w21→w252 on
+the w21 mean-of-per-seed level). Recomputed at five seeds: −0.930 (spectral 1.384 → +0.880, PCA 1.890 → +0.664, average linkage
+2.259 → −0.003). Added to verify_printed (SKIP without the window-variant logs). The check's label first tripped check_seed_language
+("over the three …" matches its three-seed prose regex) — reworded to "across the swept clusterizers"; both gates green.
