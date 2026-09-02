@@ -6519,3 +6519,30 @@ one paragraph only, left as the coauthor wrote it.
 **Repo note for the Code Branch.** `make paper-sync` now exits 2: the fig_pipeline block added in 3d0c710 is a separate
 recipe line, so `$SRC` is unset there and it tries `/figures/fig_pipeline.tex`. The manuscript files still copy (that
 block is line-continued); the figure copies do not. paper/figures/fig_pipeline.tex happens to be current already.
+
+### N117 (2026-09-02, 02:33) — §1:104 aligned with Mihai's corrected framing (knock-on of N116)
+**Edit.** §1:104 "Because the books are this similar, an equal weight of all 12 **does as well as** re-selecting the
+trailing best each year (\secref{sec:gradient})." → "Because the books are this similar, **re-selecting the trailing
+best each year does not outperform** an equal weight of all 12 (\secref{sec:gradient})."
+**Why.** N116 accepted Mihai's correction at both other sites — §5.4 "ex ante selection … does not improve upon a
+simple diversified combination" and §7 "Ex ante selection on past performance does not outperform a simple
+equal-weight combination of the 12 books" — because the bootstrap interval covers zero, which is failure to separate
+rather than the equivalence "as good as" asserts. §1 still carried the old equivalence wording, so the introduction
+claimed something stronger than the section it points to. The connective and the pointer are unchanged.
+**Verification.** Build n117: 0 `^!`, 0 undefined, 46 pages, Overfull unchanged (1 hbox at main.log:1038, 45 vbox),
+all 26 float labels and pages unchanged from N116. New string present in the render, old string absent. declare.sh:
+one line, no number-token delta. Nine gates PASS. check_prose: 661 sentences, §1 mean 25.8 words (unchanged).
+**Race caught by the Code Branch.** The edit landed at 02:33:26, during its gate run, so its first `paper/` sync missed
+it; it found the gap by building `paper/` standalone in a scratch copy and diffing the text layer page by page against
+`JFEC_OUP/main.pdf` (differed on page 3 before the re-sync, on no page after). That comparison is the check that
+proves a snapshot is current — worth running before any release snapshot. Makefile `paper-sync` bug from N116 fixed by
+the Code Branch (the fig_pipeline block is now line-continued so `$SRC` survives); tip commit 1da5e92.
+**Consistency sweep after N116/N117 (Refine, no further edits).** "does as well as"/"as good as" gone from all three
+sites; no other site says selection matches equal weight. "constant of the design" appears nowhere else. The abstract
+carries neither a selection nor a cost claim, so neither is desynced. §1:106's Guijarro-Ordonez framing still matches
+the rewritten §6.1 hypothesis sentence (same "latent factor" vocabulary, quote in the §6 opener). "ex ante" is roman
+and unhyphenated at both sites. Open wording items, not acted on: §5.4:453 still closes "The match between equal
+weights and selection is the forecast-combination result in trading form", which reads as the equivalence claim the
+opener no longer makes (one-line fix available: "This is the forecast-combination result in trading form:"); and
+"informative" is a second adjective for what the rest of the paper calls "a real partition" (§7 P2 only, the
+coauthor's word).
