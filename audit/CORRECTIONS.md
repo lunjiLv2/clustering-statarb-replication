@@ -6357,3 +6357,61 @@ names at about 691, 18 pt inside the limit (`scratchpad/cl_check/cal_v4.*`, `cal
 Overleaf still spills: `\newlfmP{closeskipbefore=0pt,closeskipafter=0pt}` (−22 pt). AI-use disclosure (user C1): not
 added — JFEC's instructions ask the cover letter only for the replicability-exemption request; survey recorded in the
 session report and in memory `cover-letter-standards`.
+
+### N112 (2026-09-01) — final whole-manuscript pass (sentence-by-sentence, §1–§7 + Appendix A) and caption/notes-vs-figure check; four wording edits, no number changes
+**Scope.** Every sentence of main.tex (abstract), sections 01–07 and A_supplementary.tex read once more for clarity,
+inter-sentence cohesion, topic sentences, paragraph structure, argument support and AI-flavoured phrasing; every figure
+caption and table note read against the rendered exhibit (main.pdf pages rendered to PNG with pymupdf, figure-producer
+scripts in `figures/scripts/` consulted for line styles and colour rules). No substantive (A-level) defect found; the
+argument chain abstract → §1 → §4–§6 → §7 is consistent (alpha-share bands of N111, "most of the 12" for the peer
+regressions, the 19-arm resolution set, the two-fifths window/K statement).
+**Manuscript edits (four, all wording; declare.sh number-token multiset unchanged).**
+1. §5.5:491 "…which moves it by up to $0.36$ away from the $\K = 30$ used throughout, nearly half the span." → "…more
+   than two fifths of the span." 0.36/0.825 = 0.44; aligns the section with §1:104 "more than two fifths of it" (the
+   user's wording) so the same ratio is not described two ways.
+2. §5.4:455 "One of the five, Sharpe (EW), has a gap of $0.27$…" → "One of the five, Sharpe (EW), the exponentially
+   weighted variant, has a gap of $0.27$…" — the paragraph also names "the equal-weight book"; the appositive keeps the
+   arm (tab:methods: "the same objective exponentially weighted, decay 0.99") from being read as an equal-weight book.
+3. fig:select_vs_ew caption (05:461): after "(block $21$, $5{,}000$ draws)" added "; black marks the clusterizers whose
+   interval excludes zero, gray those whose interval includes it." The rendered panel (b) uses two tones and the caption
+   named neither; producer `figures/scripts/fig_select_vs_ew_v3.py:71` (`"black" if stable[i] else "0.55"`, `stable` =
+   interval excludes zero under each of the three bootstrap master seeds 42/7/101). Six black (k-means above; average
+   linkage, Sharpe, Sharpe (EW), GICS, spectral below), six gray — matches §5.4 "five … sit reliably below" + "only
+   $k$-means' interval excludes zero".
+4. fig:dose caption (A:408) "The dashed verticals mark" → "The dotted verticals mark"; producer `fig_dose_v3.py:20`
+   draws both with `ls=":"`. Other line-style words checked against producers and left: fig:lens_curve dashed red /
+   dotted horizontals, fig:match_cost dashed red, fig:pseed_flip dashed horizontals, fig:reversal "dotted" for
+   `ls=(0,(2,2))` at lw 0.8 (renders as fine dots).
+**Caption/notes check, no edit needed.** fig:pipeline, fig:alpha_vol (four named arms + eight unnamed + two red
+controls + band 5.89–7.02 all present), fig:rank_shift (only Sharpe moves ≥3 places → only black line; ρ=0.85),
+fig:field_ruler (bar 0.103; the two marked gaps 0.139/0.245), fig:pseed_flip, fig:bet_corr, fig:lens_curve (44–61% at
+m=5 and 50–68% after FF5+MOM match §6.1:49/58; k-means 68%/60% guides), fig:match_cost (k-means 17.33 PCs, 21.47% of
+days unmatched → text "about 17", "79%/21%", figure "21.5%": consistent under rounding), fig:reversal (open/filled,
+red controls, dotted guide at the lowest reversal-adjusted clusterizer alpha in each panel, separate axes; the
+8.05–8.81 → 6.18–7.00, 7.27 → 4.22, 7.43 → 4.57 values of §6.2:118 read off the panel), fig:window_twin (−0.07,
+−0.31, −0.39, +0.11, −0.36 annotations = caption = A.6). Table notes (tab:methods … tab:costs, 14 tables) all open
+"This table reports/lists", define derived columns, carry no conclusions; Tables 7–9 (pp. 29–30) render cleanly and
+the §6.2 sentences quoting them match cell by cell.
+**Cosmetic, for the Code Branch (figure scripts, not the manuscript).** fig:reversal panel (a): the in-axes legend sits
+on the rows of the top two arms (complete linkage, PCA loadings) and its second label ends about 0.2 in. from the PCA
+loadings marker — readable, but the lower-left of the clusterizer block (alpha 4–6, rows GICS…SPONGE) is empty and
+would hold the legend without crowding. fig:bet_corr: the diagonal cells carry a red outline the caption does not
+name (self-evident; left).
+**Attribution note.** The unledgered wording pass of 21:57/22:13 (01, 02, 03, 04, 05, 07, A mtimes) and the 22:21:48
+§6.4 opener rewrite in 06 are the user's own (relayed by the Code Branch: "那几个判断都搞完了"); their factual content
+was recomputed by the Code Branch (items a–k, all true) and read again here. Not Refine's edits.
+**Verification.** Build n112: 0 `^!`, 0 undefined, 46 pages, Overfull only main.log:1038 (title block); PDF text: four
+new strings present, "nearly half the span" and "The dashed verticals" absent; float pages unchanged (Fig. 1–12 on pp.
+7/14/17/19/20/23/24/26/27/28/43/44; Tables 1–14 on pp. 9/13/16/16/21/22/29/30/30/31/39/40/42/45). declare.sh: only
+the four lines, no number-token delta. `make paper-sync` copied 05 and A. Nine gates PASS on the live tree
+(verify_printed 0 FAIL; check_pseed_5ps; check_pseed_flip_literals; check_seed_language; check_printed_5seed;
+check_field_window_5seed; check_note_maxw; check_calendar_bypass; check_figures_text 10/10 reproduce).
+check_prose.py unchanged (660 sentences, mean 25.2 words). No subagents; nothing fetched from the web this entry.
+Backups: `scratchpad/n112_backup/{05_convergence,A_supplementary}.tex`; logs `build_n112_{1,bib,2,3}.log`;
+rendered pages `scratchpad/figpages/`.
+**Still open for the user (judgment items, unchanged from the session report).** Long paragraphs (§1 P10, §4.1 the
+nine-sentence paragraph at 04:180, §6.1:69, §6.2:118, §6.4:392) are split candidates only; §3.7's repeated
+"19 arms of \appref{app:names}" pointer in consecutive paragraphs (722/746) and its ending on "(0.98 and 0.63)."
+(keep-or-cut plan still PAUSED); §6.3:269 "yet most clusterizer books earn alpha the peer books do not" is true with
+the factors added (8 of 12 joint; 4 of 12 on the peer books alone) — abstract/§1/§7 say "together". README.md lines
+23/34/71 still say "112 checks" (verify_printed now runs 114).
