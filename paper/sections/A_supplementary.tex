@@ -303,11 +303,9 @@ concentration term is the Herfindahl index of the long leg plus that of the shor
 %%  SSSNET's description, not here. Add them if a referee asks for the
 %%  complete set.
 
-\paragraph{Reproducibility.} Three runs of one configuration, at the same
-seed and on the same code and panel, return Sharpe ratios of $2.8940$,
-$2.8478$, and $2.8868$ on the common calendar, a standard deviation of $0.025$. Floating-point
+\paragraph{Reproducibility.} Four runs of the $k$-means-on-returns configuration at head seed $42$, on the same code and panel, return Sharpe ratios of $2.8243$, $2.8478$, $2.8868$, and $2.8940$ on the common calendar, a standard deviation of $0.033$ and a range of $0.07$. Floating-point
 arithmetic on the GPU is not reproducible at that scale, and
-differences smaller than this figure carry no information.  Every weight file used in \secref{sec:gradient} and \secref{sec:costs} was verified before use by reconstructing the run's own logged payoff from it to machine precision; the exported vector's $L^1$ norm was also checked against the run's logged gross leverage and against one, on all 12 clusterizers and both controls at five seeds each.
+differences within that range carry no information.  Every weight file used in \secref{sec:gradient} and \secref{sec:costs} was verified before use by reconstructing the run's own logged payoff from it to machine precision; the exported vector's $L^1$ norm was also checked against the run's logged gross leverage and against one, on all 12 clusterizers and both controls at five seeds each.
 
 \subsection{Identifiers in the Replication Package}
 \label{app:names}

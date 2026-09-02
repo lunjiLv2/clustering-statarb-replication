@@ -5947,3 +5947,59 @@ check_calendar_bypass, check_figures_text 10/10). paper/ synced by hand (paper-s
 preamble-oup.tex verified byte-identical. Uncommitted in replication_repo (Code Branch to commit, as the follow-up to 90935bf):
 audit/verify_printed.py, paper/sections/04_hedge_and_signal.tex, paper/sections/A_supplementary.tex. Figure decision (fig:reversal)
 still with the user.
+N99 addendum 1 (2026-09-01, same session): §4.4 "with neither control's distinguishable from zero" → "with neither control's alpha
+distinguishable from zero" — the elided noun made the reader supply "alpha"; no token added or removed (multiset unchanged).
+Rebuilt (build_n99b_*.log): 0 errors, 45 pages, last page 79%, only the title-block hbox; all five §4.4 phrases and the A.13
+1.46/1.63 sentence found once in the PDF text layer. paper/sections/04_hedge_and_signal.tex re-synced (cmp-identical); Code Branch
+had already committed the N99 state as 8530228 (verified in the repo log) — this one-word change is uncommitted until their next commit.
+
+### N100 (2026-09-01) — fig:reversal adopted into §6.2 (user: "推荐甲！"); A.4 reproducibility restated on all four same-code runs (user, via the Code Branch: "后者")
+(1) §6.2 sec:spanning (06_factor_model.tex; pre-edit md5 526555b5ac82e9471c705e2821687de5, backup in the Refine scratchpad n100_backup/):
+  pointer "…two fifths of the controls'" → "…two fifths of the controls' (\figref{fig:reversal})" at the reversal paragraph (line 119),
+  and a figure float appended after that paragraph: \includegraphics[width=\linewidth]{fig_reversal}, \label{fig:reversal}, caption
+  "Alpha before and after the short-term reversal factor. This figure plots, for each arm, its alpha on FF5+MOM (open circle) and
+  its alpha once the short-term reversal factor is added (filled circle), on the $6{,}913$-day sample, from the regressions of
+  \tabref{tab:spanning}. (a) The rule-based component; (b) the trained component. Within each panel the arms are ordered by their
+  FF5+MOM alpha, the two controls are red, and the dotted vertical marks the lowest alpha with the reversal factor among the 12
+  clusterizers. The rule-based book has gross exposure $2$, the head's $1$, so the panels carry separate horizontal axes and only
+  within-panel comparisons are meaningful." Every caption clause was checked against the producer (figures/scripts/fig_reversal_v3.py:
+  sorted by alpha6 top = highest, open = alpha6, filled = alpha7, controls CONTROL_RED, guide = min clusterizer alpha7, separate
+  x-axes, era = full, source strev_spanning_v3_cal6913.csv; it prints no number that tab:spanning / §6.2 do not print).
+  figures/fig_reversal.pdf copied from replication_repo/paper/figures (md5 c767e7ede559e9ceda9aa244ab87afd6, cmp-identical; 6.32 × 3.83
+  in). Options weighed for the user (chat): the figure (+1 main-text page), a "share absorbed" column pair in tab:spanning (0 pages,
+  bands only), no exhibit, or moving fig_match_cost to the appendix; chosen because it is the only form that shows the per-arm
+  result (12 clusterizers in a −19.7 to −25.1% band, the controls at −41.9/−38.5%) and §6.2 was the one results subsection with
+  three tables and no figure. Caption tokens added (declare.sh): 6,913, 2, 1, 12, and two "5" from "FF5"; no text number changed.
+  Render: Figure 10 on p. 28, pointer on p. 27, Tables 7–10 on pp. 29–31, §7 on p. 32, References p. 33, Appendix from p. 36;
+  appendix figures renumber 10/11 → 11/12 (no hard-coded figure number anywhere in sections/). 46 pages (was 45), last page 36%.
+(2) A.4 "Reproducibility" paragraph (A_supplementary.tex:306; pre-edit md5 0181141bcb79a073a6865cc1cd3d0fd4, backup in n100_backup/):
+  BEFORE "Three runs of one configuration, at the same seed and on the same code and panel, return Sharpe ratios of $2.8940$,
+  $2.8478$, and $2.8868$ on the common calendar, a standard deviation of $0.025$. Floating-point arithmetic on the GPU is not
+  reproducible at that scale, and differences smaller than this figure carry no information."
+  AFTER "Four runs of the $k$-means-on-returns configuration at head seed $42$, on the same code and panel, return Sharpe ratios of
+  $2.8243$, $2.8478$, $2.8868$, and $2.8940$ on the common calendar, a standard deviation of $0.033$ and a range of $0.07$.
+  Floating-point arithmetic on the GPU is not reproducible at that scale, and differences within that range carry no information."
+  Source (Code Branch located it by scanning all 909 k-means logs; recomputed here): the three replicates are server_package/
+  sssnet_seed_sweep/runs_v3/_repro/r{1,2,3}/family_kmeans_ret_seed42/log_sponge_l1norm_20260823_183041.csv (jobs 62034694/5/6,
+  2026-08-23 18:30, sg050, git rev 1805fdf) → 2.89399 / 2.84783 / 2.88679 on cal6913 (trio sd 0.02484 = the old 0.025); the
+  canonical family_kmeans_ret_seed42 run (job 61793797, 2026-08-19, same rev, host, seed, partition source) → 2.82426. Four runs:
+  sd 0.03295 → 0.033, range 0.06973 → 0.07, mean 2.8632. The trio was NOT the SPONGE/netcost set that ledger line 1064 describes
+  (that is kmeans K30 seed 42 on the old code, 2.5443/2.5933/2.5832 on the 6,941-day frame) — the Refine session had attributed it
+  so from that pointer and withdrew the attribution in chat before any edit. Wording note: the seed-42 run is the configuration's
+  canonical run at head seed 42 (the basis of §5.2 and of common_calendar.py), not one of the five head seeds the main tables
+  average, so the sentence names the configuration and seed and does not call it "the run the tables use".
+  Tokens: added 42, 2.8243, 0.033, 0.07; removed 0.025 (declare.sh and the comment-stripped multiset agree). 0.025 was quoted
+  nowhere else.
+(3) verify_printed.py: "A.4: four same-seed kmeans_ret runs" check added — reads kmeans_ret_seed42.csv and
+  kmeans_ret_seed42_repro{1,2,3}.csv from paths.HEAD_LOGS on the common calendar and asserts the four values, sd 0.033, range 0.07;
+  it prints a visible SKIP until the Code Branch ingests the three replicate logs under those names (tools/ingest_head_runs.py,
+  data/README.md count 397 → 400, checksums manifest). Until then the values rest on the recompute above.
+Verification: build (build_n100_*.log) 0 errors, 0 undefined refs, 46 pages, only the title-block hbox (log line 1038); the 3-pt
+vbox notes are the class's per-page ones, 44 → 45 with the extra page. PDF text layer: "(Figure 10)" pointer once, the Figure 10
+caption once, the four-value sentence once, "0.025" absent. Nine gates 9/9 (verify_printed 110 PASS + 1 SKIP, check_figures_text
+fig_reversal PASS 82 tokens text-identical). paper/ refreshed by `make paper-sync` (works again now that the figure exists):
+eight sections, main.tex, refs.bib, preamble-oup.tex and all eleven figure PDFs byte-identical. declare.sh note for the next
+reader: it refreshes its own baseline on every run, so each run reports only the edits since the previous run — the N99 tokens
+were declared in the N99 run and correctly do not reappear here.
+Still open: Data Availability statement (main.tex:87 placeholder; GitHub URL / Zenodo DOI) and the §5.2 "none of them the main
+partition's seed" clause — proposed wordings with the user. E-mail confirmed by the user as lunji@math.ucla.edu (no change).

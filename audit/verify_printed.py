@@ -279,6 +279,22 @@ print("== §6.1 characteristics lens (lens_extras_v3) [N88] ==")
 _lx = pd.read_csv(E+"lens_extras_v3_cal6913.csv").set_index("arm"); _lc = [a for a in _lx.index if a not in ("k1","random")]
 chk("characteristics span: real partitions keep 77-85% of their share; Z alone explains 0.13; random at its floor", (round(100*_lx.loc[_lc,"ret_spanZ"].min()), round(100*_lx.loc[_lc,"ret_spanZ"].max()), round(_lx.R2_expl_spanZ.mean(),2)) == (77, 85, 0.13) and abs(_lx.loc["random","ret_spanZ"]-1) < 0.01)
 print("== app:costs (A.13) head vs rule per unit of gross (turnover_v3_mean, naive_turnover_v3) [N98] ==")
+# A.4 reproducibility [N100]: four same-code, same-seed runs of kmeans_ret at head seed 42 -- the canonical run plus three
+# dedicated replicates (server runs_v3/_repro/r{1,2,3}, jobs 62034694-6, 2026-08-23), packaged as kmeans_ret_seed42_repro{1,2,3}.csv.
+try:
+    import paths as _paths; from analysis.common_calendar import CAL as _CAL
+    _rf = [_paths.HEAD_LOGS / "kmeans_ret_seed42.csv"] + [_paths.HEAD_LOGS / f"kmeans_ret_seed42_repro{i}.csv" for i in (1, 2, 3)]
+    if all(f.exists() for f in _rf):
+        _rs = []
+        for f in _rf:
+            _b = pd.read_csv(f, parse_dates=["Date"]).set_index("Date").DailyPnL.reindex(pd.DatetimeIndex(_CAL)); assert _b.notna().all(), f
+            _rs.append(_b.mean() / _b.std(ddof=1) * np.sqrt(252))
+        chk("A.4: four same-seed kmeans_ret runs 2.8243/2.8478/2.8868/2.8940, sd 0.033, range 0.07",
+            sorted(round(x, 4) for x in _rs) == [2.8243, 2.8478, 2.8868, 2.8940] and round(np.std(_rs, ddof=1), 3) == 0.033 and round(max(_rs) - min(_rs), 2) == 0.07)
+    else:
+        print("  SKIP  A.4 four same-seed kmeans_ret runs  [needs kmeans_ret_seed42.csv and kmeans_ret_seed42_repro{1,2,3}.csv in data/derived/head_logs (layer L1)]")
+except Exception as _e:
+    chk("A.4: four same-seed kmeans_ret runs (loader)", False, repr(_e))
 _tv = pd.read_csv(E+"turnover_v3_mean_cal6913.csv").set_index("arm"); _nv3 = pd.read_csv(E+"naive_turnover_v3_cal6913.csv").set_index("arm").rename(index={"sssnetpre": "sssnet_w60"})  # N99: the rule file names the SSSNET arm sssnetpre; without the rename the join silently drops it and the 13-arm ratios are 1.47/1.62
 _cm = [a for a in _tv.index if a in _nv3.index]; _row = _nv3.loc[_cm, "turnover_twoway_per_unit_gross"] / 2; _rret = _nv3.loc[_cm, "ann_ret"] / _nv3.loc[_cm, "gross_book"]
 chk("A.13: head trades 1.46x per unit of exposure and earns 1.63x (ratios of the 14-arm means); rule return 3.9-4.6%, break-even rule 2.75-3.74 vs head 2.66-3.79",
