@@ -14,7 +14,7 @@ Updated 2026-09-01 (CORRECTIONS N91). Everything below the line is the build-sit
 - [x] Author list and order: Lunji Zhu (UCLA); Yixuan He (Arizona State University); Mihai Cucuringu (UCLA, Oxford) — in `CITATION.cff` and the `LICENSE` copyright line (2026-09-01).
 - [x] Licences confirmed by the user 2026-09-01: code MIT (`LICENSE`), data CC BY 4.0 (`data/LICENSE-DATA.md`). GICS: the `gics` partition cache ships in place of the classification (Mihai to object if needed).
 - [x] Repository `lzwbh/clustering-statarb-replication` created 2026-09-01; `git init` inside `replication_repo/` (nested in the parent `GNN_for_Trading` tree, which does not track it); first commit made, push by the user.
-- [ ] **Zenodo record**: `python tools/package_zenodo.py --out <dir>` (weights = the main runs + the two peer books, user decision 2026-08-30); paste the DOI into `README.md` and `CITATION.cff`.
+- [x] Zenodo record published 2026-09-01: https://doi.org/10.5281/zenodo.22241254 (7 files, 2.9 GB compressed: 5 tarballs + MANIFEST.csv + SHA256SUMS; CC BY 4.0). DOI in README and CITATION.cff; Data Availability Statement in main.tex is Refine's.
 - [ ] **paper/ re-snapshot at the submitted tag** (`make paper-sync`), then rerun `make audit`.
 - [x] Deleted on the user's word (2026-09-01): `analysis/results_5seed/`, `TODO.md`, `audit/verify_printed.py.bak_5seed_k1span`, the superseded `fig_ff_curve` script/PDF/preview.
 

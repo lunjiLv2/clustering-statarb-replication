@@ -1,7 +1,7 @@
 # Quantifying the Contributions of Clustering in Statistical Arbitrage — replication package
 
-**Status: release candidate (2026-09-01).** Repository: <https://github.com/lzwbh/clustering-statarb-replication>. Every number, table and figure of the manuscript is
-reproduced by the code here and checked by the gates in `audit/`. Not yet done: the Zenodo record for the derived data and its DOI (`RELEASE_CHECKLIST.md`).
+**Status: release (2026-09-01).** Code: <https://github.com/lzwbh/clustering-statarb-replication>. Derived data: Zenodo <https://doi.org/10.5281/zenodo.22241254> (CC BY 4.0, 2.9 GB compressed). Every number, table and figure of the manuscript is
+reproduced by the code here and checked by the gates in `audit/`. Remaining steps are listed in `RELEASE_CHECKLIST.md`.
 
 The paper trades 12 clusterizers and two controls (no clustering, `k1`; a random partition,
 `random`) on 27 years of large US equities under two trading components, a fixed cross-sectional
@@ -16,7 +16,7 @@ which every module loads through `analysis/books.py` and asserts against.
 | layer | what you need | what you get | command |
 |---|---|---|---|
 | **L0** | Python 3.11 + `environment/requirements-l0.txt` | every table and figure from the shipped result CSVs (`analysis/results/`, 61 files); the 103-check printed-number harness | `make verify tables` (`make figures` needs L1 data for 3 of the 10 figures) |
-| **L1** | + the Zenodo data record (daily books, positions, partitions; see `data/README.md`) | the result CSVs, rebuilt from the daily series; every books-based gate | `make analysis` (`python analysis/run_all.py --slow` adds the Monte Carlo, turnover and position producers) |
+| **L1** | + the Zenodo data record [10.5281/zenodo.22241254](https://doi.org/10.5281/zenodo.22241254) (daily books, positions, partitions; see `data/README.md`) | the result CSVs, rebuilt from the daily series; every books-based gate | `make analysis` (`python analysis/run_all.py --slow` adds the Monte Carlo, turnover and position producers) |
 | **L2** | + CRSP daily data (licensed) → `data/build_panel.py`, `data/build_compat_panel.py` | the 102 partition caches and the 116 rule-based books | `rule_engine/`, `partitions/` |
 | **L3** | + one GPU per run (~1.5 h each) | the trained books: 70 main runs (14 arms × 5 seeds), the partition-seed runs, the variant runs | `head/run_head.py --arm kmeans_ret --seed 1` |
 
@@ -121,4 +121,4 @@ row count and date range of every data file the package ships (`python tools/che
 
 Code: MIT (`LICENSE`). Derived data on Zenodo: CC BY 4.0 (`data/LICENSE-DATA.md`). CRSP data and
 the GICS snapshot are licensed and not distributed; `data/README.md` says what stands in for them.
-Please cite the paper and the Zenodo record (`CITATION.cff`).
+Please cite the paper and the Zenodo record 10.5281/zenodo.22241254 (`CITATION.cff`).

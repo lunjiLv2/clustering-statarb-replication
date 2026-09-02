@@ -6003,3 +6003,12 @@ reader: it refreshes its own baseline on every run, so each run reports only the
 were declared in the N99 run and correctly do not reappear here.
 Still open: Data Availability statement (main.tex:87 placeholder; GitHub URL / Zenodo DOI) and the §5.2 "none of them the main
 partition's seed" clause — proposed wordings with the user. E-mail confirmed by the user as lunji@math.ucla.edu (no change).
+
+### N101 (2026-09-01) — Zenodo record published by the user: 10.5281/zenodo.22241254
+Uploaded from the server via tools/zenodo_upload.sh (API, MD5-verified per file) instead of through the VS Code tunnel; the user
+completed metadata (Dataset, three authors, CC BY 4.0, related identifier = GitHub URL, "is supplement to") and published. Contents =
+runs/zenodo_out/ of 18:44: rule_books / head_logs / weights / partitions / results tarballs (6.28 GB raw, 2.9 GB compressed; 116 /
+397 / 72 / 103 / 65 files) + MANIFEST.csv (579 rows) + SHA256SUMS. Note for a v2 of the record: the three kmeans_ret_seed42_repro
+logs (N100) postdate the packaging and are not in the record; git's manifest.csv (582 rows) is one step ahead of Zenodo's. DOI written
+into README (status line, L1 row, citation line), CITATION.cff (identifiers), data/README.md, RELEASE_CHECKLIST.md; the Data
+Availability Statement in main.tex is Refine's.

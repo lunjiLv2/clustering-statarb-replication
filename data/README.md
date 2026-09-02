@@ -1,5 +1,7 @@
 # Data
 
+The derived data live on Zenodo: <https://doi.org/10.5281/zenodo.22241254> (5 tarballs + `MANIFEST.csv` + `SHA256SUMS`, 2.9 GB compressed). Unpack the tarballs into `derived/` (or point `CSA_DATA_ROOT` at the unpacked tree) and run `python tools/checksums.py check`.
+
 | folder | content | source | shipped how |
 |---|---|---|---|
 | `factors/` | Ken French daily FF5, momentum and short-term reversal factors | Kenneth R. French data library | fetched by `fetch_ken_french.py` (not redistributed) |
