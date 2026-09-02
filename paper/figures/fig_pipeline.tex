@@ -12,6 +12,7 @@
 \definecolor{figvary}{HTML}{9A5410}
 \definecolor{figvaryfill}{HTML}{FAF1E3}
 \definecolor{figraw}{HTML}{1D5B8F}
+\providecommand{\figts}{\fontsize{7.0bp}{8.1bp}\selectfont}% the 14-row arm table, whose row pitch is fixed
 \providecommand{\figfs}{\fontsize{7.5bp}{8.6bp}\selectfont}% body text of the figure; \scriptsize (6.5bp) kept only in the estimand stratum, whose box is fixed
 \begin{tikzpicture}[x=1pt,y=1pt,
     every node/.style={inner sep=0pt,outer sep=0pt},
@@ -21,8 +22,8 @@
                anchor=east,text=figink},
     gun/.style={font=\figfs\linespread{0.96}\selectfont,align=right,
                anchor=north east,text=figink},
-    rb/.style={font=\figfs,anchor=base west,text=figink},
-    fb/.style={font=\figfs\itshape,anchor=base east,text=figink},
+    rb/.style={font=\figts,anchor=base west,text=figink},
+    fb/.style={font=\figts\itshape,anchor=base east,text=figink},
     ic/.style={font=\figfs,align=right,anchor=north east,
                text=figgray},
     hair/.style={draw=figrule,line width=0.3pt},
