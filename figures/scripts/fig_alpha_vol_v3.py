@@ -63,7 +63,7 @@ ax.axhspan(cl.alpha.min(), cl.alpha.max(), color="0.92", zorder=0)
 ax.annotate("the 12 clusterizers, alpha $%.2f$–$%.2f$" % (cl.alpha.min(), cl.alpha.max()),
             (cl.vol.mean() + 0.55, cl.alpha.max()), xytext=(0, 22), textcoords="offset points",
             ha="center", fontsize=7.8, color="0.40", zorder=4)
-ax.set_xlabel("annualized volatility of the book (%)")
+ax.set_xlabel("annualized volatility of the portfolio (%)")
 ax.set_ylabel("FF5+MOM alpha (% per year)")
 # Data-driven limits with a margin. A hard-coded ylim tuned to an earlier seed set silently dropped
 # both controls once their alphas fell below it; the assertion makes that failure loud.

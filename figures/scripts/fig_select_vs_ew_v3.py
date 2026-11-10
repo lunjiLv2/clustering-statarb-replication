@@ -65,15 +65,15 @@ ax[0].legend(_h[1:], _l[1:], frameon=False, loc="lower right", borderaxespad=0.2
 _ei = 3800
 ax[0].annotate("equal weight, all 12 clusterizers", (_ei, float(np.cumsum(ew)[_ei])), xytext=(-24, 15),
                textcoords="offset points", ha="center", fontsize=11)
-ax[0].set_title("(a) selection against\nthe equal-weight book", fontsize=11.2, loc="left")
+ax[0].set_title("(a) selection against\nthe equal-weight portfolio", fontsize=11.2, loc="left")
 ax[1].axvline(0, color="0.6", lw=0.8)
 for r, i in enumerate(o):
     c = "black" if stable[i] else "0.55"
     ax[1].plot([lo[i], hi[i]], [r, r], "-", color=c, lw=1.2); ax[1].plot(gap[i], r, "o", color=c, ms=4.0)
 ax[1].set_yticks(range(len(TW))); ax[1].set_yticklabels([LAB[TW[i]] for i in o], fontsize=11); ax[1].set_ylim(len(TW) - 0.4, -0.6)
 ax[1].set_xticks([-0.6, -0.3, 0.0, 0.3])
-ax[1].set_xlabel("Sharpe ratio minus\nthe equal-weight book's")
-ax[1].set_title("(b) each clusterizer against\nthe equal-weight book,\n$95\\%$ block bootstrap", fontsize=11.2, loc="left")
+ax[1].set_xlabel("Sharpe ratio minus\nthe equal-weight portfolio's")
+ax[1].set_title("(b) each clusterizer against\nthe equal-weight portfolio,\n$95\\%$ block bootstrap", fontsize=11.2, loc="left")
 fig.tight_layout(); style.save(fig, "fig_select_vs_ew", dpi=150)
 print(f"  equal-weight Sharpe {SR(ew):.4f}   T={T} days;  intervals excluding zero under every master seed: {stable.sum()} of 12 (below: {(stable & (gap < 0)).sum()})")
 for L, v in SEL.items(): print(f"  {L:<24s} Sharpe {SR(v):.4f}")

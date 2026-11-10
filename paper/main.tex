@@ -1,122 +1,63 @@
 %%=====================================================================
-%%  JFEC — Machine Learning special issue.  OFFICIAL OUP CLASS BUILD.
-%%
-%%  Content is identical to ../JFEC_A_Manuscript; only the class, the
-%%  front matter and the preamble differ. Edit prose in sections/, which
-%%  is shared in substance with that tree — keep the two in step.
-%%
-%%  LAYOUT. `modern, small` is the design the journal's own instructions
-%%  recommend, and it is also one of the two the class leaves single
-%%  column (cls:2519-2523) -- which the tables need, four of them
-%%  carrying seven or eight columns of banded figures.
-%%  `unnumsec` is NOT used: the body carries 65 \secref pointers and
-%%  needs numbered heads.
+%%  SSRN preprint build — plain article class.
+%%  Body = the JFEC submission of 2026-09-02 (sections/ copied verbatim
+%%  from JFEC_OUP/sections). Post-submission experiments are NOT included.
+%%  Build: pdflatex main; bibtex main; pdflatex main; pdflatex main
 %%=====================================================================
-\documentclass[namedate,webpdf,modern,small]{oup-authoring-template}
-%% The class sets \floatpagefraction=.94, which strands every figure behind the
-%% [p] pipeline figure until the end of the document. Relax it so exhibits
-%% appear where they are discussed (verified 2026-08-25: 42 -> 41 pages).
-\renewcommand\floatpagefraction{.5}
+\documentclass[10pt]{article}
+\input{preamble}
 
-\input{preamble-oup}
+\providecommand*{\ZenodoDOI}{10.5281/zenodo.22241254}
+
+\title{\bfseries Quantifying the Contributions of Clustering to Statistical Arbitrage\thanks{%
+We thank NVIDIA Corporation and ASU Research Computing: the computations in this article were performed on an NVIDIA GPU server awarded to Yixuan He and on the Sol supercomputer at Arizona State University. This work was supported by an NVIDIA Academic Grant Award and a Jetstream2 AI Fellowship to Yixuan He. The authors declare that they have no competing interests.}}
+
+\author{%
+  Lunji Zhu\thanks{Corresponding author. Department of Mathematics, University of California, Los Angeles. Email: \href{mailto:lunji@math.ucla.edu}{lunji@math.ucla.edu}.}
+  \and Yixuan He\thanks{School of Mathematical and Natural Sciences, Arizona State University.}
+  \and Mihai Cucuringu\thanks{Department of Mathematics, University of California, Los Angeles, and Department of Statistics and Oxford-Man Institute of Quantitative Finance, University of Oxford.}%
+}
+\date{This version: November 2026}
 
 \begin{document}
-
-\journaltitle{Journal of Financial Econometrics}
-\DOI{DOI added during production}
-\copyrightyear{2026}
-\pubyear{2026}
-\vol{00}
-\issue{0}
-\access{Advance Access Publication Date: Day Month Year}
-\appnotes{Paper}
-\firstpage{1}
-
-\title[Quantifying the Contributions of Clustering to Statistical Arbitrage]{Quantifying the Contributions of Clustering to Statistical Arbitrage}
-
-\author[1,$\ast$]{Lunji Zhu}
-\author[2]{Yixuan He}
-\author[1,3]{Mihai Cucuringu}
-
-\address[1]{\orgdiv{Department of Mathematics}, \orgname{University of
-California, Los Angeles}, \orgaddress{\state{California},
-\country{United States}}}
-\address[2]{\orgdiv{School of Mathematical and Natural Sciences}, \orgname{Arizona State University}, \orgaddress{\state{Arizona}, \country{United States}}}
-\address[3]{\orgdiv{Department of Statistics and Oxford-Man Institute of Quantitative Finance}, \orgname{University of Oxford}, \orgaddress{\country{United Kingdom}}}
-
-\corresp[$\ast$]{Corresponding author. \href{mailto:lunji@math.ucla.edu}{lunji@math.ucla.edu}.}
-
-\received{Date}{0}{Year}
-\revised{Date}{0}{Year}
-\accepted{Date}{0}{Year}
-
-\abstract{Clustering-based statistical arbitrage makes two decisions, the clustering and the trading model, usually evaluated together. We separate them by trading 12
-clusterizers and two controls, no clustering and a random partition, on 27
-years of large US equities, under a fixed cross-sectional rule and a neural trading head. Clustering adds alpha and cuts book
-volatility by $28\%$ to $42\%$, while the trading head adds primarily alpha. The clusterizers disagree on the groups yet trade closely correlated books; their Sharpe-ratio differences arise mainly through volatility. Most of the 12 clusterizers retain alpha that factors and per-stock peer regressions together cannot explain.}
-\keywords{statistical arbitrage, clustering, signed graphs, Sharpe ratio, factor models}
-
-\keywords[JEL classification]{C58, G11, C38}
-
 \maketitle
+
+\begin{abstract}
+\noindent
+Previous studies in clustering-based statistical arbitrage usually evaluate clustering and the trading model together. In our study, we separate the contributions of clustering and the trading rule using 27 years of data on large US equities. We trade by using 12 clusterizers, a no-clustering control, and a random-partition control with a fixed cross-sectional rule and a neural trading head. We find that clustering lowers portfolio volatility by $28\%$ to $42\%$ and increases alpha, whereas the trading head contributes mainly through increasing alpha. Although different clusterizers obey qualitatively different rules, their portfolios are closely correlated and differ in Sharpe ratio mainly through volatility. Most clusterizers' portfolios retain their alpha that baseline factors and portfolios built on per-stock peer regressions together cannot explain.
+\\[8pt]
+\noindent\textbf{Keywords:} statistical arbitrage, clustering, signed graphs, Sharpe ratio, factor models\\
+\noindent\textbf{JEL classification:} C58, G11, C38
+\end{abstract}
+
+\thispagestyle{empty}\pagenumbering{roman}
+\clearpage
+\pagenumbering{arabic}
 
 \input{sections/01_introduction}
 \input{sections/02_literature}
 \input{sections/03_design}
-%%---------------------------------------------------------------------
-%%  RESULTS 1 (§4).  Two files, one section: 04 opens it, 06 continues
-%%  it as §4.4 and must NOT carry a \section line.
-%%---------------------------------------------------------------------
 \input{sections/04_hedge_and_signal}
-%%---------------------------------------------------------------------
-%%  RESULTS 2 (§5).
-%%---------------------------------------------------------------------
 \input{sections/05_convergence}
-%%---------------------------------------------------------------------
-%%  RESULTS 3 (§6).  07 opens it, 08 is its closing subsection §6.4.
-%%---------------------------------------------------------------------
 \input{sections/06_factor_model}
 \input{sections/07_conclusion}
 
-\section*{Conflicts of interest}
-The authors declare that they have no competing interests.
-
-\section*{Funding}
-This work was supported by an NVIDIA Academic Grant Award and a Jetstream2 AI Fellowship to Yixuan He.
-
-%% Zenodo DOI of the derived-data record (published 2026-09-01). This is the
-%% concept DOI, which resolves to the latest version (v1 = zenodo.22241255).
-%% While empty the statement says the deposit is in progress and prints no
-%% placeholder.
-\providecommand*{\ZenodoDOI}{10.5281/zenodo.22241254}
-
 \section*{Data availability}
 The CRSP daily data underlying this article were obtained under license
-through Wharton Research Data Services and cannot be redistributed; the
+through Wharton Research Data Services and cannot be redistributed. The
 replication package contains the code that rebuilds the panel from the
 CRSP daily files and the checksums that identify the panel used here. The
-GICS sector memberships used by one arm are likewise licensed, and the
+GICS sector memberships used by one clusterizer are likewise licensed, and the
 partitions derived from them are provided in their place. The factor
 returns were derived from a publicly available source, the Kenneth R.
 French data library
 (\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}).
-The derived data underlying the tables and figures---the daily return of
-every book, the positions of the trained runs, the partition caches, and
-the training logs---\ifx\ZenodoDOI\empty are being deposited on Zenodo
-under a CC BY 4.0 license (DOI to follow)\else are available on Zenodo at
-\href{https://doi.org/\ZenodoDOI}{\texttt{https://doi.org/\allowbreak\ZenodoDOI}}
-under a CC BY 4.0 license \citep{zhu2026replicationdata}\fi. The code,
+The derived data underlying the tables and figures are available on Zenodo at \href{https://doi.org/\ZenodoDOI}{\texttt{https://doi.org/\allowbreak\ZenodoDOI}} under a CC BY 4.0 license \citep{zhu2026replicationdata}. They include the daily return of every portfolio, the positions of the trained runs, the partition caches, and the training logs. The code,
 with the checks that tie the printed values to these files, is available
 at \href{https://github.com/lzwbh/clustering-statarb-replication}{\texttt{https://github.com/lzwbh/\allowbreak clustering-statarb-replication}} under an
 MIT license.
 
-\section*{Acknowledgments}
-The computations in this article were performed on an NVIDIA GPU
-server awarded to Yixuan He and on the Sol supercomputer at Arizona
-State University; we thank NVIDIA Corporation and ASU Research
-Computing for these resources.
-
-\bibliographystyle{oup-abbrvnat}
+\bibliographystyle{plainnat}
 \bibliography{refs}
 
 \begin{appendices}
@@ -124,3 +65,5 @@ Computing for these resources.
 \end{appendices}
 
 \end{document}
+%% SSRN-build deviations from the submitted sections (wrapper-level, documented here):
+%%   sections/03_design.tex:231  \footnotesize -> \scriptsize for tab:methods (page overflow at article 10pt)

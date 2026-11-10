@@ -84,6 +84,8 @@ def main() -> int:
     level = float(np.sqrt(np.mean([S[a].var(ddof=1) for a in CL])))
     chk("paired ruler 0.103", paired, 0.103, 0.0006)
     chk("level ruler 0.168", level, 0.168, 0.0006)
+    _gap = max(S[a].mean() for a in CL) - min(S[a].mean() for a in CL)
+    chk("§5.1: the level ruler is 20% of the 0.83 gap (N123)", round(100 * level / _gap), 20)
     ew = sum(books.head_avg(a) for a in CL) / len(CL)
     chk("equal-weight book 2.505", books.sharpe(ew), 2.505, 0.0006)
     d = sorted(((books.sharpe(books.head_avg(a)) - books.sharpe(ew)) for a in CL), reverse=True)[:3]
@@ -111,6 +113,8 @@ def main() -> int:
         s60 = np.array([books.sharpe(books.head_book(a, s)) for s in paths.SEEDS])
         s21 = np.array([books.sharpe(books.head_book(a, s, "_w21")) for s in paths.SEEDS])
         chk(f"window move {a} {want:+.2f}", s21.mean() - s60.mean(), want)
+        if a in ("pca_load", "spectral_unsigned"):   # fig:window_twin caption: each loss is 2.4 / 2.6 times the 60-day configuration's sd across head seeds (N123)
+            chk(f"window loss / sd {a}", round((s60.mean() - s21.mean()) / s60.std(ddof=1), 1), {"pca_load": 2.4, "spectral_unsigned": 2.6}[a])
 
     print("\n== abstract / §4.1: clustering cuts book volatility by 28% to 42% in every combination (N86 add.) ==")
     _ctl = ["k1", "random"]; _cl = [a for a in paths.ARMS if a not in _ctl]

@@ -58,7 +58,7 @@
 %%  §4.4, so the heading names the object measured rather than the
 %%  clustering alone.
 
-In this section, we show that a real partition has two benefits: it lowers the volatility of the payoff, and it raises its alpha. We measure both benefits within each trading component. We then measure how much comovement each partition removes and show that a random partition removes only the amount that any grouping into $\K$ sets removes by construction (\secref{sec:mechanism}). We decompose the Sharpe gap between grouped and control books into a mean part and a volatility part (\secref{sec:split}), and finally turn the comparison around and measure what the trading head adds to a partition held fixed (\secref{sec:head}).
+In this section, we show that a real partition lowers the volatility of the payoff and raises its alpha. We measure both effects within each trading component. We then measure the variance share of each partition, the share of the cross-sectional variance of the day's market residuals that demeaning within its groups removes. For a random partition, we show that this variance share equals the degrees-of-freedom floor, the variance share that $\K$ random groups remove in expectation (\secref{sec:mechanism}). Next, we decompose the Sharpe gap between the clusterizers' portfolios and the control portfolios into a mean part and a volatility part (\secref{sec:split}). Finally, we hold the partition fixed and measure what the neural trading head adds to the performance (\secref{sec:head}).
 
 %%  ── 4.0  OPENING ────────────────────────────────────────────────────
 %%  Two goods, priced separately. Then the licence, pointing at §3.6.
@@ -75,10 +75,10 @@ In this section, we show that a real partition has two benefits: it lowers the v
 %%    -> the model substitutes for a MISSING clustering, not a WRONG one
 
 
-\subsection{Volatility and Alpha}
+\subsection{The Alpha and Volatility}
 \label{sec:hedge}
 
-Clustering cuts book volatility by $28\%$ to $42\%$ in every combination of trading component, control, and convention (\tabref{tab:moments}). Under both components the least volatile control book sits far above the most volatile of the 12 clusterizers' books. The neural trading head narrows the gap against both controls without closing either, from $41.9\%$ to $35.4\%$ against the all-market control and from $38.7\%$ to $33.0\%$ against the random control.
+We find that clustering lowers portfolio volatility by $28\%$ to $42\%$ in every combination of trading component, control, and averaging convention across head seeds (\tabref{tab:moments} and its notes). In both trading components, each control portfolio is much more volatile than any of the 12 clusterizers' portfolios. Although the volatility reduction is smaller in the trained trading component than in the rule-based trading component, it persists against both controls. Against the $\K=1$ control, the reduction is $41.9\%$ in the rule-based component and $35.4\%$ in the trained component. Against the random control, it is $38.7\%$ in the rule-based component and $33.0\%$ in the trained component. The lower end of the range, $28\%$, comes from averaging the trained payoffs over head seeds before measuring their volatility (notes to \tabref{tab:moments}).
 
 %%=====================================================================
 %%  v3 UPDATE, 2026-08-20 -- PARTIAL, BY DESIGN.
@@ -106,7 +106,7 @@ Clustering cuts book volatility by $28\%$ to $42\%$ in every combination of trad
 %%=====================================================================
 \begin{table}[tb]
 \centering
-\caption{Book volatility and factor alpha: 12 clusterizers against the two
+\caption{Portfolio volatility and factor alpha: 12 clusterizers against the two
 controls, within each trading component}
 \label{tab:moments}
 \begin{threeparttable}
@@ -119,35 +119,32 @@ controls, within each trading component}
 \cmidrule(lr){3-5}\cmidrule(lr){6-7}
 & Trading component & 12 clusterizers & $\K=1$ & Random & against $\K=1$ & against Random \\
 \midrule
-Volatility & Rule-based & $4.77$--$6.18$ & $9.30$ & $8.83$ & $-41.9\%$ & $-38.7\%$ \\
+Volatility & Rule-based & $2.38$--$3.09$ & $4.65$ & $4.41$ & $-41.9\%$ & $-38.7\%$ \\
            & Trained & $2.88$--$3.80$ & $5.07$ & $4.89$ & $-35.4\%$ & $-33.0\%$ \\
 \addlinespace
-Alpha      & Rule-based & $8.05$--$8.81$ & $7.27$ & $7.43$ & $+15.6\%$ & $+13.1\%$ \\
+Alpha      & Rule-based & $4.03$--$4.40$ & $3.63$ & $3.72$ & $+15.6\%$ & $+13.1\%$ \\
            & Trained & $5.89$--$7.02$ & $5.44$ & $5.33$ & $+20.0\%$ & $+22.5\%$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\small
-\item \emph{Notes.} This table reports the annualized volatility and the annualized alpha of the rule-based and trained books of the 12 clusterizers and the two controls, and the change from each control's level to the clusterizers'. All 14 arms are measured on the $6{,}913$-day window of \secref{sec:panel} (July 1997 to December 2024), with the common 60-day estimation window wherever the partition is estimated from returns or correlations. Rule-based books carry gross exposure $2$ and trained books gross $1$, and the two components also differ in signal window, so only within-component comparisons are meaningful. Alphas are against the Fama--French five factors \citep{fama2015five} plus momentum \citep{carhart1997persistence}, FF5+MOM below, with Newey--West(21) standard errors; each payoff is paired with the factor return of the calendar day on which it was realized. The two trading components label their books differently: the rule-based series by decision day, the trained series by a date label that runs one trading day ahead of the factor file's, so the join is same-day for the rule-based series and lagged one day for the trained series. Trained volatilities are computed per head seed and averaged over the five seeds; trained alphas are on the payoff averaged over the five head seeds. Change is the ratio of the 12 clusterizers' mean level to the control's, minus one, computed on unrounded values; those means are $5.41$ and $3.27$ for volatility and $8.41$ and $6.52$ for alpha. Averaging the trained payoff series over seeds before measuring volatility gives $2.66$--$3.48$ for the clusterizers against $4.44$ and $4.18$ for the controls, changes of $-32.3\%$ and $-28.1\%$.
+\item \emph{Notes.} This table reports the annualized volatility and the annualized alpha of the rule-based and trained portfolios of the 12 clusterizers and the two controls, and the change from each control's level to the clusterizers'. All 14 configurations of each trading component are measured on the $6{,}913$-day sample of \secref{sec:panel} (July 1997 to December 2024), with the common 60-day estimation window wherever the partition is estimated from returns or correlations. Both trading components have gross exposure one (\secref{sec:components}). Alphas are against the Fama--French five factors \citep{fama2015five} plus momentum \citep{carhart1997persistence} (FF5+MOM below), with Newey--West(21) standard errors. Each payoff is paired with the factor return of the calendar day on which it was realized. Each trading component is joined to the factor file on its own realization calendar (\appref{app:calendar}). Trained volatilities are computed per head seed and averaged over the five head seeds. Trained alphas are estimated on the payoff averaged over the five head seeds. For alpha, the two conventions give the same point estimate, because an OLS intercept is linear in the dependent variable. Change is the ratio of the 12 clusterizers' mean level to the level of the control, minus one, computed on unrounded values. For volatility, those means are $2.70$ in the rule-based component and $3.27$ in the trained component. For alpha, they are $4.20$ in the rule-based component and $6.52$ in the trained component. Averaging the trained payoff series over head seeds before measuring volatility gives $2.66$--$3.48$ for the clusterizers. On this convention, the volatility is $4.44$ for the $\K=1$ control and $4.18$ for the random control. The changes are then $-32.3\%$ against the $\K=1$ control and $-28.1\%$ against the random control.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-Every clusterizer produces a reduction in volatility. The 12 trained books span $2.88\%$ ($k$-means on returns) to $3.80\%$ (spectral clustering), a band of $0.9$ points, while either control sits about a point above the band's top. Across the 12 trained books the highest volatility is $32\%$ above the lowest, the highest alpha only $19\%$ above (\tabref{tab:moments}), so their Sharpe ratios differ mainly through volatility. \figref{fig:alpha_vol} puts the two moments on one plot: the 12 clusterizers form a narrow band in alpha and a wide one in volatility, and both controls fall outside both bands, below in alpha and above in volatility. The rule-based books, at twice the gross exposure, take the same shape. The
-volatility reduction is a property of clustering, not of a well-chosen partition,
-and \secref{sec:invariance} returns to how little the choice of clusterizer
-matters downstream.
+For the neural trading head, the volatility of the 12 clusterizers' portfolios ranges from $2.88\%$ for $k$-means on returns to $3.80\%$ for unsigned spectral clustering. This band is $0.9$ percentage points wide. Each control's volatility is about a percentage point above the top of this band. Across the 12 trained portfolios, the highest volatility is $32\%$ above the lowest, whereas the highest alpha is $19\%$ above the lowest (\tabref{tab:moments}). The Sharpe ratios of these portfolios therefore differ mainly through volatility. \figref{fig:alpha_vol} plots alpha against volatility for the trained portfolios. Both control portfolios lie outside the ranges of the 12 clusterizers' portfolios, with lower alpha and higher volatility. The rule-based portfolios show the same pattern. In \secref{sec:invariance}, we return to how little the choice of clusterizer affects the results downstream.
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\linewidth]{fig_alpha_vol}
-\caption{Alpha against volatility at the trained component. This figure plots
-each arm's annualized alpha against the annualized volatility of its book, both
-at the trained component over the $6{,}913$-day sample (July 1997 to December
-2024). Alphas are against FF5+MOM with Newey--West(21) standard errors on the
-seed-averaged payoff, and volatilities are computed per head seed and averaged over the five seeds, the conventions of \tabref{tab:moments}. The shaded band
-spans the 12 clusterizers' alphas. Four clusterizers are named: $k$-means on
-returns at the lowest volatility, the graph Sharpe clusterizer at the highest alpha, \textsc{gics} at the second-highest volatility with a mid-band alpha, and spectral clustering at the highest volatility and the lowest alpha; the eight unnamed circles are the remaining clusterizers, whose
-coordinates the replication package lists. The two controls are red.}
+\caption{Alpha against volatility in the trained component. This figure plots
+each trained portfolio's annualized alpha against its annualized volatility over the
+$6{,}913$-day sample (July 1997 to December 2024). As in \tabref{tab:moments},
+alphas are against FF5+MOM with Newey--West(21) standard errors on the
+seed-averaged payoff, and volatilities are computed per head seed and averaged over the five head seeds. The shaded band
+covers the range of the 12 clusterizers' alphas. Four clusterizers are labeled. Among the 12 clusterizers, $k$-means on
+returns has the lowest volatility. Sharpe (graph) has the highest alpha. \textsc{gics} has the second-highest volatility and a mid-band alpha. Unsigned spectral clustering has the highest volatility and the lowest alpha. The eight unlabeled circles are the remaining clusterizers, whose
+coordinates are listed in the replication package. The two controls are red.}
 \label{fig:alpha_vol}
 \end{figure}
 
@@ -171,14 +168,11 @@ coordinates the replication package lists. The two controls are red.}
 %%  ⛔ "forces / imposes group neutrality" -- refuted, see §4.3
 
 
-Clustering also raises alpha, and unlike the volatility benefit the size of the gain depends on which trading component reads the signal. At the rule-based component both controls sit below every one of the
-12 clusterizers ($7.27\%$ per year for no clustering and $7.43\%$ for the random partition, against $8.05\%$ to $8.81\%$ for the clusterizers). The same fixed rule
-therefore earns $15.6\%$ more alpha on
-the twice-residualized signal of \eqnref{eq:relsig} than on the
-all-market control's signal, and $13.1\%$ more than on the random control's. Because the rule-based component has no fitted parameters and the arms differ only in the signal they receive, the extra alpha can come only from the signal the partition supplies.
+Clustering also raises alpha. We call the percentage by which the clusterizers' alpha exceeds the alpha of a control the alpha advantage. As with the volatility reduction, the size of the alpha advantage depends on which trading component trades the signal. In the rule-based component, both controls earn less alpha than each of the 12 clusterizers. The alphas of the 12 clusterizers range from $4.03\%$ to $4.40\%$ per year. The alpha is $3.63\%$ for the $\K=1$ control and $3.72\%$ for the random control. In relative terms, the mean rule-based alpha of the 12 clusterizers is $15.6\%$ higher than that of the $\K=1$ control and $13.1\%$ higher than that of the random control. Because the fixed rule has no fitted parameters and the rule-based configurations differ only in the signal they receive, the extra alpha must come from the group-demeaned residuals that the partition defines (\eqnref{eq:relsig}).
 
-The neural trading head widens the alpha advantage over both controls, far more over the random control than over the all-market control (against the six factors of \tabref{tab:moments}; with a short-term reversal factor added, the rule-based advantage exceeds the trained one, \secref{sec:spanning}). Against the
-all-market control the advantage rises from $15.6\%$ to $20.0\%$; against the random control it rises from $13.1\%$ to $22.5\%$. The same asymmetry appears arm by arm. Both advantages are positive at every one of the 12 clusterizers. Formed seed by seed, so that the dispersion across a clusterizer's five head seeds is preserved, the advantage over the all-market control exceeds twice that dispersion at only four of the 12, while the advantage over the random control does so at seven. The count is the same under either dispersion, the clusterizer's own across its five seeds or the figure pooled over the 12, though not the same four. A wrong partition therefore costs more under the neural trading head than under the fixed rule (\secref{sec:head}).
+Measured against FF5+MOM, the six factors of \tabref{tab:moments}, the alpha advantage over both controls is larger in the trained component than in the rule-based component. The advantage widens much more over the random control than over the $\K=1$ control. Against the $\K=1$ control, the six-factor advantage rises from $15.6\%$ in the rule-based component to $20.0\%$ in the trained component. Against the random control, it rises from $13.1\%$ to $22.5\%$. A wrong partition therefore has a larger disadvantage in the trained component than in the rule-based component, in the sense that the random control falls further behind the clusterizers in alpha (\secref{sec:head}). However, when a short-term reversal factor is added, the rule-based advantage exceeds the trained advantage (\secref{sec:spanning}).
+
+Clusterizer by clusterizer, the advantage over the random control is also more robust than the advantage over the $\K=1$ control. Both advantages are positive for all 12 clusterizers. We also compute the advantage separately for each head seed, so that it has a dispersion across a clusterizer's five head seeds. The advantage over the random control exceeds twice this dispersion for seven of the 12 clusterizers. The advantage over the $\K=1$ control does so for four of the 12. The count of four does not change when we use the dispersion pooled over the 12 clusterizers instead of each clusterizer's own dispersion, although the two dispersions do not select the same four clusterizers.
 %%  RECORD, not an open item. On the old panel this paragraph read the
 %%  other way: the advantage over K=1 was reported to fall by more than
 %%  half while the advantage over random held. On v3 both rise. Two
@@ -188,9 +182,8 @@ all-market control the advantage rises from $15.6\%$ to $20.0\%$; against the ra
 %%  v3 and is now in the text above: 5 of 12 against K=1, 12 of 12
 %%  against random, positive at all twelve arms against both. Source:
 %%  server_package/e2e_plan/perrule_count_v3.csv.
-The random control earns less alpha than $\K=1$ under the head ($5.33$ against $5.44$), a gap that plausibly reflects what the two signals contain. Demeaning within a random group subtracts the average of roughly 16 unrelated stocks, so the random signal
-is the $\K=1$ signal perturbed by a component that carries little systematic peer information, and the trained component
-reads a corrupted copy of the signal it reads under $\K=1$.
+
+In the trained component, the random control earns less alpha than the $\K=1$ control ($5.33$ against $5.44$). One plausible explanation for this gap is the noise that random groups add to the $\K=1$ signal. Demeaning within a random group subtracts the average market residual of roughly 16 unrelated stocks. Under the random partition, the group-demeaned residual is therefore the $\K=1$ group-demeaned residual perturbed by a term that contains little systematic information about comovement. As a result, the trading head receives a noisier version of the signal that it receives under $\K=1$.
 
 
 %%  THE PIVOT OF THE SECTION. Two controls part ways under training.
@@ -211,27 +204,24 @@ reads a corrupted copy of the signal it reads under $\K=1$.
 \subsection{Variance Removed by Group Demeaning}
 \label{sec:mechanism}
 
-Group demeaning removes between a tenth and a quarter of the cross-sectional variance under a real partition, and only the mechanical floor under a random one. We measure directly how much of the cross-sectional variance of the market residuals the group demeaning of \eqnref{eq:relsig} removes. For each arm we take each day's market residuals (\secref{sec:resid}), subtract each stock's own group mean, and record the share of variance that disappears. For the 12 clusterizers the share runs from $10.8\%$ for the sector taxonomy to $26.4\%$ for $k$-means on returns, and the other 10 lie within about two percentage points of one another ($17.0\%$ to $19.1\%$). Ten of the 12, though they disagree widely on the partition (\secref{sec:pseed}), remove nearly the same share.
+Under a real partition, demeaning within groups removes $11\%$ to $26\%$ of the cross-sectional variance of the day's market residuals. Under a random partition, the variance share equals the degrees-of-freedom floor. We measure the variance share directly. For each clusterizer and each control, we take each day's market residuals (\secref{sec:resid}) and subtract from each stock the mean market residual of its group, as in \eqnref{eq:relsig}. The variance share is the share of the cross-sectional variance that this subtraction removes. For the 12 clusterizers, the variance share ranges from $10.8\%$ for the \textsc{gics} sector taxonomy to $26.4\%$ for $k$-means on returns. The value for $k$-means on returns counts its singleton groups. Each singleton group removes all of the variance of its one member (\appref{app:lensrobust}). The variance shares of the other 10 clusterizers range from $17.0\%$ to $19.1\%$, within about two percentage points of one another. These clusterizers nevertheless disagree widely on the partition (\secref{sec:pseed}).
 
-For the $\K=1$ control the same quantity is zero by
-construction: its one group's mean \emph{is} the cross-sectional mean, around which the variance is already measured. The $\K=1$ signal is therefore residualized only once, against the market, while a signal after clustering is residualized twice.
+For the $\K=1$ control, the variance share is zero by construction, because its single group's mean \emph{is} the cross-sectional mean, around which the variance is already measured. The group-demeaned residual of the $\K=1$ control therefore has the same cross-sectional variance as the market residual.
 
-The random control measures the part of the removed variance that has nothing to do with structure. Subtracting a group mean removes some variance even
-when the groups are meaningless, and the amount can be computed:
-with $\K$ random groups over $\N_t$ stocks it is
-$(\K-1)/(\N_t-1)$ in expectation, $5.88\%$ at $\K=30$ on the $494.3$ names the rule-based book trades on an average day. The random control measures $5.93\%$. Everything it removes is therefore this mechanical part, and its book remains one of the two most volatile of the 14 books. Removing variance from the signal helps only when the variance removed is real comovement.
+The random control measures the part of the variance share that is unrelated to structure. Subtracting a group mean removes some variance even when the groups are meaningless. With $\K$ random groups over $\N_t$ stocks, the expected variance share is $(\K-1)/(\N_t-1)$, the degrees-of-freedom floor. At $\K=30$, the floor is $5.88\%$. We compute it on the $494.3$ stocks that the rule-based portfolio trades on an average day. The random control's variance share is $5.93\%$, so the floor accounts for everything it removes. Consistent with this result, the random control's portfolio remains one of the two most volatile of the 14 portfolios. Removing variance that does not come from comovement therefore does little to lower the volatility of the portfolio.
 
-Less comovement in the signal produces less volatility in the book. With the common movement removed, the positions the head builds on the signal comove less, and in the spanning regressions of \secref{sec:spanning} the 12 clusterizers' trained books carry $42\%$ less market beta than the all-market control and $35\%$ less than the random control. Across the three cases (no clustering, random, real), removal share and book volatility rank in the same order at both trading components (\secref{sec:hedge}). A partition degraded step by step toward a random one traces the same relation continuously: the removal share falls toward the floor and book volatility rises at every step (\appref{app:dose}).
+The removed comovement explains the lower volatility of the portfolio. With that comovement removed, the positions that the head builds on the signal comove less. In particular, in the spanning regressions of \secref{sec:spanning}, the 12 clusterizers' trained portfolios have $42\%$ less market beta than the $\K=1$ control and $35\%$ less than the random control. Moreover, from no clustering to a random partition to a real partition, the variance share rises and portfolio volatility falls in both trading components (\secref{sec:hedge}). Similarly, when we degrade a partition step by step toward a random partition, the variance share falls toward the degrees-of-freedom floor and portfolio volatility rises at every step (\appref{app:dose}).
 
-Balance within groups contributes little to the volatility reduction. The demeaned signal sums to zero within each group, and the book could inherit that balance, but a typical group's longs and shorts are out of balance by $16\%$ to $23\%$ of the group's total position, about three quarters of the level that random signs on the same weights would produce. The one exception is \textsc{gics}, whose imbalance exceeds its own random level.
+Balance within groups could also lower the volatility of the portfolio. The group-demeaned residuals sum to zero within each group, so the positions of the portfolio could inherit that balance. However, in our portfolios, balance contributes little to the volatility reduction. A typical group's longs and shorts are out of balance by $16\%$ to $23\%$ of the group's total position. This imbalance is $71\%$ to $85\%$ of the imbalance that random signs on the same weights would produce. The exception is \textsc{gics}, whose imbalance exceeds its own random level.
+
 \subsection{Decomposing the Sharpe Gap}
 \label{sec:split}
 
-Most of a partition's Sharpe advantage over either control comes through volatility. Because the log Sharpe ratio is the log mean minus the log volatility, the log-Sharpe gap between the clusterizers' books and a control book splits exactly into a mean part and a volatility part,
+Most of the Sharpe gap between the clusterizers' portfolios and either control arises through volatility. Because the log Sharpe ratio is the log mean minus the log volatility, the log-Sharpe gap between the clusterizers' portfolios and the control portfolios splits exactly into the mean part and the volatility part,
 \begin{equation}\label{eq:split}
 \log \mathrm{SR}_g-\log \mathrm{SR}_c=(\log\mu_g-\log\mu_c)-(\log\sigma_g-\log\sigma_c).
 \end{equation}
-Across the four cells of \tabref{tab:split}, the volatility part is $82.0\%$ of the gap over the $\K=1$ control at the trained component, and between $75\%$ and $83\%$ overall, largest at the rule-based component against the random control. Arm by arm, in the trained cells the share is lowest for the graph Sharpe clusterizer against the $\K=1$ control and for \textsc{gics}, the coarsest partition, against the random control, down to $68\%$; no other clusterizer goes below $69\%$ in any cell. In this split, the return the controls earn from factor exposure counts as mean; measured on calendar-aligned alphas instead, the mean part rises to $29.4\%$ against $\K=1$ and $33.6\%$ against random in the two trained cells. Under either measure, the volatility reduction accounts for most of a partition's Sharpe advantage.
+In \eqnref{eq:split}, the clusterizers' mean and volatility are the averages over the clusterizers of their annualized means and volatilities, and the mean and volatility of the control are its own. In the trained component, the volatility part is $82.0\%$ of the gap to the $\K=1$ control (\tabref{tab:split}). We call the volatility part divided by the gap the volatility share of the gap. Across the four cells of the table, the volatility share ranges from $75\%$ to $83\%$ and is largest in the rule-based component against the random control. Because this split uses mean returns, any return that the controls earn from factor exposure enters their means. With FF5+MOM alphas in place of the mean returns, the volatility reduction still accounts for most of the Sharpe gap (notes to \tabref{tab:split}).
 
 \begin{table}[tb]
 \centering
@@ -250,7 +240,7 @@ Trained & Random & $0.532$ & $0.131$ & $0.401$ & $75.4\%$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\footnotesize
-\item \emph{Notes.} This table reports the log-Sharpe gap between the 12 clusterizers' mean book and each control and its split into a mean part and a volatility part, by trading component. All arms use the common 60-day window, on the $6{,}913$-day window of \secref{sec:panel} (July 1997 to December 2024). The clusterizers' mean book takes the mean over the 12 clusterizers of the annualized mean and of the annualized volatility; each control uses its own. Gap is the left side of \eqnref{eq:split}; the mean part is $\log\mu_g-\log\mu_c$, the volatility part $\log\sigma_c-\log\sigma_g$, and the share is the volatility part over the gap. In the trained cells $\mu$ and $\sigma$ are computed per head seed and averaged over the five seeds; averaging the payoff series over seeds first gives shares of $80.2\%$ and $71.6\%$ in the two trained cells. The rule-based component has no training seed. Arm by arm, in the trained cells the share is lowest for the graph Sharpe clusterizer against the $\K=1$ control and for \textsc{gics} against the random control, down to $67.8\%$. Replacing the means with calendar-aligned alphas in the trained cells gives a mean part of $0.182$ against $\K=1$ and $0.203$ against random, a share of $29.4\%$ and $33.6\%$ for the mean.
+\item \emph{Notes.} This table reports the log-Sharpe gap between the 12 clusterizers and each control and its split into a mean part and a volatility part, by trading component. All configurations use the common 60-day estimation window and are measured on the $6{,}913$-day sample of \secref{sec:panel} (July 1997 to December 2024). For the clusterizers, $\mu$ and $\sigma$ are the means over the 12 clusterizers of the annualized mean and of the annualized volatility. Each control uses its own mean and volatility. Gap is the left side of \eqnref{eq:split}. The mean part is $\log\mu_g-\log\mu_c$, the volatility part is $\log\sigma_c-\log\sigma_g$, and the volatility share is the volatility part divided by the gap. In the trained cells, $\mu$ and $\sigma$ are computed per head seed and averaged over the five head seeds. Averaging the payoff series over head seeds before computing $\mu$ and $\sigma$ instead gives a volatility share of $80.2\%$ against the $\K=1$ control and $71.6\%$ against the random control. The rule-based component has no head seed. Clusterizer by clusterizer, in the trained cells the volatility share is lowest for Sharpe (graph) against the $\K=1$ control and for \textsc{gics} against the random control. The lower of these two values is $67.8\%$. Every other clusterizer stays at or above $69\%$ in every cell. Replacing the means with calendar-aligned alphas in the trained cells gives a mean part of $0.182$ against the $\K=1$ control and $0.203$ against the random control. The mean part is then $29.4\%$ of the recomputed gap against the $\K=1$ control and $33.6\%$ against the random control.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -697,20 +687,20 @@ Trained & Random & $0.532$ & $0.131$ & $0.401$ & $75.4\%$ \\
 %%     The naive comparator uses a 5-day signal window and the head 30;
 %%     matching them does not close the gap, it doubles it.
 %%=====================================================================
-\subsection{What the Trading Head Adds}
+\subsection{The Contribution of the Trading Head}
 \label{sec:head}
 
-Sections \ref{sec:hedge} to \ref{sec:split} held the trading component fixed and varied the partition. We now hold the partition fixed and ask what the neural trading head adds to it. At matched gross exposure it raises alpha at every one of the 14 arms and raises volatility at every arm by proportionally less. The ranking of the 12 clusterizers is largely the same under either component; the gap between the two controls also closes, and that closing shows what training does to a partition that carries no information. 
-
-The two trading components differ in two ways, the model and the signal window ($5$ against $30$ days, \secref{sec:components}), so any difference between them bundles the two changes. Rerunning the rule-based component with a $30$-day window widens the alpha advantage over the controls to $+38.7\%$ and $+35.8\%$, and the head still adds alpha at every arm over that rerun, so the longer signal window alone does not account for the head's alpha improvement. That rerun also sets the base against which the head's advantage is measured. At the head's gross exposure, the $30$-day window moves the fixed rule's gap to either control by at most $0.04$ alpha points but lowers the alphas themselves to $1.4\%$ to $2.3\%$ a year across the 14 arms, with neither control's alpha distinguishable from zero ($t = 1.6$ and $1.7$). The larger relative advantage therefore comes from the smaller base. In alpha points the head's gap to either control is roughly twice the fixed rule's at either signal window, $1.9$ to $2.5$ times.
+In Sections \ref{sec:hedge} to \ref{sec:split}, we compared partitions within each trading component. We now compare the two trading components on the same partition and ask what the neural trading head contributes to the performance.
 
 
 
-\tabref{tab:head_adds} reports each arm against itself across the two trading components, with the rule-based book divided by two to match the head's gross exposure. The head adds alpha at every arm, controls included, and raises volatility at every arm, by $9\%$ to $24\%$, even though its objective divides by the standard deviation.
+
+
+\tabref{tab:head_adds} compares the rule-based and the trained portfolio of each clusterizer and each control.  The head raises alpha in every portfolio, including the two control portfolios. Although the head is trained on an objective that divides by the standard deviation, it also raises volatility in every portfolio, by $9\%$ to $24\%$. In proportion, this rise is smaller than the rise in alpha.
 
 \begin{table}[tb]
 \centering
-\caption{Alpha and volatility at the two trading components, and the change between them}
+\caption{Alpha and volatility in the rule-based and trained components, and the change between them}
 \label{tab:head_adds}
 \begin{threeparttable}
 \small
@@ -726,7 +716,7 @@ Random & $3.72$ & $5.33$ & $+1.61$ & $4.41$ & $4.89$ & $1.11$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\small
-\item \emph{Notes.} This table reports each arm's alpha and volatility at the two trading components and the change from the rule-based to the trained component. All 14 arms at the common 60-day window, on the $6{,}913$-day window of \secref{sec:panel} (July 1997 to December 2024); alphas are against FF5+MOM with Newey--West(21) standard errors, each component joined to the factor file on its own realization calendar (\appref{app:calendar}); rule-based cells are divided by two to match the trained component's gross exposure of one. Gain is the trained alpha minus the rule-based alpha, in percentage points; Ratio is the trained volatility over the rule-based volatility. Both are computed arm by arm on unrounded values, as are the divided-by-two cells; the 12-clusterizer row is therefore the range of the per-arm values, not the difference or ratio of the printed ranges. Volatility columns are computed per head seed and averaged and alpha columns are on the seed-averaged payoff, both as in \tabref{tab:moments}; the rule-based cells here are the rule-based entries of that table halved. 
+\item \emph{Notes.} This table reports the alpha and volatility of each clusterizer and each control in both trading components, and the change from the rule-based to the trained component. All 14 configurations of each trading component use the common 60-day estimation window and are measured on the $6{,}913$-day sample of \secref{sec:panel} (July 1997 to December 2024). Alphas are against FF5+MOM with Newey--West(21) standard errors, with each trading component joined to the factor file on its own realization calendar (\appref{app:calendar}). Rule-based cells repeat the rule-based entries of \tabref{tab:moments}. Gain is the trained alpha minus the rule-based alpha, in percentage points. Ratio is the trained volatility divided by the rule-based volatility. Both are computed separately for each clusterizer and control on unrounded values. The 12-clusterizer row is therefore the range of the per-clusterizer values, not the difference or ratio of the printed ranges. As in \tabref{tab:moments}, volatility columns are computed per head seed and averaged over head seeds, and alpha columns are estimated on the seed-averaged payoff. 
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -734,8 +724,11 @@ Random & $3.72$ & $5.33$ & $+1.61$ & $4.41$ & $4.89$ & $1.11$ \\
 
 
 
-The rule-based ranking largely remains the same under the neural trading head (\figref{fig:rank_shift}). Across the 12 clusterizers the Spearman rank correlation between the two components' rankings is $+0.85$ ($p = 0.0004$). Three clusterizers keep their rank, the largest move is five places, and both ends of the ranking are the same at both components: $k$-means leads, and spectral clustering and \textsc{gics} are the two
-lowest.
+The rule-based and trained components differ in how the weights are set, by the fixed rule or by the neural trading head. They also differ in the signal window, which is $5$ days in the rule-based component and $30$ days in the trained component (\secref{sec:components}). Any difference between their portfolios therefore combines the effects of these two differences. For every clusterizer and control, the trained portfolio still earns more alpha than a $30$-day rerun of the rule-based component, so the longer signal window alone does not account for the head's alpha improvement.
+
+The alpha advantage of \secref{sec:hedge} expresses the difference between the clusterizers' alpha and the alpha of a control as a percentage of the control's alpha, so it becomes large when the control's alpha is small. We therefore also measure this difference in percentage points and call it the alpha gap. At either signal window, the alpha gap to either control is $1.9$ to $2.5$ times as large in the trained component as in the rule-based component. In the $30$-day rerun, the alpha advantage widens to $+38.7\%$ over the $\K=1$ control and $+35.8\%$ over the random control. However, moving the rule-based component from the five-day to the $30$-day signal window changes its alpha gap to either control by at most $0.04$ percentage points. The longer signal window instead lowers the rule-based alphas to $1.4\%$ to $2.3\%$ a year across the 14 portfolios. Neither control's alpha is then distinguishable from zero ($t = 1.6$ for the $\K=1$ control and $1.7$ for the random control). The larger alpha advantage of the $30$-day rerun thus reflects the smaller alphas against which it is measured.
+
+\figref{fig:rank_shift} shows that the Sharpe-ratio ranking of the 12 clusterizers is largely the same in the rule-based and trained components. Across the 12 clusterizers, the Spearman rank correlation between the rankings in the rule-based and trained components is $+0.85$ ($p = 0.0004$). Three clusterizers keep their rank. The largest move in rank is five places. Both ends of the ranking are the same in the two trading components, with $k$-means on returns at the top and unsigned spectral clustering and \textsc{gics} in the two lowest places.
 
 %%  RECORD (kept out of the body: readers never saw the old number).
 %%  The earlier version reported this correlation as +0.38 and read it as
@@ -748,15 +741,14 @@ lowest.
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\linewidth]{fig_rank_shift}
-\caption{Sharpe-ratio ranks at the two trading components. This figure plots the 12 clusterizers ranked by Sharpe ratio at each trading component, on the matched 60-day estimation window over the $6{,}913$-day sample; the trained column is the mean of the five per-seed Sharpe ratios. A clusterizer that changes rank by three places or more is drawn in black. The Spearman rank correlation between the columns is $+0.85$.}
+\caption{Sharpe-ratio ranks in the rule-based and trained components. This figure plots the 12 clusterizers ranked by Sharpe ratio in each trading component, on the common 60-day estimation window over the $6{,}913$-day sample. The trained column uses the mean per-seed Sharpe ratio over the five head seeds. A clusterizer that changes rank by three places or more is drawn in black. The Spearman rank correlation between the columns is $+0.85$.}
 %%  fig_rank_shift regenerated on the v3 matched basis at the 6,913-day
 %%  calendar (2026-08-24, Code Branch batch; leader/bottom gate passed).
 %%  Caption and figure agree at +0.90.
 \label{fig:rank_shift}
 \end{figure}
 
-The random control's edge over the $\K=1$ control does not survive training. At the rule-based component, where the book is a deterministic function of the partition, the random control earns a higher Sharpe ratio than the $\K=1$ control, $0.89$ against $0.83$. At the trained component the two are level on the mean-of-per-seed convention, $1.28$ against $1.28$, and on the seed-averaged book the random control's edge is only $0.04$, $1.50$ against $1.46$, so under the head they are indistinguishable. Paired by seed, the difference is
-$0.00$ with a standard deviation of $0.08$ across five fits ($t = 0.00$), and its sign changes from fit to fit. Training therefore makes a wrong partition more expensive. One explanation, consistent with \secref{sec:hedge}, is that the fixed rule bets small, equal amounts everywhere, so the noise a random partition adds largely cancels, whereas a trained model fits whatever structure the labels imply, even when there is none or it is wrong.
+In the trained component, the random control no longer earns a higher Sharpe ratio than the $\K=1$ control. In the rule-based component, where the portfolio is a deterministic function of the partition, the random control earns a higher Sharpe ratio than the $\K=1$ control, $0.89$ against $0.83$. In the trained component, the two controls have the same mean per-seed Sharpe ratio, $1.28$.\footnote{On the seed-averaged payoff, the random control's Sharpe ratio exceeds that of the $\K=1$ control by $0.04$, at $1.50$ against $1.46$.} When we pair the two controls by head seed, the mean difference in Sharpe ratio is $0.00$ ($t = 0.00$). Its standard deviation across the five head-seed runs is $0.08$. The sign of the difference changes from one head-seed run to another, so the two controls are indistinguishable in the trained component. Relative to no partition, a wrong partition therefore does worse in Sharpe ratio in the trained component than in the rule-based component. One explanation, consistent with \secref{sec:hedge}, is that the fixed rule bets small, equal amounts on every stock, so the noise that a random partition adds largely cancels. In this explanation, a trained model fits the structure that the group labels imply, even when that structure is absent or wrong.
 
 %%---------------------------------------------------------------------
 %%  §6 DRAFT, 2026-08-16. Yours to edit. All numbers recomputed on the

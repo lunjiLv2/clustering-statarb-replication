@@ -2,14 +2,16 @@
 
 Input: analysis/results/dose_v3_traded_cal6913.csv (producer analysis/dose_v3_traded.py): for corruption
 level q the share of cross-sectional residual variance the partition removes and the annualized
-volatility of its rule-based book, two independent corruption draws, plus the actual random control
+volatility of its rule-based book (drawn at gross exposure one: stored x RULE_REPORT_SCALE, N123), two independent corruption draws, plus the actual random control
 (draw == -1) on the same traded basis.
 """
 import pandas as pd
 import matplotlib.pyplot as plt
 import style, paths
+from analysis.books import RULE_REPORT_SCALE   # N123: rule-based levels at gross exposure one
 
 d = pd.read_csv(paths.RESULTS / "dose_v3_traded_cal6913.csv")
+d["ann_vol"] = d["ann_vol"] * RULE_REPORT_SCALE   # the actual random control (draw == -1) included
 control = d[d.draw == -1].iloc[0]                      # the actual random control
 d = d[d.draw >= 0]
 m = d.groupby("q")[["removal_share", "ann_vol"]].mean().reset_index()
@@ -18,9 +20,9 @@ intact = float(d[d.q == 0].removal_share.iloc[0])
 
 fig, ax = plt.subplots(figsize=(5.0, 3.6))
 ax.axvline(floor, color="0.30", ls=":", lw=0.9); ax.axvline(intact, color="0.30", ls=":", lw=0.9)
-ax.annotate(r"floor $(\mathrm{K}{-}1)/(\mathrm{N}{-}1)$", (floor, 0.0625), xytext=(6, 0), textcoords="offset points",
+ax.annotate(r"floor $(\mathrm{K}{-}1)/(\mathrm{N}{-}1)$", (floor, 0.03125), xytext=(6, 0), textcoords="offset points",
             fontsize=8.2, color="0.30", rotation=90, va="bottom")
-ax.annotate("intact partition", (intact, 0.0625), xytext=(-6, 0), ha="right", textcoords="offset points",
+ax.annotate("intact partition", (intact, 0.03125), xytext=(-6, 0), ha="right", textcoords="offset points",
             fontsize=8.2, color="0.30", rotation=90, va="bottom")
 ax.plot(m.removal_share, m.ann_vol, color=style.GREY, lw=1.0, zorder=1)
 for draw, marker in ((0, "o"), (1, "^")):
@@ -36,7 +38,8 @@ ax.set_xlabel("share of cross-sectional variance the partition removes")
 import matplotlib.ticker as _mt
 ax.xaxis.set_major_formatter(_mt.PercentFormatter(xmax=1.0, decimals=0))
 ax.yaxis.set_major_formatter(_mt.PercentFormatter(xmax=1.0, decimals=1))
-ax.set_ylabel("annualized book volatility")
+ax.yaxis.set_major_locator(_mt.MultipleLocator(0.005))   # ticks every 0.5 percentage points, so one decimal is exact
+ax.set_ylabel("annualized portfolio volatility")
 ax.invert_xaxis()
 # labels sit on the series themselves (Schwabish 2014): the two corruption draws are one cloud, so
 # one label with a note is clearer than a legend box repeating the marker shapes.

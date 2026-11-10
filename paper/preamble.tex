@@ -1,0 +1,86 @@
+%%=====================================================================
+%%  preamble.tex — SSRN preprint build (plain article class).
+%%  Sections are the SUBMITTED JFEC text (JFEC_OUP/sections, 2026-09-02),
+%%  copied verbatim. Only this wrapper differs from the OUP build.
+%%=====================================================================
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{float}
+\usepackage{threeparttable}
+\usepackage{xcolor}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage{appendix}  % no [title]: the OUP build prints "A. Appendix: ..." too
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,fit,backgrounds,arrows.meta,shapes.geometric,decorations.pathreplacing,patterns}
+\usepackage[round,authoryear]{natbib}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Quantifying the Contributions of Clustering to Statistical Arbitrage},pdfauthor={Lunji Zhu, Yixuan He, Mihai Cucuringu}}
+% float placement (the article class strands floats otherwise)
+\setcounter{topnumber}{4}\setcounter{bottomnumber}{2}\setcounter{totalnumber}{5}
+\renewcommand{\topfraction}{0.92}\renewcommand{\bottomfraction}{0.75}
+\renewcommand{\textfraction}{0.06}\renewcommand{\floatpagefraction}{0.70}
+% --- cross-reference helpers (cleveref is not installed here) --------
+\newcommand{\secref}[1]{Section~\ref{#1}}
+\newcommand{\secsref}[2]{Sections~\ref{#1} and~\ref{#2}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\eqnref}[1]{Equation~\eqref{#1}}
+\newcommand{\appref}[1]{Appendix~\ref{#1}}
+\newcommand{\panelref}[2]{Panel~#1 of \tabref{#2}}
+
+% --- drafting helpers (delete before submission) ---------------------
+\newcommand{\TODO}[1]{\textcolor{red}{[\textbf{TODO:} #1]}}
+\newcommand{\PH}[1]{\textcolor{gray}{\ensuremath{\langle}\text{#1}\ensuremath{\rangle}}}
+\newcommand{\PENDGROSS}{\TODO{pending gross-alignment verification}}
+\newcommand{\PROVEN}{\textsc{[proven]}}
+\newcommand{\SKETCH}{\textsc{[sketch]}}
+\newcommand{\CONJ}{\textsc{[conjecture]}}
+
+%%---------------------------------------------------------------------
+%%  NOTATION — identical to the article-class build; the sections use it.
+%%---------------------------------------------------------------------
+\newcommand{\N}{N}
+\newcommand{\Tw}{T}
+\newcommand{\K}{K}
+\newcommand{\Rmat}{\mathbf{R}}
+\newcommand{\Cmat}{\mathbf{C}}
+\newcommand{\Wmat}{\mathbf{W}}
+\newcommand{\Dmat}{\mathbf{D}}
+\newcommand{\Proj}{\mathbf{P}}
+\newcommand{\Imat}{\mathbf{I}}
+\newcommand{\rt}{\tilde{\mathbf{r}}}
+\newcommand{\Zmat}{\mathbf{Z}}
+\newcommand{\Lam}{\bm{\Lambda}}
+\newcommand{\ones}[1]{\bm{1}_{#1}}
+\newcommand{\Pgics}{\mathbf{P}_{\mathrm{GICS}}}
+\newcommand{\SR}{\mathrm{SR}}
+\newcommand{\Exp}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\rank}{\operatorname{rank}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\Part}{\mathcal{P}}
+\newcommand{\PartOne}{\Part_{\mathrm{one}}}
+\newcommand{\PartRnd}{\Part_{\mathrm{rand}}}
+\newcommand{\alphaFF}{\alpha_{\mathrm{FF5+MOM}}}
+\newcommand{\ARI}{\mathrm{ARI}}
+\newcommand{\nogroup}{\emph{no grouping}}
+\newcommand{\randgroup}{\emph{random grouping}}

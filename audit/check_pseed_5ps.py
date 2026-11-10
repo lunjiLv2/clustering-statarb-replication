@@ -30,7 +30,7 @@ chk("rule: 45 books spread 0.58, largest range = 36% of it", round(sp, 2) == 0.5
 chk("rule: random moves 0.08", round(rr["random"], 2) == 0.08, f"{rr['random']:.4f}")
 lead = [R.loc[ST, p].idxmax() for p in PS]; last = [R.loc[ST, p].idxmin() for p in PS]
 chk("rule: spectral last at all five; k-means first at three, Sharpe (graph) and PCA once each", set(last) == {"spectral_unsigned"} and sorted(lead) == sorted(["kmeans_ret"] * 3 + ["fv3sm_w60", "pca_load"]), f"{lead}")
-chk("rule: largest range grows from 0.21 to 0.38 under the head (by three quarters)", round(hr[ST].max(), 2) == 0.38 and 1.7 <= hr[ST].max() / rr[ST].max() <= 1.85, f"ratio {hr[ST].max()/rr[ST].max():.3f}")
+chk("rule: largest range grows from 0.21 to 0.38 under the head (by 77%, N123)", round(hr[ST].max(), 2) == 0.38 and round(100 * (hr[ST].max() / rr[ST].max() - 1)) == 77, f"ratio {hr[ST].max()/rr[ST].max():.3f}")
 # trained component, head seed 42
 hl = [H.loc[ST, p].idxmax() for p in PS]
 chk("head: k-means first at four of five draws, SPONGE at the other (seed 1); fig caption 'seeds 2 to 5'", hl == ["sponge_w60"] + ["kmeans_ret"] * 4, f"{hl}")

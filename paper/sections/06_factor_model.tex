@@ -31,67 +31,59 @@
 \section{Factors, Peers, and Costs}
 \label{sec:factor}
 
-A partition is a special case of a factor model, and clustering a special case of peer-based trading. As a factor model, it fixes each stock's loading at $1$ on its own group's mean and $0$ on every other group's mean, whereas the latent factor literature estimates loadings freely \citep{fan2013large}. \citet{guijarro2025deep} remark in passing that ``under appropriate assumptions a clustering problem can be solved by a latent factor estimation.'' As a choice of peers, it gives every stock in a group the same peer set, whereas the simplest alternative gives each stock its own peer set, the names most correlated with it. This section asks whether either general construction already contains everything a partition contributes. Against factor models the test has two parts: in the cross-section, what a partition still explains after factors are projected out (\secref{sec:lens}); in the time series, whether the books the partitions produce are spanned by the standard factors, by a reversal factor, by the leading principal components, or by the same pipeline run without clustering (\secref{sec:spanning}). Against per-stock peers, \secref{sec:peer} replaces the partition with per-stock peer regressions and asks the same question of the books. Finally, \secref{sec:costs} asks whether the same books' returns survive trading costs. 
+A partition is a special case of a factor model, and clustering-based trading is a special case of peer-based trading. As a factor model, a partition fixes each stock's loading at $1$ on its own group's mean and $0$ on every other group's mean. Latent factor models estimate the loadings freely \citep{fan2013large}. \citet{guijarro2025deep} remark in passing that ``under appropriate assumptions a clustering problem can be solved by a latent factor estimation.'' As a choice of peers, a partition gives every stock in a group the same peer set. The simplest alternative gives each stock its own peer set, the stocks most correlated with it. In this section, we ask whether either of these more general constructions already contains the information that a partition contributes. We test a partition against factor models in the cross-section and in the time series. In the cross-section, we measure how much of a partition's variance share remains after factors are projected out (\secref{sec:lens}). In the time series, we test whether the portfolios built on the partitions are spanned by the Fama--French five factors plus momentum, by a reversal factor, by the leading principal components, or by the portfolio of the same pipeline run without clustering (\secref{sec:spanning}). To test a partition against per-stock peers, we replace it with per-stock peer regressions and ask the same question of the portfolios (\secref{sec:peer}). Finally, we ask whether the portfolios remain profitable after trading costs (\secref{sec:costs}).
 
 \subsection{Cross-Sectional Projections}
 \label{sec:lens}
 
-We ask how much of the cross-sectional variance of a day's residuals a partition can explain, and how much of that it still explains after the leading principal components are projected out. For each of the $6{,}913$ out-of-sample days, we take the day's cross-section of market residuals (\secref{sec:resid}), apply the partition's same-day labels, and record the share of cross-sectional variance that demeaning within groups removes, the quantity measured in \secref{sec:mechanism}. The names used here are those with a complete $252$-day residual history, the window on which the principal components are estimated: $479$ to $500$ a day for the 11 clusterizers other than the sector taxonomy, and $322$ for \textsc{gics}. The traded book of \secref{sec:mechanism} has $494$ names a day and is not the same set, which is why its numbers differ slightly from those here. We then project out the leading $m$ principal components, estimated on the trailing $252$ days and
-strictly before the day, and record what share the partition explains
-of what is left. If a low-dimensional latent factor representation captures the
-same cross-sectional structure as the partition, projecting out a few
-leading components should substantially reduce the variance share the
-partition subsequently explains.
+We ask how much of the cross-sectional variance of a day's market residuals a partition can explain, and how much of that it still explains after the leading principal components are projected out. If a low-dimensional latent factor representation captures the same cross-sectional structure as the partition, projecting out a few leading principal components should substantially reduce the variance share that the partition explains afterward. For each of the $6{,}913$ out-of-sample days, we take the day's cross-section of market residuals (\secref{sec:resid}) and apply the partition's same-day labels. We then record the variance share defined in \secref{sec:mechanism}, which is the share of the cross-sectional variance that demeaning within groups removes. We use the stocks whose market residuals are complete over the loading window, the trailing $252$ days on which the principal components are estimated.\footnote{This leaves $322$ stocks a day for \textsc{gics} and $479$ to $500$ for the other 11 clusterizers. These stocks are not the same set as the $494$ stocks a day that the rule-based portfolio of \secref{sec:mechanism} trades, so the variance shares reported there differ slightly from those here.} Next, we project out the leading $m$ principal components, estimated over the loading window and strictly before the day. The variance share after the projection is the share of the remaining cross-sectional variance that the partition explains.
 
-Projecting out the five leading components removes only about half of what a real partition explains (\figref{fig:lens_curve}a). The $k$-means partition
-explains $0.265$ of the day's cross-sectional residual variance;
-after five components are projected out it still explains $0.160$ of
-the remainder, $60\%$ of its unconditional share. Across the 12
-clusterizers the retention at five components runs from $44\%$ to $61\%$, the
-sector taxonomy at the bottom and spectral clustering at the
-top. The random control sits at the degrees-of-freedom floor $(\K-1)/(\N-1) = 0.0597$ that $\K$ arbitrary groups remove from any cross-section, $0.0600$ before the projection and $0.0599$ after. The floor is computed on the universe used here; on the traded universe of \secref{sec:mechanism} the same formula gives $0.0588$, the $5.88\%$ reported there. The $\K=1$ control is zero by
+Projecting out the five leading principal components removes $39\%$ to $56\%$ of a real partition's variance share (\figref{fig:lens_curve}a). For example, with its singleton groups counted (\appref{app:lensrobust}), the $k$-means-on-returns partition explains $0.265$ of the cross-sectional variance of the day's market residuals.
+After five principal components are projected out, it still explains $0.160$ of
+the remainder. This is $60\%$ of its variance share before the projection. We call this ratio the retention: the variance share after a projection divided by the variance share before it. Across the 12
+clusterizers, the retention at five principal components ranges from $44\%$ for
+\textsc{gics} to $61\%$ for unsigned spectral clustering. By contrast, the random control's variance share is $0.0600$ before the projection and $0.0599$ after. Both values are at the degrees-of-freedom floor $(\K-1)/(\N-1) = 0.0597$, the variance share that $\K$ random groups remove in expectation from any cross-section.\footnote{This floor is computed on the universe used here. On the traded universe of \secref{sec:mechanism}, the same formula gives $0.0588$, the $5.88\%$ reported there.} The $\K=1$ control's variance share is zero by
 construction.
 
-Matching the $k$-means partition's share of the day's cross-section takes about $17$ principal components on the $79\%$ of days when $30$ suffice, and on the other $21\%$ even $30$ are not enough (\figref{fig:match_cost}). That count is specific to $k$-means: the other 11 are matched by $7$ to $11$ components, and $30$ fall short on $0.2\%$ to $3.0\%$ of days. Block-bootstrap standard errors on every mean in this subsection are $0.001$ to $0.005$ and are omitted from the figures.
+We also count the leading principal components needed to match a partition's variance share, up to a maximum of $30$, the value of $\K$ (\figref{fig:match_cost}). For the $k$-means-on-returns partition, $30$ principal components suffice on $79\%$ of days. On those days, about $17$ leading principal components are needed to match its variance share. On the other $21\%$ of days, even $30$ are not enough. For the other 11 partitions, the count is $7$ to $11$. For these partitions, $30$ principal components fall short on $0.2\%$ to $3.0\%$ of days. The block-bootstrap standard errors of every mean in this subsection are $0.001$ to $0.005$, so we omit them from the figures.
 
 The Fama--French factors absorb even less than the principal
-components: after the full six-factor set the 12 clusterizers keep
-$50\%$ to $68\%$ of their unconditional shares
-(\figref{fig:lens_curve}b). We rebuild the same exercise with the stocks'
-trailing loadings on nested Fama--French sets in place of principal
-components (CAPM, then three, five, and six factors). Every real partition's share declines gently, and none comes close to
-the floor. For the $k$-means partition the sequence is
-$0.246$, $0.206$, $0.185$, $0.178$. Against the principal-component sequence, the whole six-factor
+components. We repeat the measurement with the stocks'
+loadings on nested Fama--French sets, estimated over the same loading window, in place of principal
+components (CAPM, then three, five, and six factors). After the full six-factor set is projected out, the 12 clusterizers keep
+$50\%$ to $68\%$ of their variance shares before the projection
+(\figref{fig:lens_curve}b). Every real partition's variance share declines gently and stays well above
+the degrees-of-freedom floor. For example, the variance share of the $k$-means-on-returns partition falls from $0.246$ after the CAPM projection to $0.206$ after three factors, $0.185$ after five factors, and $0.178$ after six factors. For $k$-means on returns, the whole six-factor
 set removes
-about as much as three statistical components and less than five, and
-that ordering holds for every one of the 12 rather than for
-$k$-means alone. The random control keeps $99.9\%$ or more of its share under every one of the seven projections. Its share is only the degrees-of-freedom floor, which no projection can remove, so full retention is the expected result. The $\K=1$ control is again zero.
+about as much as three principal components and less than five. This
+ordering holds for all 12 clusterizers. The random control keeps $99.9\%$ or more of its variance share under each of the seven projections. Its variance share equals the floor, which no projection can remove, so full retention is the expected result.
 
-Loadings conditioned on characteristics absorb the least: removing the span of the four
-characteristics available on this panel (size, momentum, short-term
-reversal, and realized volatility) leaves every real partition with
-$77\%$ to $85\%$ of its share, more than survives three statistical
-components. Size is the log of market capitalization at the close of day $t$, momentum the return from day $t-252$ to day $t-21$, short-term reversal the return over the $21$ days ending on day $t$, and realized volatility the standard deviation of raw returns over the $60$ days ending on day $t$. Each is standardized across the day's cross-section, and a missing value is set to zero after standardization. Unlike the principal components, which are estimated strictly before the day, size, reversal, and volatility are measured through day $t$ itself. The same-day information favors the span, not the partition, so the retention reported here is, if anything, understated. The span bounds what any factor model with
-characteristic-linear loadings could absorb, the instrumented principal components (IPCA) family included \citep{kelly2019characteristics}, whatever its coefficients. The four characteristics explain $0.13$ of the day's cross-sectional residual variance on their own, and the random control again stays at its floor. Accounting characteristics are not available on this panel, so
-the bound is for these instruments, not for every instrument set. Under every projection, every real partition keeps a positive excess over its own floor; under the principal components, how much it keeps depends on the number projected out and on the floor (\appref{app:lensrobust}).
+Loadings conditioned on characteristics absorb the least. We use the four
+characteristics available on this panel: size, momentum, short-term
+reversal, and realized volatility. Size is the log of market capitalization at the close of day $t$. Momentum is the return from day $t-252$ to day $t-21$, and short-term reversal is the return over the $21$ days ending on day $t$. Realized volatility is the standard deviation of raw returns over the $60$ days ending on day $t$. We standardize each characteristic across the day's cross-section and set a missing value to zero after standardization. After the linear span of these characteristics is projected out, every real partition keeps
+$77\%$ to $85\%$ of its variance share, more than it keeps after three principal
+components are projected out. The principal components are estimated strictly before the day, but size, reversal, and volatility are measured through day $t$ itself and so contain that day's own return. This same-day information allows the span of the characteristics to absorb more of the day's cross-section than predetermined characteristics could, so the retention reported here is, if anything, understated. The span of the four characteristics bounds what any factor model with
+loadings linear in these characteristics could absorb, for any choice of coefficients. The bound covers the instrumented principal components (IPCA) family \citep{kelly2019characteristics}. On their own, the four characteristics explain $0.13$ of the cross-sectional variance of the day's market residuals. The random control's variance share again stays at its degrees-of-freedom floor. Accounting characteristics are not available on this panel, so
+the bound applies only to these four characteristics.
+
+Under every projection, every real partition keeps a variance share above its own floor. Net of its own floor, the retention at five principal components ranges from $28\%$ to $49\%$ across the 12 clusterizers (\appref{app:lensrobust}).
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\linewidth]{fig_lens_curve}
-\caption{Partition share after projecting out principal components and after
-projecting out Fama--French loadings. This figure plots the share of the day's
-cross-sectional residual variance each partition explains once a set of common
-factors is projected out, over the $6{,}913$-day sample. The two panels share a
+\caption{Variance share retained after projecting out principal components and after
+projecting out Fama--French loadings. This figure plots each partition's retention over the $6{,}913$-day sample, the ratio of its
+variance share after a set of common factors is projected out to its
+variance share before. The two panels share a
 vertical axis, so the two projections can be compared directly.
-(a) The leading principal components, projected out one, three, and five at a
-time. (b) The stocks' trailing loadings on nested Fama--French sets, estimated
-on the same trailing $252$ days as the principal components and on the aligned
-calendar (\appref{app:calendar}); the two dotted horizontals mark where
-$k$-means sits in panel (a) at three and at five components. In both panels
-$k$-means on returns is black and the other 11 clusterizers gray; the random
-control is the dashed red line, which sits on the floor $(\K-1)/(\N-1)$ and
-retains $99.9\%$ or more of its share at every projection, and the $\K=1$
-control is zero by construction.}
+(a) The leading principal components, with the first one, the first three, and the first five projected out. (b) The stocks' loadings on nested Fama--French sets, estimated
+over the same $252$-day loading window as the principal components and on the aligned
+calendar (\appref{app:calendar}). In panel (b), two dotted horizontal lines mark the retention of
+$k$-means in panel (a) at three and at five principal components. In both panels,
+$k$-means on returns is black and the other 11 clusterizers are gray. The dashed
+red line is the random control, whose variance share is at the degrees-of-freedom floor $(\K-1)/(\N-1)$ and whose
+retention is $99.9\%$ or more at every projection, because no projection can remove the floor. The $\K=1$
+control's variance share is zero by construction.}
 \label{fig:lens_curve}
 \end{figure}
 
@@ -99,54 +91,56 @@ control is zero by construction.}
 \centering
 \includegraphics[width=.72\linewidth]{fig_match_cost}
 \caption{Principal components needed to match a partition. This figure plots,
-for each clusterizer, the mean number of leading principal components that
-explain as much of the day's cross-section as its partition does, over the
-$6{,}913$-day sample. The search stops at $30$ components: the mean is taken
+for each clusterizer, the mean number of leading principal components needed
+to match its partition's variance share, over the
+$6{,}913$-day sample. The search stops at $30$ principal components. The mean is taken
 over the days on which $30$ suffice, and the percentage beside each bar is the
-share of days on which they do not. $k$-means on returns is black and the other
-11 clusterizers gray; the dashed red line is the random control.}
+share of days on which they do not. The bar for $k$-means on returns is black, and the bars for the other
+11 clusterizers are gray. The dashed red line marks the random control.}
 \label{fig:match_cost}
 \end{figure}
 
 
-\subsection{Book Spanning Tests}
+\subsection{Portfolio Spanning Tests}
 \label{sec:spanning}
 
-The time-series part of the factor test asks whether the standard factors span the books' returns, that is, whether each book's alpha against those factors is zero \citep{barillas2017alpha}. \tabref{tab:spanning} regresses every arm's payoff on the Fama--French five factors \citep{fama2015five} plus momentum \citep{carhart1997persistence}, at both trading components, with each component's payoffs matched to the factor returns of the days on which they are realized (\appref{app:calendar}). No book is spanned. Every alpha is positive, with $t$ between $4.1$ and $10.7$, and the factors explain little of any of these series ($R^2$ at most $0.21$ for the 12 clusterizers). The alphas of \secref{sec:hedge} are therefore not compensation for exposure to these factors.
+In the time series, we test whether the standard factors span the portfolios' returns, that is, whether each portfolio's alpha against those factors is zero \citep{barillas2017alpha}. In both trading components, we regress every portfolio's payoff on the Fama--French five factors \citep{fama2015five} plus momentum \citep{carhart1997persistence} (\tabref{tab:spanning}). We find that no portfolio is spanned. Every alpha is positive, with $t$-statistics between $4.1$ and $10.7$. The factors explain little of any of these payoffs, with an $R^2$ of at most $0.21$ for the 12 clusterizers. The alphas of \secref{sec:hedge} are therefore not compensation for exposure to these factors.
 
-These rejections are not artifacts of the finite-sample size of the $t$-tests. A Monte Carlo calibrated to each book's own tails and dependence puts their empirical size at $6.6\%$ at nominal $5\%$, and the critical value corrected for the worst-behaved book, $2.2$ in $t$ units, is far below the smallest $t$ of $4.1$ (\appref{app:size}).
+These rejections are not artifacts of the finite-sample size of the $t$-tests. In a Monte Carlo calibrated to each portfolio's own tails and serial dependence, the empirical size of these tests is $6.6\%$ at a nominal $5\%$ level. Even for the worst-behaved portfolio, the corrected critical value is $2.2$ in $t$ units, which is well below the smallest $t$-statistic of $4.1$ (\appref{app:size}).
 
-The rule-based component is itself a five-day reversal, so the natural factor to add is one that prices reversal. The short-term reversal factor of the French library reverses the prior 20 trading days rather than five, but it is the closest traded factor, and the lower block of \tabref{tab:spanning} adds it to FF5+MOM. At the rule-based component the factor absorbs about a quarter of the clusterizers' alpha and about two fifths of the controls' (\figref{fig:reversal}): the clusterizers' alphas, $8.05\%$ to $8.81\%$ under FF5+MOM, fall to $6.18\%$ to $7.00\%$, the $\K=1$ control's falls from $7.27\%$ to $4.22\%$, and the random control's from $7.43\%$ to $4.57\%$. The clusterizers' advantage over the controls therefore widens, from $+15.6\%$ and $+13.1\%$ to $+54.5\%$ and $+42.8\%$. Under the neural trading head every book loads on the factor at only $0.05$ to $0.07$; the alphas fall by about a tenth and the advantage barely moves. Every one of the 28 books remains unspanned. The reversal the factor prices is the market-wide part; demeaning within a real group removes that part from the signal and keeps the part that is relative to the group. This is the intra- and inter-industry decomposition of \citet{hameed2015industries} in spanning form, with a statistical partition in place of the industry and with the two controls that the industry studies lack. The head loads on the factor lightly whatever the partition, so it collects little of the reversal premium the controls earn under the fixed rule; that is why the rule-based advantage now exceeds the trained one, the reverse of the ordering in \secref{sec:hedge}.
+The fixed rule is a five-day reversal strategy, so the natural factor to add is a reversal factor. The short-term reversal factor of the French library is the closest traded factor, although it is formed on the return over the prior 20 trading days, against five days for the fixed rule. We add it to FF5+MOM in the lower block of \tabref{tab:spanning}. In the rule-based trading component, the reversal factor explains $20\%$ to $25\%$ of the clusterizers' alphas and $38\%$ to $42\%$ of the controls' alphas (\figref{fig:reversal}). For example, the $\K=1$ control's alpha falls from $3.63\%$ to $2.11\%$. Every clusterizer's alpha remains at $3.09\%$ or more (\figref{fig:reversal} shows every value, and \tabref{tab:spanning} reports the ranges). The clusterizers' alpha advantage over the $\K=1$ control therefore widens from $+15.6\%$ to $+54.5\%$. Over the random control, it widens from $+13.1\%$ to $+42.8\%$. However, in the trained trading component, every portfolio loads on the reversal factor at $0.05$ to $0.07$, so the trained alphas fall by $8\%$ to $13\%$. The alpha advantage barely changes. All 28 portfolios remain unspanned.
+
+The reversal factor prices the market-wide part of reversal, which demeaning within a real group removes from the signal while keeping the part that is relative to the group. This split is the intra- and inter-industry decomposition of \citet{hameed2015industries} in spanning form, with a statistical partition in place of the industry and with the two controls that the industry studies lack. All trained portfolios load lightly on the reversal factor, so they earn little of the reversal premium that the controls earn in the rule-based component. This difference in exposure to the reversal factor is why the rule-based alpha advantage now exceeds the trained alpha advantage. In \secref{sec:hedge}, the ordering was the reverse.
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\linewidth]{fig_reversal}
 \caption{Alpha before and after the short-term reversal factor. This figure
-plots, for each arm, its alpha on FF5+MOM (open circle) and its alpha once the
+plots, for each portfolio, its alpha on FF5+MOM (open circle) and its alpha once the
 short-term reversal factor is added (filled circle), on the $6{,}913$-day
 sample, from the regressions of \tabref{tab:spanning}. (a) The rule-based
-component; (b) the trained component. Within each panel the arms are ordered
-by their FF5+MOM alpha, the two controls are red, and the dotted vertical marks
-the lowest alpha with the reversal factor among the 12 clusterizers. The
-rule-based book has gross exposure $2$, the head's $1$, so the panels carry
-separate horizontal axes and only within-panel comparisons are meaningful.}
+component; (b) the trained component. Within each panel, the portfolios are ordered
+by their FF5+MOM alpha, and the two controls are red. The dotted vertical line marks
+the lowest alpha with the reversal factor among the 12 clusterizers. Both trading components have gross exposure one, so the two panels share a horizontal axis.}
 \label{fig:reversal}
 \end{figure}
 
-The leading principal components, which absorb about half of a partition's cross-sectional share (\secref{sec:lens}), absorb almost none of its alpha. Adding the five leading components as daily factors, estimated on the trailing $252$ days as in \secref{sec:lens}, moves every alpha in \tabref{tab:spanning} by at most $0.08$ points and every $R^2$ by at most $0.02$.\footnote{Each component's daily return is the payoff of the unit-gross book of residuals whose weights are the component's loading vector from the trailing window, sign-aligned from day to day. The five factors have annualized volatilities from $13.5\%$ down to $5.6\%$ and insignificant premia.}
+The leading principal components absorb $39\%$ to $56\%$ of a partition's variance share (\secref{sec:lens}), but they absorb almost none of its alpha. When we add the five leading principal components as daily factors, estimated over the same $252$-day loading window as in \secref{sec:lens}, every alpha in \tabref{tab:spanning} changes by at most $0.08$ percentage points, and every $R^2$ changes by at most $0.02$.\footnote{Each principal component's daily return is the return of a unit-gross portfolio of market residuals whose weights are that principal component's loading vector from the loading window, sign-aligned from day to day. The five principal-component factors have annualized volatilities from $13.5\%$ down to $5.6\%$, and their premia are insignificant.}
 
-The closest benchmark of all is the pipeline run without clustering. The $\K=1$ book of the same trading component shares the universe and the signal window, and differs from a clusterizer's book only in the grouping, so regressing one on the other asks directly what the grouping adds (\tabref{tab:k1span}). Every clusterizer keeps alpha against it, $4.48\%$ to $5.73\%$ a year at the rule-based component ($t$ from $6.9$ to $8.2$) and $2.39\%$ to $4.70\%$ under the head ($t$ from $5.8$ to $9.4$), with loadings of $0.37$ to $0.65$, and adding FF5+MOM changes these alphas little. The random control keeps almost none: its book loads on the $\K=1$ book at $0.93$ and $0.90$ with an $R^2$ of $0.97$ and $0.92$, and its alpha is $0.69\%$ ($t = 2.3$) at the rule-based component and $0.40\%$ ($t = 1.7$) under the head. The alpha each clusterizer keeps against the $\K=1$ book is $52\%$ to $68\%$ of its FF5+MOM alpha in \tabref{tab:spanning} at the rule-based component and $41\%$ to $68\%$ under the head; this alpha is relative value within the group, and a random grouping supplies almost none of it.
+The closest benchmark is the portfolio of the same pipeline run without clustering. The $\K=1$ configuration of the same trading component shares the universe and the signal window with a clusterizer's configuration and differs from it only in the partition. To measure directly how much alpha a real partition adds, we therefore regress each clusterizer's portfolio and the random control's portfolio on the $\K=1$ portfolio (\tabref{tab:k1span}). Every clusterizer keeps alpha against the $\K=1$ portfolio. These alphas are $2.24\%$ to $2.86\%$ a year in the rule-based component and $2.39\%$ to $4.70\%$ in the trained component. Each of these alphas has a $t$-statistic of at least $5.8$. The clusterizers' portfolios load on the $\K=1$ portfolio at $0.37$ to $0.65$. Adding FF5+MOM to these regressions changes the alphas little. Against the $\K=1$ portfolio, each clusterizer keeps $52\%$ to $68\%$ of its FF5+MOM alpha (\tabref{tab:spanning}) in the rule-based component and $41\%$ to $68\%$ in the trained component. This remaining alpha comes from relative value within the group.
+
+In contrast, the random control keeps little alpha. In the rule-based component, its portfolio loads on the $\K=1$ portfolio at $0.93$, with an $R^2$ of $0.97$. Its rule-based alpha is $0.34\%$ ($t = 2.3$). In the trained component, the random control's portfolio loads on the $\K=1$ portfolio at $0.90$, with an $R^2$ of $0.92$. Its trained alpha is $0.40\%$ ($t = 1.7$).
 
 
 
 
-Under FF5+MOM the factor loadings also separate the controls from the clusterizers: at the trained component the $\K=1$ control loads on the market at $0.105$ and the random control at $0.093$, against $0.051$ to $0.077$ for the 12 clusterizers. At the rule-based component, where the book
-is dollar-neutral by construction, the range is compressed ($R^2$
-$0.05$ to $0.07$ everywhere), and the market loadings sit between $0.05$ and $0.06$ for the clusterizers and at $0.07$ for both controls. This pattern is the volatility
+Under FF5+MOM, the factor loadings also distinguish the controls from the clusterizers. In the trained component, the market loading is $0.105$ for the $\K=1$ control's portfolio and $0.093$ for the random control's portfolio. By comparison, the 12 clusterizers' trained portfolios load on the market at $0.051$ to $0.077$. In the rule-based component, where each portfolio is dollar-neutral by construction, the factors explain little of any portfolio, with an $R^2$ of $0.05$ to $0.07$. The rule-based market loadings differ less than the trained ones, at $0.023$ to $0.029$ for the clusterizers, $0.036$ for the $\K=1$ control, and $0.035$ for the random control. This separation of the controls from the clusterizers is the volatility
 reduction of
-\secref{sec:hedge} in factor terms: a real partition leaves the trained book with less factor exposure than a missing or a random one.
+\secref{sec:hedge} expressed in terms of factor exposure. In the trained component, a real partition leaves the portfolio with less factor exposure than no partition or a random partition does.
 
-The clusterizers' advantage over the controls holds after 2009 as well as before. Split at January 2009 (\tabref{tab:era}), alphas fall everywhere in the later period, from $9\%$--$16\%$ to below $5\%$ a year, but the separation between clusterizers and controls remains on three measures. First, in both eras and at both trading components, the controls are more volatile than every clusterizer. Second, every alpha $t$ falls, but the ordering is unchanged: over $2009$--$2024$ the lowest clusterizer $t$ ($2.6$ at the trained component, $2.8$ at the rule-based component) exceeds the highest control $t$ ($2.5$ and $2.1$). Third, at the trained component the alpha advantage over the $\K=1$ control is larger in the later era, $+29.3\%$ over $2009$--$2024$ against $+20.2\%$ before, with all 12 clusterizers above that control in the earlier era and 11 of the 12 in the later, spectral clustering the exception. With the reversal factor added, the rule-based controls are no longer significant after 2009 ($t = 1.5$ and $1.7$) while every clusterizer at that component remains so ($t$ from $2.6$ to $3.6$); at the trained component the controls keep $t = 2.1$ and $2.2$, below every clusterizer ($2.3$ to $5.3$).
+The clusterizers' advantage over the controls holds after 2009 as well as before. When we split the sample at January 2009 (\tabref{tab:era}), alphas fall everywhere in the later era, from $6\%$--$12\%$ to below $4\%$ a year. The clusterizers nevertheless remain separated from the controls in portfolio volatility, in the ordering of the alpha $t$-statistics, and, in the trained component, in the alpha advantage over the $\K=1$ control. First, in both eras and in both trading components, the controls' portfolios are more volatile than every clusterizer's portfolio. Second, every alpha $t$-statistic falls, but the ordering is unchanged. Over $2009$--$2024$, the lowest clusterizer $t$-statistic in the trained component, $2.6$, narrowly exceeds the highest control $t$-statistic, $2.5$. In the rule-based component over the same years, the lowest clusterizer $t$-statistic, $2.8$, exceeds the highest control $t$-statistic, $2.1$. Third, in the trained component, the alpha advantage over the $\K=1$ control is larger in the later era, $+29.3\%$ over $2009$--$2024$ against $+20.2\%$ before. In the trained component, all 12 clusterizers earn more alpha than that control in the earlier era. In the later era, 11 of the 12 do so. The exception is unsigned spectral clustering.
+
+After 2009, the ordering of the $t$-statistics also holds when we add the reversal factor. Specifically, in the rule-based component, the controls' alphas are then no longer significant ($t = 1.5$ for the $\K=1$ control and $1.7$ for the random control). By contrast, every rule-based clusterizer's alpha remains significant ($t$ from $2.6$ to $3.6$). In the trained component, the controls keep their alphas in the post-2009 regressions with the reversal factor ($t = 2.1$ for the $\K=1$ control and $2.2$ for the random control). Every trained clusterizer's alpha has a higher $t$-statistic, from $2.3$ to $5.3$, although the lowest exceeds those of the controls by a small margin.
 
 \begin{table}[tb]
 \centering
@@ -164,43 +158,41 @@ The clusterizers' advantage over the controls holds after 2009 as well as before
 & $\alpha$ & $t_\alpha$ & $R^2$ & $\beta_{\mathrm{Rev}}$ \\
 \midrule
 \multicolumn{9}{@{}l}{\emph{FF5+MOM}}\\
-12 clusterizers & $8.05$--$8.81$ & $6.4$--$7.6$ & $0.05$--$0.07$ & --- & $5.89$--$7.02$ & $8.2$--$10.7$ & $0.14$--$0.21$ & --- \\
-$\K=1$ & $7.27$ & $4.1$ & $0.05$ & --- & $5.44$ & $6.8$ & $0.24$ & --- \\
-Random & $7.43$ & $4.4$ & $0.05$ & --- & $5.33$ & $7.1$ & $0.22$ & --- \\
+12 clusterizers & $4.03$--$4.40$ & $6.4$--$7.6$ & $0.05$--$0.07$ & --- & $5.89$--$7.02$ & $8.2$--$10.7$ & $0.14$--$0.21$ & --- \\
+$\K=1$ & $3.63$ & $4.1$ & $0.05$ & --- & $5.44$ & $6.8$ & $0.24$ & --- \\
+Random & $3.72$ & $4.4$ & $0.05$ & --- & $5.33$ & $7.1$ & $0.22$ & --- \\
 \addlinespace
 \multicolumn{9}{@{}l}{\emph{FF5+MOM+Reversal}}\\
-12 clusterizers & $6.18$--$7.00$ & $5.3$--$6.6$ & $0.27$--$0.31$ & $0.16$--$0.21$ & $5.24$--$6.38$ & $7.5$--$10.4$ & $0.21$--$0.30$ & $0.05$--$0.07$ \\
-$\K=1$ & $4.22$ & $2.5$ & $0.25$ & $0.30$ & $4.80$ & $6.1$ & $0.28$ & $0.06$ \\
-Random & $4.57$ & $2.8$ & $0.25$ & $0.28$ & $4.65$ & $6.3$ & $0.27$ & $0.07$ \\
+12 clusterizers & $3.09$--$3.50$ & $5.3$--$6.6$ & $0.27$--$0.31$ & $0.08$--$0.11$ & $5.24$--$6.38$ & $7.5$--$10.4$ & $0.21$--$0.30$ & $0.05$--$0.07$ \\
+$\K=1$ & $2.11$ & $2.5$ & $0.25$ & $0.15$ & $4.80$ & $6.1$ & $0.28$ & $0.06$ \\
+Random & $2.29$ & $2.8$ & $0.25$ & $0.14$ & $4.65$ & $6.3$ & $0.27$ & $0.07$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\small
-\item \emph{Notes.} This table reports spanning regressions of each arm's payoff on the six factors, and on the six factors plus a short-term reversal factor, at each trading component, for the 12 clusterizers and the two controls at the common 60-day window, on the $6{,}913$-day window of \secref{sec:panel} (July 1997 to December 2024). Alphas are in percent a year. FF5+MOM is the Fama--French five factors plus momentum. Reversal is the daily short-term reversal factor (ST\_Rev) of the Ken French data library (CRSP vintage 202606): the average return of the two low-prior-return portfolios minus the two high-prior-return portfolios from $2 \times 3$ independent sorts on size and prior return, with prior return measured over days $-20$ to $-1$ and the portfolios formed daily; $\beta_{\mathrm{Rev}}$ is its loading. Newey--West($21$) standard errors \citep{newey1987simple}; trained
-cells are on the
-seed-averaged payoff; each trading component is joined to the factor file on its
-own realization calendar (\appref{app:calendar}). The rule-based book
-has gross exposure $2$, the head's $1$; only within-component comparisons
-are meaningful.
+\item \emph{Notes.} This table reports spanning regressions of each portfolio's payoff on the six factors, and on the six factors plus a short-term reversal factor, in each trading component. The portfolios are those of the 12 clusterizers and the two controls at the common 60-day estimation window, on the $6{,}913$-day sample of \secref{sec:panel} (July 1997 to December 2024). Alphas are in percent a year. FF5+MOM is the Fama--French five factors plus momentum. Reversal is the daily short-term reversal factor (ST\_Rev) of the Ken French data library (CRSP vintage 202606): the average return of the two low-prior-return portfolios minus the two high-prior-return portfolios from $2 \times 3$ independent sorts on size and prior return, with prior return measured over days $-20$ to $-1$ and the portfolios formed daily. The loading on this factor is $\beta_{\mathrm{Rev}}$. Standard errors are Newey--West($21$) \citep{newey1987simple}. Trained
+cells are estimated on the
+seed-averaged payoff, and each trading component is joined to the factor file on its
+own realization calendar (\appref{app:calendar}). Both trading components have gross exposure one (\secref{sec:components}).
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
 \begin{table}[tb]
 \centering
-\caption{Spanning against the no-clustering book of the same trading component}
+\caption{Spanning against the $\K=1$ portfolio of the same trading component}
 \label{tab:k1span}
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
-& \multicolumn{4}{c}{On the $\K=1$ book} & \multicolumn{2}{c}{With FF5+MOM added} \\
+& \multicolumn{4}{c}{On the $\K=1$ portfolio} & \multicolumn{2}{c}{With FF5+MOM added} \\
 \cmidrule(lr){2-5}\cmidrule(lr){6-7}
 & $\alpha$ & $t_\alpha$ & $\beta$ & $R^2$ & $\alpha$ & $t_\alpha$ \\
 \midrule
 \multicolumn{7}{@{}l}{\emph{Rule-based component}}\\
-12 clusterizers & $4.48$--$5.73$ & $6.9$--$8.2$ & $0.37$--$0.59$ & $0.53$--$0.81$ & $4.37$--$5.67$ & $6.9$--$8.3$ \\
-Random & $0.69$ & $2.3$ & $0.93$ & $0.97$ & $0.64$ & $2.1$ \\
+12 clusterizers & $2.24$--$2.86$ & $6.9$--$8.2$ & $0.37$--$0.59$ & $0.53$--$0.81$ & $2.19$--$2.84$ & $6.9$--$8.3$ \\
+Random & $0.34$ & $2.3$ & $0.93$ & $0.97$ & $0.32$ & $2.1$ \\
 \addlinespace
 \multicolumn{7}{@{}l}{\emph{Trained component}}\\
 12 clusterizers & $2.39$--$4.70$ & $5.8$--$9.4$ & $0.42$--$0.65$ & $0.48$--$0.69$ & $2.46$--$4.77$ & $5.8$--$9.5$ \\
@@ -208,7 +200,7 @@ Random & $0.40$ & $1.7$ & $0.90$ & $0.92$ & $0.39$ & $1.7$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\small
-\item \emph{Notes.} This table reports regressions of each clusterizer's payoff, and of the random control's, on the $\K=1$ book of the same trading component, which shares the universe and the signal window and differs only in the grouping; $\beta$ is the loading on the $\K=1$ book, and alphas are in percent a year. The last two columns add FF5+MOM to the regressors. Sample, calendar, and conventions are those of \tabref{tab:spanning}, with Newey--West($21$) standard errors and trained cells on the seed-averaged payoff. The bands cover the 12 clusterizers.
+\item \emph{Notes.} This table reports regressions of the payoff of each clusterizer's portfolio and of the random control's portfolio on the $\K=1$ portfolio of the same trading component. The $\K=1$ configuration shares the universe and the signal window with the other configurations of that trading component and differs from them only in the partition. The coefficient $\beta$ is the loading on the $\K=1$ portfolio, and alphas are in percent a year. The last two columns add FF5+MOM to the regressors. Sample, calendar, and conventions are those of \tabref{tab:spanning}, with Newey--West($21$) standard errors and trained cells estimated on the seed-averaged payoff. The bands cover the 12 clusterizers.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -232,13 +224,13 @@ $\K=1$ & $9.41$ & $7.0$ & $4.4$ & $2.15$ & $2.3$ & $4.4$ \\
 Random & $9.29$ & $7.1$ & $4.2$ & $2.09$ & $2.5$ & $4.1$ \\
 \addlinespace
 \multicolumn{7}{@{}l}{\emph{Rule-based component}}\\
-12 clusterizers & $14.2$--$16.2$ & $6.4$--$7.4$ & $5.3$--$6.5$ & $3.4$--$4.4$ & $2.8$--$3.9$ & $4.4$--$5.9$ \\
-$\K=1$ & $12.89$ & $4.0$ & $10.4$ & $3.64$ & $1.9$ & $8.4$ \\
-Random & $13.03$ & $4.3$ & $9.8$ & $3.78$ & $2.1$ & $8.1$ \\
+12 clusterizers & $7.1$--$8.1$ & $6.4$--$7.4$ & $2.6$--$3.3$ & $1.7$--$2.2$ & $2.8$--$3.9$ & $2.2$--$3.0$ \\
+$\K=1$ & $6.45$ & $4.0$ & $5.2$ & $1.82$ & $1.9$ & $4.2$ \\
+Random & $6.52$ & $4.3$ & $4.9$ & $1.89$ & $2.1$ & $4.0$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\small
-\item \emph{Notes.} This table reports the spanning regressions of each arm's payoff on FF5+MOM, split at January $2009$, with the same series and calendars as the FF5+MOM block of \tabref{tab:spanning}, on the $6{,}913$-day window of \secref{sec:panel}; $\sigma$ is the era's realized annualized volatility of the same series, so the trained $\sigma$ is that of the seed-averaged payoff, the convention quoted in the notes to \tabref{tab:moments} rather than the per-seed levels in its cells. Only within-component comparisons are meaningful.
+\item \emph{Notes.} This table reports the spanning regressions of each portfolio's payoff on FF5+MOM, split at January $2009$, with the same series and calendars as the FF5+MOM block of \tabref{tab:spanning}, on the $6{,}913$-day sample of \secref{sec:panel}. Here, $\sigma$ is the era's realized annualized volatility of the same series. The trained $\sigma$ is therefore that of the seed-averaged payoff, the convention quoted in the notes to \tabref{tab:moments}. The cells of that table report levels computed per head seed. 
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -246,39 +238,36 @@ Random & $13.03$ & $4.3$ & $9.8$ & $3.78$ & $2.1$ & $8.1$ \\
 \subsection{Per-Stock Peer Regressions}
 \label{sec:peer}
 
-The second general construction is the per-stock peer set. We build two per-stock peer books on this panel: for every stock, we take its 20 most correlated names over the trailing $21$ days, regress its residual return on theirs (fit windows of $60$ and $252$ days give the two books), and pass the resulting per-stock residual to the same trading head. The
-peer sets overlap, are not shared, and involve no partition. Each book is a single head run at seed $42$, and peer selection itself is deterministic, so no dispersion is available for these two arms and we make no level comparison against the clusterizers.
+We now turn to per-stock peer sets, from which we build two per-stock peer-regression portfolios on this panel. For every stock, we take as its peers the 20 stocks most correlated with it over the trailing $21$-day peer-selection window. We regress the stock's market residual on the market residuals of its peers over a fit window of $60$ days for one portfolio and $252$ days for the other. We call the stock's market residual minus its fitted value from this regression the peer-regression residual. The same trading head takes this residual as input. Different stocks' peer sets can overlap. However, no group of stocks shares a common peer set, so the construction does not involve a partition. Each peer-regression portfolio comes from a single run of the trading head at head seed $42$. Peer selection is deterministic. No dispersion is therefore available for these two peer-regression portfolios, and we do not compare their levels with those of the clusterizers.
 
-In the cross-section, the peer construction absorbs much of what a
-partition explains. None of the factor projections above comes close.
-When the measurement of \secref{sec:lens} is rerun with the peer-fitted component removed from each stock first, retention falls to $25\%$ to $32\%$ of
-the unconditional shares for 10 of the 12 clusterizers, against $44\%$ to $61\%$ under five
-principal components; $k$-means retains $52\%$, inflated by its singletons (\appref{app:lensrobust}), and \textsc{gics} $17\%$. Adding the principal components
-\emph{after} the peer removal changes almost nothing (at most one
-point of retention for 10 of the 12 clusterizers, and at most five for
-the two exceptions), so the joint span
-of peers and factors is, for this purpose, the peer span. The random control remains at its floor through every stage, retaining $99.7\%$. 
+In the cross-section, the peer construction absorbs much of a partition's variance share, considerably more than any of the factor projections above.
+We repeat the measurement of \secref{sec:lens} after first removing the peer fit, the part of each stock's market residual fitted by its peers. For 10 of the 12 clusterizers, retention then falls to $25\%$ to $32\%$, against $44\%$ to $61\%$ across all clusterizers under five
+principal components. The two exceptions are the $k$-means-on-returns partition, which retains $52\%$, and \textsc{gics}, which retains $17\%$. The level for $k$-means on returns is inflated by its singletons (\appref{app:lensrobust}). Projecting out the principal components
+\emph{after} the peer removal changes almost nothing, with retention changing by at most one
+percentage point for 10 of the 12 clusterizers and by at most five for
+the two exceptions. For this measurement, the joint span
+of peers and factors is therefore the peer span. The random control's variance share remains at its degrees-of-freedom floor through every stage, with a retention of $99.7\%$.
 
-The payoffs separate the clustering and the peer-regression strategies even though the
-cross-section does not. \tabref{tab:peer} regresses every arm's payoff on the two peer books,
-on the six pre-specified factors, and on both together. Against the factors alone every arm keeps its alpha, as in \secref{sec:spanning}. Against the peer books the results divide. Both controls lose their alpha entirely, the $\K=1$ book to $-1.6\%$ a year ($t=-2.2$) and the random book to $-1.4\%$ ($t=-2.0$), so whatever this pipeline
-earns without a real partition, two per-stock peer regressions earn as
-well. Of the 12 clusterizers, four keep theirs: $0.8\%$ to $1.5\%$ a year, at $t$ between $2.1$ and $3.9$. The other eight fall between $-0.81\%$ and $0.74\%$ ($t$ from $-1.7$ to $1.8$); the weakest is spectral clustering, which is also the arm that gains nothing in $\K$ (\secref{sec:window}), has the highest volatility (\secref{sec:hedge}), and sits furthest below the equal-weight book (\secref{sec:gradient}). Adding the factors on top of the peer books raises every one of the 12 alphas, by $0.17$ to $0.47$ points; adding the reversal factor as well moves them by no more than $0.11$ points, since the peer books already absorb what it would. The factors raise the alphas and take common variation out of the residual, and both effects sharpen the $t$-statistics: eight of the 12 clear a $t$ of $1.96$ against the peer books and the factors together, against four on the peer books alone.
+The payoff regressions distinguish the clusterizers' portfolios from the peer-regression portfolios, even though the cross-sectional variance shares do not. We regress every trained portfolio's payoff on the two peer-regression portfolios,
+on FF5+MOM, and on both together (\tabref{tab:peer}). Against FF5+MOM alone, every portfolio keeps its alpha, as in \secref{sec:spanning}. However, against the peer-regression portfolios, the controls and the clusterizers differ. Both controls lose their alpha entirely, with an alpha of $-1.6\%$ a year ($t=-2.2$) for the $\K=1$ portfolio and $-1.4\%$ ($t=-2.0$) for the random control's portfolio. The two peer-regression portfolios therefore explain all of the alpha that this pipeline
+earns without a real partition. In contrast, four of the 12 clusterizers keep their alpha, $0.8\%$ to $1.5\%$ a year, with $t$ between $2.1$ and $3.9$. The alphas of the other eight range from $-0.81\%$ to $0.74\%$ ($t$ from $-1.7$ to $1.8$). The weakest is unsigned spectral clustering. Its Sharpe ratio is no higher at $50$ groups than at $10$ (\secref{sec:window}). Its portfolio also has the highest volatility (\secref{sec:hedge}) and is furthest below the equal-weight portfolio (\secref{sec:gradient}).
 
-The two controls show that this alpha comes from the grouping itself and not from the stages around it. The controls use the same residualization, the same signal window, and the same trading head, with a random partition or none. If those stages produced the alpha, the controls would keep alpha against the peer books as well. They keep none.
+Adding the factors to the peer-regression portfolios raises all 12 alphas, by $0.17$ to $0.47$ percentage points. The increase comes from the loadings on the peer-regression portfolios. With the factors in the regression, every clusterizer's portfolio loads less on both of them. Because the peer-regression portfolios earn positive mean returns, lower loadings on them leave more of each portfolio's mean return in the alpha. The small positive market loadings of the clusterizers' portfolios offset part of this increase. Adding the reversal factor as well changes the alphas by at most $0.11$ percentage points, because the peer-regression portfolios already absorb the part of the returns that the reversal factor would absorb. The factors raise the alphas and remove common variation from the regression residual. Both effects increase the $t$-statistics. Against the peer-regression portfolios and the factors together, eight of the 12 clusterizers have a $t$-statistic above $1.96$, against four on the peer-regression portfolios alone.
 
-Regressed the other way, on the equal weight of all 12 clusterizers, the peer books keep their alpha as well: $2.5\%$ and $2.3\%$ a year ($t = 5.5$ and $6.8$). The two constructions summarize much the same comovement, yet most clusterizer books earn alpha the peer books do not, and the peer books earn alpha the clusterizer books do not. Since the 12 clusterizer books differ little among themselves (\secref{sec:gradient}), the alpha that survives appears to attach to the class of peer set, shared or per-stock, rather than to the choice within a class. A clusterizer's closeness to the peer books is not significantly related to its Sharpe ratio at the $5\%$ level (\appref{app:peerdist}); the volatility of the books separates the clusterizers (\secref{sec:hedge}).
+The two controls show that this alpha comes from the partition and cannot be attributed to the other stages of the pipeline. The controls use the same market residuals, the same signal window, and the same trading head, with a random partition or no partition. If those stages produced the alpha, the controls would also keep alpha against the peer-regression portfolios, but they do not.
+
+Conversely, when we regress each peer-regression portfolio on the equal-weight portfolio of all 12 clusterizers, the alpha is $2.5\%$ a year ($t = 5.5$) for the $60$-day fit and $2.3\%$ ($t = 6.8$) for the $252$-day fit. Although partitions and per-stock peer regressions capture much the same comovement, neither explains all of the other's alpha. A clusterizer's closeness to the peer-regression portfolios is positively related to its Sharpe ratio. However, the relation falls just short of significance at the $5\%$ level (\appref{app:peerdist}).
 
 \begin{table}[tb]
 \centering
-\caption{Spanning against peer books, factors, and both}
+\caption{Spanning against peer-regression portfolios, factors, and both}
 \label{tab:peer}
 \begin{threeparttable}
 \small
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.9cm}cccccc@{}}
 \toprule
-& \multicolumn{2}{c}{On the peer books}
+& \multicolumn{2}{c}{On the peer-regression portfolios}
 & \multicolumn{2}{c}{On the six factors}
 & \multicolumn{2}{c}{On both} \\
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
@@ -288,15 +277,14 @@ Regressed the other way, on the equal weight of all 12 clusterizers, the peer bo
 $\K=1$ & $-1.63$ & $-2.2$ & $5.44$ & $6.8$ & $-0.82$ & $-1.2$ \\
 Random & $-1.42$ & $-2.0$ & $5.33$ & $7.1$ & $-0.74$ & $-1.1$ \\
 \addlinespace
-Peer book, $60$-day fit, on the clusterizers' equal weight & $2.52$ & $5.5$ & & & & \\
-Peer book, $252$-day fit, on the clusterizers' equal weight & $2.32$ & $6.8$ & & & & \\
+Peer-regression portfolio, $60$-day fit, on the clusterizers' equal-weight portfolio & $2.52$ & $5.5$ & & & & \\
+Peer-regression portfolio, $252$-day fit, on the clusterizers' equal-weight portfolio & $2.32$ & $6.8$ & & & & \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\footnotesize
-\item \emph{Notes.} This table reports spanning regressions of each arm's payoff on the two peer books, on the six factors (the Fama--French five factors plus momentum), and on both, and of each peer book on the equal weight of the 12 clusterizers. Alphas are in percent a year. The six-factor columns repeat the trained-component regressions of the FF5+MOM block of \tabref{tab:spanning} for comparison. Clusterizer payoffs are seed-averaged over the five head seeds; the peer books are single runs at seed $42$. All series are panel-internal, so the regressions share
-one calendar; the factor file is joined at a one-day lag, as elsewhere
-in this section. Newey--West($21$) $t$-statistics.
-\item[a] All three ranges cover the 12 clusterizers. On the peer books four of the 12 keep a $t$ above $1.96$; on the peer books and the six factors together, eight do.
+\item \emph{Notes.} This table reports spanning regressions of each trained portfolio's payoff on the two peer-regression portfolios, on the six factors (the Fama--French five factors plus momentum), and on both. The table also reports the regression of each peer-regression portfolio on the equal-weight portfolio of the 12 clusterizers. In the last two rows, the first pair of columns reports the alpha and $t$-statistic of each peer-regression portfolio on that equal-weight portfolio. Alphas are in percent a year. The six-factor columns repeat the trained-component regressions of the FF5+MOM block of \tabref{tab:spanning} for comparison. Clusterizer payoffs are seed-averaged over the five head seeds, and the peer-regression portfolios come from single runs at head seed $42$. All series are panel-internal, so the regressions share
+a common calendar. The factor file is joined at a one-day lag, as for every trained series (\appref{app:calendar}). The $t$-statistics are computed with Newey--West($21$) standard errors.
+\item[a] All three ranges cover the 12 clusterizers. On the peer-regression portfolios, four of the 12 keep a $t$ above $1.96$. On the peer-regression portfolios and the six factors together, eight do.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -386,19 +374,14 @@ in this section. Newey--West($21$) $t$-statistics.
 %%=====================================================================
 \subsection{Transaction Costs}
 \label{sec:costs}
-The last question is whether the books' returns survive trading costs.
-The books turn over about two fifths of their notional every day: $38.2\%$ to $46.9\%$ one-way across the 14, a spread of $23\%$ against a spread of $101\%$ in gross Sharpe ratio, both as the top relative to the bottom of the 14. Turnover is therefore much less dispersed across
-partitions than gross Sharpe ratios. Break-even sits at $2.7$ to $3.8$ basis points one-way, and at daily rebalancing no configuration is net positive at five.
+The last question is whether the portfolios remain profitable after trading costs.
+The 14 trained portfolios turn over $38.2\%$ to $46.9\%$ of their notional every day, one-way. Turnover is much less dispersed across
+partitions than gross Sharpe ratios. The highest turnover is $23\%$ above the lowest, whereas the highest gross Sharpe ratio is $101\%$ above the lowest. The break-even cost is $2.7$ to $3.8$ basis points one-way. At daily rebalancing, every portfolio has a negative net return at five basis points.
 
-At costs below break-even, the net Sharpe ranking follows the gross ranking; at costs above break-even, it follows turnover. At one and two basis points every one of the 12 clusterizers
-holds a higher net Sharpe ratio than either control, the two controls
-remain the two lowest of the 14 books, and the net ordering correlates with the gross ordering at $\rho = 0.98$ and $0.91$. At five basis points that correspondence largely dissolves. The rank correlation with gross falls to about $0.3$; \textsc{gics}, eleventh of the 12 on gross Sharpe ratio, is the least negative book; $k$-means on returns falls from first to a tie for seventh of the 14, level with spectral clustering to three decimals; and both controls move up among the clusterizers, $\K=1$ above four of the 12 and the random control above one. Turnover sorts
-the arms at that level, and turnover is not a measure of clustering
-quality. The arm that rises furthest, \textsc{gics}, is also the arm
-whose book depends least on its own labels: about a third of the names
-it trades on a given day are assigned by the nearest-correlation fill
-rather than by the sector table (\tabref{tab:methods}, note e), so its
-low turnover cannot be attributed to the taxonomy. Average linkage shows the same reordering without that qualification, turning over $39.7\%$ and finishing fourth at five basis points. The gross
-ranking is therefore not an ordering of economic value, and every
-comparison in \secref{sec:riskreturn} and \secref{sec:invariance} is a
-gross comparison and should be interpreted as one. \appref{app:costs} gives the cost model, the full table, the same measurement on the rule-based component, and the limitations of the exercise.
+At costs below break-even, the net Sharpe ranking follows the gross ranking. At five basis points, it follows turnover. Turnover is not a measure of clustering quality. At one and two basis points, the two controls
+remain the two lowest of the 14 portfolios, below each of the 12 clusterizers
+in net Sharpe ratio. The rank correlation between the net and the gross ordering is $\rho = 0.98$ at one basis point and $0.91$ at two.
+
+At five basis points, the net ranking largely stops following the gross ranking. The rank correlation with the gross ranking falls to about $0.3$. For example, \textsc{gics} ranks eleventh of the 12 on gross Sharpe ratio but is the least negative portfolio at five basis points. The portfolio of $k$-means on returns falls from first to a tie for seventh of the 14, level with unsigned spectral clustering to three decimals. Both controls move up among the clusterizers. The $\K=1$ control ranks above four of the 12 clusterizers. The random control ranks above one. The \textsc{gics} portfolio rises furthest. This could suggest that a taxonomy trades cheaply, because its labels rarely change. However, the \textsc{gics} portfolio is also the one that depends least on its own labels. On a given day, about $35\%$ of the stocks it trades are not covered by the sector table and are assigned to the group they correlate with most strongly (\tabref{tab:methods}, note e). As a result, the
+low turnover of \textsc{gics} cannot be attributed to the taxonomy. Average linkage, which does not use a taxonomy, shows the same reordering. Its portfolio turns over $39.7\%$ a day and finishes fourth at five basis points. The gross ranking therefore does not order the portfolios by their value after trading costs. Every
+comparison in \secsref{sec:riskreturn}{sec:invariance} compares gross performance, before trading costs. Although our rule-based results corroborate the no-clustering benchmark of \citet{brutti2026orthogonal}, our portfolios do not show the turnover reduction that they report. In \appref{app:costs}, we give the cost model, the full table, the same measurement on the rule-based component, the comparison with that study, and the limitations of the exercise.

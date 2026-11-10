@@ -6569,3 +6569,109 @@ setting is not in doubt.
 26 float labels and pages identical to N117. New string present in the render, old string absent; the paragraph read
 end to end as rendered. declare.sh: one line, no number-token delta. `make paper-sync` exits 0 now (Code Branch fixed
 the recipe). Nine gates PASS.
+
+### N119 (2026-09-02) — cover letter v7: a narrow replicability-exemption request added to Mihai's v6 (user ruling "好")
+**Background.** The live `Cover_Letter/cover_letter.tex` was Mihai's final version (v6, saved 02:29–02:31), in which he
+commented out both the v5 replicability paragraph and the funding/competing-interests paragraph, on the ground that
+both facts sit in the manuscript's Data availability and Funding sections and in the ScholarOne form fields. The user
+asked whether the exemption has to be requested at all.
+**Primary source (JFEC General Instructions / Replicability Policy, fetched 2026-09-02).** "For empirical,
+experimental, and numerical papers, authors will be required to upload source files and relevant data files for
+editorial replicability review **as a condition of acceptance**." "Authors unable to fully comply should **request an
+exemption from replicability review in the cover letter at the point of submission**." "The journal reserves the right
+to reject papers lacking underlying data without compelling justification." Applies to submissions from 13 March 2023.
+**Why the request is owed.** The package can supply the code, the audit scripts, the checksums identifying the panel,
+and every derived series (Zenodo, CC BY 4.0), but not the two licensed inputs — the CRSP daily panel and the GICS
+sector memberships, both licensed through WRDS. That is partial non-compliance, which is the policy's trigger.
+**Edit.** One paragraph added before the reviewers paragraph, the user's own approved wording: "The daily CRSP data and
+the GICS memberships are licensed through WRDS and cannot be redistributed, so we request an exemption from
+replicability review for those two inputs. The code, the checksums that identify the panel, and the derived series
+behind every table and figure are public, as the manuscript's data availability statement records." No URLs and no
+funding text, so nothing Mihai cut is reintroduced. Mihai's version as he returned it is preserved as
+`cover_letter_v6_mihai_2026-09-02.tex`; the file's header note now records the change.
+**Rejected alternative.** Reinstating the v5 block, which read "We request **no** exemption from the Journal's
+replicability review" while admitting CRSP cannot be redistributed: it asserts a full compliance the licensed inputs
+cannot deliver at acceptance, and it spelled "MIT licence" against the manuscript's American "license".
+**Verification.** Rebuilt the calibrated newlfm proxy (`scratchpad/cl_check/cal_v7.tex`, the article/charter proxy with
+`\parskip 7.7pt` on a 1400 pt page, +4.6 pt offset, the one that reproduced v4's 34 Overleaf lines): 0 errors, 0
+overfull; body ends at y = 557 against the one-page limit 622, 65 pt of slack (v5 had 18 pt, Mihai's v6 has 127 pt),
+and the closing block ends at y = 644 against the text-area bottom 709. Still one page. Overleaf must recompile —
+newlfm.cls is not installed here.
+
+### N120 (2026-11-05) — A.2 "a change of 0.0 names per day" is wrong (about 0.1); §3.7's mean-return verdict overstated; the 2010–16 era ratio is a knife edge
+
+**Found in** the SSRNv2 language revision's final check (user: "你仔细深入检查一下看看咋搞" … "认真完整严谨地最后复核一遍").
+Both are in the SUBMITTED JFEC text (JFEC_OUP) as well.
+
+**A.2 (app:singleton).** The text gives 0.13 SPONGE repairs per day, then says imposing the deletion policy would change
+"0.0 names per day". 0.0 is the singleton count of the already-REPAIRED cache. Recounted independently (numpy only) from
+`replication_repo/data/derived/partitions/sponge_w60.pkl` on the 6,913-day calendar: 29.865037 labels/day, i.e.
+0.134963 emptied labels/day = 933 repairs (762 days with at least one), 0 singletons. k-means on returns, average linkage
+and unsigned spectral keep 30 labels on every day despite 9.81 / 0.55 / 0.013 singletons/day, so a missing SPONGE label
+is a repair (min_size=2: one member per repaired group). Deleting instead removes about 0.13 names/day (the trained books
+trade 499.5–500 of 500) → "about 0.1". The 2026-08-17 decision above ("would alter 0.00 names/day") rests on the same
+conflation; the decision itself (disclose, do not change) stands, since the change is still negligible.
+**SSRNv2 corrected** (user "好"). `JFEC_OUP/sections/A_supplementary.tex:151` still says 0.0 → fix at R&R.
+
+**§3.7 (sec:resolution).** Five-seed SET19 mean ratios 2.21 / 1.49 / 0.98 / 0.63 (blind recompute from the daily logs
+equals `era_ratios_v3_cal6913.csv` to four decimals). "The two moments fall on opposite sides of what the design can
+resolve" (JFEC) and "can resolve differences in volatility but not differences in mean return" (SSRNv2 before) overstate:
+the first two periods are above one in every head-seed subset (1997–2001 1.90–2.32; 2002–09 1.37–1.55).
+**Knife edge:** 2010–16 is 0.98 at five seeds but at or above one in 2/5 four-seed and 7/10 three-seed subsets
+(0.87–1.08). Never draw a line at 2010 from this statistic; the clause already flipped once (N84: three-seed 1.010).
+The volatility ratio is at least 6.5 × the mean ratio in every period and subset. **SSRNv2:** topic sentence → "Relative
+to their measurement error, differences in volatility are much larger than differences in mean return."; number
+sentences restored to the submitted range form (user "A" / "B" / "都做"). `JFEC_OUP/sections/03_design.tex:746` is
+unchanged → R&R. verify_printed.py's N84 check (below one in the last two periods, 0.98 / 0.63) still matches.
+
+**Also:** the provenance comment above §3.7 carried the v2 table (6,941 days, 1.9/1.6/1.2/0.7); in SSRNv2 a v3 note now
+precedes it. Record and scripts: `SSRNv2/_revision/final_check_2026-11-05/`.
+
+### N121 (2026-11-05) — SSRNv2 fluency round: five claim-level adjustments that the submitted JFEC text still lacks
+
+**Context.** Two cold readers (SSRNv2/_revision/coldread_*_2026-11-05/) led to a fluency round in SSRNv2 (user "都改"). Most
+edits are language. Five change what a claim says. Mirror them in `JFEC_OUP/` at R&R:
+1. **§6.2 and §1: "the random control keeps almost no alpha" against the K = 1 book.** Its rule-based alpha there is 0.69%
+   with t = 2.3. SSRNv2 now says "little".
+2. **§6.2: the post-2009 orderings rest on margins of 0.1.** Trained: lowest clusterizer t 2.6 against highest control 2.5.
+   With the reversal factor: 2.3 against 2.2. SSRNv2 adds "narrowly". These are knife-edge ordinals in the N86 sense, not
+   yet tested against seed noise.
+3. **§6.3: why adding FF5+MOM to the peer books raises every clusterizer alpha by 0.17–0.47 points.** Decomposed with
+   `SSRNv2/_revision/fluency_2026-11-05/peer_alpha_decomp.py`, a numpy mirror of `analysis/peer_spanning_v3.py` that first
+   reproduces all 24 shipped alphas to 1.5e-10. Every clusterizer's loadings on both peer books fall when the factors
+   enter. The peer books earn 6.31%/7.65% a year, so the fall adds +0.33 to +0.80 points, and the positive market
+   loadings (0.014–0.035; MktRF mean 8.92% a year) take back 0.13 to 0.31. SSRNv2 states the mechanism without the numbers.
+4. **A.1 / Table 1 note d pointed at each other without saying how Sharpe (EW) differs from Sharpe beyond the weighting.**
+   From the executed code (`tier2/work/fv2a/work.py` → `refine_fv2a`; `tier2/work/sharpe_fixed/work.py` →
+   `refine_fv2a_fixed`), Sharpe (EW) trains on unnormalized bets and soft-assignment group means, and Sharpe on L1-normalized
+   bets and hard-assignment means (straight-through). SSRNv2 A.1 now says so.
+5. **§6.1 gave only the gross retention (44%–61% at five PCs).** The summary's hedge pointed to A.10. SSRNv2 now prints the
+   net-of-own-floor 28%–49% from A.10.
+Also new in SSRNv2 only: Table 13 listing every window (A.5), the §5.5 naming of the three pre-registered configurations,
+and A.5 retitled "Identifiers and the 19 Configurations".
+
+### N122 (2026-11-06) — SSRNv2 structure round: three more claim adjustments that the submitted JFEC text still lacks
+
+After a structure cold read, a devil's-advocate reader and a blind A/B judge (SSRNv2/_revision/fluency_2026-11-05/AB_RESULT.md;
+user "好 改吧"), SSRNv2 changed three original claims. Mirror them in `JFEC_OUP/` at R&R:
+1. **§6.4 "at costs above break-even, it follows turnover" → "at five basis points".** The cost table covers 1, 2 and 5 bp,
+   and break-even runs 2.66–3.79 bp. Spearman(turnover, net SR) is −0.78 at 5 bp, −0.15 at 10 bp and −0.10 at 14 bp in the
+   trained component (`turnover_v3_mean_cal6913.csv`; per seed −0.24 to −0.92 at 5 bp), and −0.90/−0.82/−0.82 in the
+   rule-based component (`naive_turnover_v3_cal6913.csv`). Open caveat: the controls rise in net Sharpe at 5 bp only
+   through their higher volatility (a negative ratio is less negative for a more volatile book); on net return they stay
+   last.
+2. **§6.3 and §7 "the alpha that survives appears to depend on the class of peer set … rather than on the choice within a
+   class" → removed.** Against peers plus FF5+MOM, clusterizer alphas run from −0.35% (t −0.73) to +1.68% (t 4.55), and 4
+   of 12 are insignificant. The per-stock class has two single-seed books whose positions correlate at only 0.49. The
+   post-submission ridge peer book leaves 0 of 12 clusterizers with significant alpha.
+3. **§7 "so a wrong partition costs more under a fitted model" → removed.** ¶5 keeps the qualified substance; the bare claim
+   fails in Sharpe terms (log-Sharpe gap to the random control 0.590 → 0.532, Table 3).
+Also noted: "eight of the 12 … t above 1.96" (§6.3) counts Sortino at t = 1.963 (LM p = 0.049); "most" survives a flip.
+
+### N123 (2026-11-10) — SSRNv2: rule-based levels reported at gross exposure one; verbal fractions replaced by percentages; replication repo re-pointed to SSRNv2
+**User rulings.** "那统一normalize到1" (rule-based levels at gross exposure one); "between a tenth and a quarter … 这种直接换成百分%"; "仔细认真检查draft的数字是否正确+改replication repo".
+**(a) Convention.** SSRNv2 eq. naivew now uses ±1/(2n±) (gross exposure one, the gross exposure of the trained books); a §3.4 footnote states that the implementation uses ±1/n± (gross 2). The stored rule books and EVERY result CSV stay at gross 2; `analysis/books.py: RULE_REPORT_SCALE = 0.5` is the one place the reporting scale lives. **When quoting a rule-based alpha, volatility, return or factor loading from a CSV, multiply the unrounded value by 0.5, then round — never halve a printed number.** Scale-free (unchanged): Sharpe, t, R², % changes, volatility shares, β on the K=1 book, break-even, turnover per unit of gross.
+Printed values changed (old gross-2 → new gross-1; source): tab:moments rule vol 4.77–6.18 / 9.30 / 8.83 → 2.38–3.09 / 4.65 / 4.41, alpha 8.05–8.81 / 7.27 / 7.43 → 4.03–4.40 / 3.63 / 3.72, note means 5.41 / 8.41 → 2.70 / 4.20 (naive_turnover ann_vol; strev_spanning alpha6); tab:spanning rule FF block as tab:moments; +Rev block alpha 6.18–7.00 / 4.22 / 4.57 → 3.09–3.50 / 2.11 / 2.29, β_Rev 0.16–0.21 / 0.30 / 0.28 → 0.08–0.11 / 0.15 / 0.14 (strev_spanning full); tab:k1span rule alpha 4.48–5.73 → 2.24–2.86, +FF6 4.37–5.67 → 2.19–2.84, random 0.69 / 0.64 → 0.34 / 0.32 (k1_regressor); tab:era rule 1997–2008 alpha 14.2–16.2 → 7.1–8.1, σ 5.3–6.5 → 2.6–3.3, 2009–24 alpha 3.4–4.4 → 1.7–2.2, σ 4.4–5.9 → 2.2–3.0, K=1 12.89 / 10.4 / 3.64 / 8.4 → 6.45 / 5.2 / 1.82 / 4.2, random 13.03 / 9.8 / 3.78 / 8.1 → 6.52 / 4.9 / 1.89 / 4.0 (rule_spanning_era); §6.2 era text "from 9%–16% to below 5%" → "from 6%–12% to below 4%" (all 28 portfolios); §6.2 rule market loadings "0.05 to 0.06 … 0.07" → 0.023–0.029, K=1 0.036, random 0.035 (pc_spanning ff6 b_MktRF); app:dose 5.19% → 8.84% becomes 2.60% → 4.42% (dose_v3_traded); figures fig_reversal (one shared x-axis now) and fig_dose redrawn. All "only comparisons within a trading component / panel", "divided by two", "per unit of gross exposure" caveats removed. tab:head_adds already printed the halved values and is unchanged.
+**(b) Verbal fractions → percentages (exact value; source).** §1 "about 40% … about a third less volatile" → 39%–42% / 33%–35% (tab:moments changes); §1 "loses at most about half" → 56% (lens_extras 1−min ret_5PC 0.562); §1 "reversal explains at most half" → 42% (strev max 1−α7/α6 = 0.419, rule K=1); §1 "two fifths to two thirds … less than a tenth" → 41%–68% / 8%–9% (k1_regressor α_on_k1/α6; random 9.3% rule, 7.5% trained); §3.7 fn "by about a third" → 36% (√(1+ρ̄) = 1.362, era_ratios SET19 ρ̄ 0.854); §4.2 "between a tenth and a quarter" → 11%–26% (10.8%–26.4%); §4.2 "about three quarters of the random-sign imbalance" → 71%–85% (server_package/e2e_plan/imbalance_seedable_v3.py, five seeds, logs/imbal_1_62461752.out: 0.707–0.847, GICS 1.225 excepted; NOT owned by the repo harness); §5.1 "half the gap" → 50% (0.4145/0.8251), "a fifth of the gap" → 20% (0.1682/0.8251); §5.2 "increases by three quarters" → 77% (0.3759/0.2128); §5.4 "about two thirds as similar" → 65% (ARI 0.193/0.296); tab:gradient note "about two thirds of the traded universe" → about 65% (1 − 0.348, ledger id 1846); §5.5 "more than two fifths of the gap" → 44% (0.3599/0.8251); §6.1/§6.2 "about half" absorbed → 39%–56%; §6.2 "about a quarter … about two fifths" → 20%–25% / 38%–42%, "fall by about a tenth" → 8%–13% (strev); §6.4 "about two fifths of their notional" → removed (38.2%–46.9% already printed), "about a third of the stocks" → about 35%; §7 "each absorb at most about half" → PCs at most 56%, FF at most 50% (lens_full_stages 1−min ret_FF6 0.500); A.10 caption "about two and a half times" → 2.4 (PCA loadings) and 2.6 (spectral) (loss/sd across head seeds of the 60-day configuration).
+**(c) Number check of the whole draft (kind: delta against the last audited render).** Numeric-token multiset of every SSRNv2 section against the audited JFEC snapshot (replication_repo/paper @ 7b3a7f2): 198 tokens gained, 84 lost; every one explained and recomputed (round-33/34 values above; explicit number–object mappings of N122-era language rounds re-checked against strev_spanning, split_v3, rule_sigw30, bet_corr_matrix, naive_turnover, turnover_v3_mean; "up to 0.36" holds over all five swept clusterizers incl. spectral −0.057; SHRCD {10,11,12} per data/build_panel.py; net retention 28.1%–49.2%; never-matched 0.19%–2.95%). Tokens not in the delta are unchanged from the audited render.
+**(d) Replication repo.** `paper/` re-snapshotted from ../SSRNv2 (plain article build; JFEC snapshot = commit 7b3a7f2; `make paper-sync` default now ../SSRNv2); standalone build text-identical to SSRNv2/main.pdf on 47 of 47 pages. `RULE_REPORT_SCALE` used by `audit/verify_printed.py` (old rule literals replaced, new checks for every value in (a) and the CSV-owned values in (b)), `audit/check_printed_5seed.py` (ruler 20%, window loss/sd 2.4/2.6), `audit/check_field_window_5seed.py` (50%, 44%), `audit/check_pseed_5ps.py` (77%), `analysis/print_tables.py` (rule rows at gross one; adds tab:moments, tab:k1span, tab:era; tab:peer now prints the 12 clusterizers — it still excluded spectral, a 3-seed leftover), `figures/scripts/fig_reversal_v3.py`, `fig_dose_v3.py` (+ book→portfolio labels in fig_alpha_vol / fig_select_vs_ew). Gates: verify_printed 128 PASS 0 FAIL; check_printed_5seed, check_pseed_5ps, check_field_window_5seed, check_note_maxw, check_pseed_flip_literals, check_seed_language, check_calendar_bypass 0 FAIL; check_figures_text 10/10 text-identical (fig_bet_corr unchanged, --all not run); fingerprint_3seed 31 vs 27 on the JFEC text — the 8 new matches are all seed-invariant gross-one rule values (coincidences), the 4 that vanished were old gross-2 values.

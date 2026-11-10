@@ -73,37 +73,38 @@
 \node[gun] at (\GX,-41)   {\textsc{correlation} $\mathbf{C}$};
 \node[gun] at (\GX,-128)  {\textsc{partition} $\mathbf{Z}_t$\\[1.0pt]
                            $K=30$, daily\\[3.0pt]
-                           \textcolor{figvary}{\bfseries the one stage}\\
+                           \textcolor{figvary}{\bfseries the only stage}\\
                            \textcolor{figvary}{\bfseries that varies}\\[1.0pt]
-                           \textcolor{figvary}{$12+2=14$ arms}};
-\node[gun] at (\GX,-268)  {\textsc{peer}\\ \textsc{demeaning} $s_{it}$};
-\node[gun] at (\GX,-338)  {\textsc{the book} $w_{it}$\\[1.0pt]
+                           \textcolor{figvary}{$12+2=14$}\\
+                           \textcolor{figvary}{configurations}};
+\node[gun] at (\GX,-268)  {\textsc{group}\\ \textsc{demeaning} $s_{it}$};
+\node[gun] at (\GX,-338)  {\textsc{the portfolio} $w_{it}$\\[1.0pt]
                            fixed; two variants\\[1.0pt]
-                           $\times\,2 = 28$ books};
+                           $\times\,2 = 28$ portfolios};
 \node[gun] at (\GX,-434)  {\textsc{payoff} $\pi_t$};
 \node[gun] at (\GX,-466)  {\textsc{moments} $\mu,\sigma$};
 % =====================================================================
 %  1. the panel
 % =====================================================================
 \node[tx] at (\CL,-1.5)
- {Daily US equities, top $500$ by market capitalization: raw returns $r_{it}$ on $N_t$ names.\\
-  {\color{figgray}$6{,}913$ out-of-sample days, 8 July 1997--27 December 2024, shared by every arm.}};
+ {Daily US equities, top $500$ by market capitalization: raw returns $r_{it}$ on $N_t$ stocks.\\
+  {\color{figgray}$6{,}913$ out-of-sample days, 8 July 1997--27 December 2024, shared by every configuration.}};
 % =====================================================================
 %  2. market residualization
 % =====================================================================
 \node[tx] at (\CL,-20.0)
  {$\tilde r_{it} = r_{it} - \hat\beta_{it}\,r_{mt}$,\quad
   $\hat\beta_{it}$ from the $60$ days $[t-59,t]$,\quad market $=$ SPY, a traded instrument.\\
-  {\color{figgray}\itshape Computed once, before any partition exists: a common input, identical for every arm.}};
+  {\color{figgray}\itshape Computed before any partition exists: a common input, identical for every configuration.}};
 % =====================================================================
 %  3. the correlation object
 % =====================================================================
 \node[tx,text width=228pt] at (\CL,-44)
- {$\mathbf{C}$: the sample correlation of the residual
+ {$\mathbf{C}$: the sample correlation of the market-residual
   panel $\widetilde{\mathbf{R}} = (\tilde r_{it})$, formed each trading day on the
-  same $60$-day window that fixes $\hat\beta_{it}$.};
+  $60$-day estimation window.};
 \node[tx,text width=228pt] at (\CL,-78)
- {{\color{figgray}\itshape Ten of the 14 read $\mathbf{C}$ or a function of it; one reads $\widetilde{\mathbf{R}}$ directly; three read nothing, though the sector table covers only part of the book and the rest is placed by correlation. Every arm receives the same $\mathbf{C}$.}};
+ {{\color{figgray}\itshape Ten of the 14 use $\mathbf{C}$ or a function of it. Of the other four, one uses $\widetilde{\mathbf{R}}$ directly and three use neither, although the sector table covers only part of the portfolio and the rest is placed by correlation. Every configuration receives the same $\mathbf{C}$.}};
 \node[anchor=north east] at (\IX,-42)
  {\includegraphics[width=\IW pt]{\figinsetdir corr_2014-07-07.pdf}};
 \node[ic] at (\IX,-115.5) {$\mathbf{C}$ on 7 Jul 2014};
@@ -112,7 +113,7 @@
 %     Rows are the fourteen arms; the second column is what each reads.
 % =====================================================================
 \node[tx,text=figgray,font=\figfs\itshape] at (164,-129) {clusterizer};
-\node[tx,text=figgray,font=\figfs\itshape] at (262,-129) {reads};
+\node[tx,text=figgray,font=\figfs\itshape] at (262,-129) {input};
 \draw[draw=figvary!60,line width=0.4pt] (\CL,-139) -- (\TR,-139);
 \draw[draw=figvary!45,line width=0.3pt]  (254,-140) -- (254,-262);
 \foreach \y in {-150.1,-167.3,-193.1,-201.7,-236.1}
@@ -139,7 +140,7 @@
   -225.2/{Sharpe (EW)}/{$\mathbf{C}$ and the payoff},
   -233.8/{Sharpe (graph)}/{$\mathbf{C}$ and the payoff},
   -242.4/{\textsc{gics}}/{nothing, where covered},
-  -251.0/{$K=1$ (all-market)}/{nothing},
+  -251.0/{$K=1$ (no clustering)}/{nothing},
   -259.6/{random partition}/{nothing}}
   {\node[rb] at (164,\y) {\r};
    \node[rb] at (262,\y) {\d};}
@@ -153,24 +154,24 @@
 \node[tx] at (\CL,-268)
  {$s_{it} = \tilde r_{it} - |C_{k(i)}|^{-1}\sum\nolimits_{j \in C_{k(i)}} \tilde r_{jt}$};
 \node[tx,text width=228pt] at (\CL,-285)
- {{\color{figgray}\itshape The market is removed above; the peer group is removed here.
-   A group of size one leaves nothing to remove, and those names carry no position that day.}};
+ {{\color{figgray}\itshape The market is removed above. The mean of the stock's group is removed here.
+   A group of size one leaves nothing to remove, and the portfolio does not trade those stocks that day.}};
 \node[anchor=north east] at (\IX,-267.6)
  {\includegraphics[width=\IW pt]{\figinsetdir demean.pdf}};
-\node[ic] at (\IX,-322.8) {peer means, 7 Jul 2014};
+\node[ic] at (\IX,-322.8) {group means, 7 Jul 2014};
 % =====================================================================
 %  6. STAGE TWO -- pinned, run in two variants
 % =====================================================================
 \node[tx,text width=228pt] at (\CL,-338)
  {\textbf{(a) Rule-based.} Five-day sum of $s_{it}$, sign flipped: long what has fallen
-  behind its peers, short what has run ahead, equal weight each side. Gross $2$, net $0$: dollar neutral by construction, with no fitted parameter.};
+  behind its peers, short what has run ahead, equal weight each side. Gross $1$, net $0$: dollar neutral by construction, with no fitted parameter.};
 \draw[draw=figrule,line width=0.25pt,dash pattern=on 1.2pt off 1.4pt]
       (\CL,-378) -- (333,-378);
 \node[tx,text width=228pt] at (\CL,-380)
  {\textbf{(b) Neural trading head.} Thirty-day path of running sums of $s_{it}$, one channel
   per stock; parallel kernel widths $2,4,8$ into a long-convolution head, no attention.
-  $\sum\nolimits_i |w_{it}| = 1$ fixes gross and leaves net free, so the book is not dollar neutral. Refitted
-  walk-forward every $125$ days; five seeds.};
+  $\sum\nolimits_i |w_{it}| = 1$ fixes gross and leaves net free, so the portfolio is not dollar neutral. Refitted
+  walk-forward every $125$ days; five head seeds.};
 \node[anchor=north east] at (\IX,-347.4)
  {\includegraphics[width=\IW pt]{\figinsetdir signal.pdf}};
 \node[ic] at (\IX,-409.1) {$s_{it}$ paths, 7 Jul 2014};
@@ -180,7 +181,7 @@
 \node[tx] at (\CL,-433)
  {$\pi_t = \sum\nolimits_i w_{it}\, r_{i,t+1}$};
 \node[tx] at (\CL,-449)
- {{\color{figgray}\itshape Residuals build the grouping and the signal; the payoff is earned on raw returns.}};
+ {{\color{figgray}\itshape Market residuals build the partition and the signal. The payoff is earned on raw returns.}};
 % =====================================================================
 %  8. the estimand -- the pair, measured separately
 % =====================================================================

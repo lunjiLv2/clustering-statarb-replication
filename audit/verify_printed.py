@@ -6,6 +6,7 @@ Every check prints PASS/FAIL; exit code = number of failures."""
 import sys, os, numpy as np, pandas as pd
 import pathlib, os; _ROOT = pathlib.Path(__file__).resolve().parents[1]; R = str(_ROOT); E = os.environ.get("CSA_RESULTS_ROOT", str(_ROOT / "analysis" / "results")).rstrip("/") + "/"  # repository layout (paths.py); CSA_RESULTS_ROOT selects a side directory
 sys.path.insert(0, f"{R}/analysis"); sys.path.insert(0, R)
+from analysis.books import RULE_REPORT_SCALE as RS   # 2026-11-10 (N123): rule-based LEVELS are printed at gross exposure one = stored value x RS
 fails = []
 def chk(name, ok, detail=""):
     print(f"  {'PASS' if ok else 'FAIL'}  {name}  {detail}")
@@ -85,7 +86,8 @@ chk("every clusterizer above both controls at both horizons: 12 of 12", (_above_
 
 print("== dose / naive ==")
 d = pd.read_csv(E+"dose_v3_traded_cal6913.csv"); q0 = d[d.q==0].iloc[0]; rr = d[d.draw==-1].iloc[0]
-chk("dose q0 19.1% / 5.19 / floor 5.88 / N 494.3", (round(q0.removal_share*100,1), round(q0.ann_vol*100,2), round(q0.dof_floor*100,2), round(q0.traded_N,1)) == (19.1, 5.19, 5.88, 494.3))
+chk("dose q0 19.1% / 2.60 (gross one) / floor 5.88 / N 494.3", (round(q0.removal_share*100,1), round(q0.ann_vol*100*RS,2), round(q0.dof_floor*100,2), round(q0.traded_N,1)) == (19.1, 2.60, 5.88, 494.3))
+_d1 = d[(d.q==1.0)&(d.draw>=0)]; chk("app:dose: q=1 volatility 4.42 (gross one, mean of the two draws)", round(_d1.ann_vol.mean()*100*RS,2) == 4.42)
 chk("random control 5.93%", round(rr.removal_share*100,2) == 5.93)
 nv = pd.read_csv(E+"naive_turnover_v3_cal6913.csv", index_col=0)
 chk("naive k1 0.83 / random 0.89", (round(nv.loc["k1","naive_SR"],2), round(nv.loc["random","naive_SR"],2)) == (0.83, 0.89))
@@ -126,10 +128,18 @@ if SF is not None: chk("SS shares 42/32/26", [round(100*SF.out[k]) for k in ("ss
 print("== rule-layer spanning / era (rule_spanning_era_v3) [B] ==")
 rs = pd.read_csv(E+"rule_spanning_era_v3_cal6913.csv"); A12 = ["kmeans_ret","pca_load","agglo_avg","agglo_complete","spectral_unsigned","gics","sponge_w60","fv2a_w60","fv3sm_w60","sharpe_fixed_w60","sortino_w60","sssnet_w60"]
 rf = rs[(rs.component=="rule")&(rs.era=="full")].set_index("arm"); hf = rs[(rs.component=="head")&(rs.era=="full")].set_index("arm")
-chk("tab:spanning rule alpha 8.05-8.81 / t 6.4-7.6 (LM columns withdrawn N78-8)", band(rf.loc[A12].alpha, 8.05, 8.81) and band(rf.loc[A12].t, 6.4, 7.6, 1))
+chk("tab:spanning rule alpha 4.03-4.40 at gross one / t 6.4-7.6 (LM columns withdrawn N78-8; N123)", band(RS*rf.loc[A12].alpha, 4.03, 4.40) and band(rf.loc[A12].t, 6.4, 7.6, 1))
+chk("tab:spanning / tab:moments rule K=1 3.63 (4.1), random 3.72 (4.4) at gross one", (round(RS*rf.loc["k1","alpha"],2), round(rf.loc["k1","t"],1), round(RS*rf.loc["random","alpha"],2), round(rf.loc["random","t"],1)) == (3.63, 4.1, 3.72, 4.4))
 chk("tab:moments advantages (was tab:signal) +15.6/+13.1 and +20.0/+22.5", [round(100*(rf.loc[A12].alpha.mean()/rf.loc[c,"alpha"]-1),1) for c in ("k1","random")]==[15.6,13.1] and [round(100*(hf.loc[A12].alpha.mean()/hf.loc[c,"alpha"]-1),1) for c in ("k1","random")]==[20.0,22.5])
 r1 = rs[(rs.component=="rule")&(rs.era=="1997-2008")].set_index("arm"); h2 = rs[(rs.component=="head")&(rs.era=="2009-2024")].set_index("arm"); h1 = rs[(rs.component=="head")&(rs.era=="1997-2008")].set_index("arm")
-chk("tab:era rule 1997-2008 alpha 14.2-16.2", band(r1.loc[A12].alpha, 14.2, 16.2, 1))
+chk("tab:era rule 1997-2008 alpha 7.1-8.1 at gross one (N123)", band(RS*r1.loc[A12].alpha, 7.1, 8.1, 1))
+r2 = rs[(rs.component=="rule")&(rs.era=="2009-2024")].set_index("arm")
+chk("tab:era rule rows at gross one: sigma 2.6-3.3 / 2.2-3.0, alpha 2009-24 1.7-2.2; K=1 6.45 5.2 1.82 4.2; random 6.52 4.9 1.89 4.0 (N123)",
+    band(RS*r1.loc[A12].vol, 2.6, 3.3, 1) and band(RS*r2.loc[A12].vol, 2.2, 3.0, 1) and band(RS*r2.loc[A12].alpha, 1.7, 2.2, 1)
+    and (round(RS*r1.loc["k1","alpha"],2), round(RS*r1.loc["k1","vol"],1), round(RS*r2.loc["k1","alpha"],2), round(RS*r2.loc["k1","vol"],1)) == (6.45, 5.2, 1.82, 4.2)
+    and (round(RS*r1.loc["random","alpha"],2), round(RS*r1.loc["random","vol"],1), round(RS*r2.loc["random","alpha"],2), round(RS*r2.loc["random","vol"],1)) == (6.52, 4.9, 1.89, 4.0))
+_all = pd.concat([RS*r1.alpha, h1.alpha]); _all2 = pd.concat([RS*r2.alpha, h2.alpha])
+chk("§6.2 era: alphas fall from 6%-12% (all 28, gross one) to below 4% (N123)", (round(_all.min()), round(_all.max())) == (6, 12) and _all2.max() < 4 and len(_all) == 28 and len(_all2) == 28)
 chk("era advantage over K=1: +29.3 (2009-24) vs +20.2 (pre)", round(100*(h2.loc[A12].alpha.mean()/h2.loc["k1","alpha"]-1),1)==29.3 and round(100*(h1.loc[A12].alpha.mean()/h1.loc["k1","alpha"]-1),1)==20.2)
 
 
@@ -217,28 +227,56 @@ print("== tab:spanning ST_Rev block / tab:k1span (strev_spanning_v3, k1_regresso
 _st = pd.read_csv(E+"strev_spanning_v3_cal6913.csv"); _stf = _st[_st.era=="full"]
 def _blk(comp):
     c = _stf[(_stf.component==comp)&~_stf.arm.isin(["k1","random"])]; k = _stf[(_stf.component==comp)&(_stf.arm=="k1")].iloc[0]; r = _stf[(_stf.component==comp)&(_stf.arm=="random")].iloc[0]
-    return (band(c.alpha7,*{"rule":(6.18,7.00),"head":(5.24,6.38)}[comp]) and band(c.t7,*{"rule":(5.3,6.6),"head":(7.5,10.4)}[comp],1) and band(c.beta_strev,*{"rule":(0.16,0.21),"head":(0.05,0.07)}[comp])
-            and (round(k.alpha7,2),round(k.t7,1),round(r.alpha7,2),round(r.t7,1)) == {"rule":(4.22,2.5,4.57,2.8),"head":(4.80,6.1,4.65,6.3)}[comp])
-chk("tab:spanning +ST_Rev block: rule 6.18-7.00 / 5.3-6.6 / 0.16-0.21, K=1 4.22 (2.5), random 4.57 (2.8)", _blk("rule"))
-chk("tab:spanning +ST_Rev block: head 5.24-6.38 / 7.5-10.4 / 0.05-0.07, K=1 4.80 (6.1), random 4.65 (6.3)", _blk("head"))
+    f = RS if comp == "rule" else 1.0   # alpha and the reversal loading are levels: printed at gross one for the rule-based component (N123)
+    return (band(f*c.alpha7,*{"rule":(3.09,3.50),"head":(5.24,6.38)}[comp]) and band(c.t7,*{"rule":(5.3,6.6),"head":(7.5,10.4)}[comp],1) and band(f*c.beta_strev,*{"rule":(0.08,0.11),"head":(0.05,0.07)}[comp])
+            and (round(f*k.alpha7,2),round(k.t7,1),round(f*r.alpha7,2),round(r.t7,1)) == {"rule":(2.11,2.5,2.29,2.8),"head":(4.80,6.1,4.65,6.3)}[comp]
+            and (round(f*k.beta_strev,2),round(f*r.beta_strev,2)) == {"rule":(0.15,0.14),"head":(0.06,0.07)}[comp])
+chk("tab:spanning +ST_Rev block: rule 3.09-3.50 / 5.3-6.6 / 0.08-0.11, K=1 2.11 (2.5) beta 0.15, random 2.29 (2.8) beta 0.14 (gross one, N123)", _blk("rule"))
+chk("tab:spanning +ST_Rev block: head 5.24-6.38 / 7.5-10.4 / 0.05-0.07, K=1 4.80 (6.1) beta 0.06, random 4.65 (6.3) beta 0.07", _blk("head"))
+_sh = _stf.assign(share=1-_stf.alpha7/_stf.alpha6); _shr = _sh[_sh.component=="rule"].set_index("arm"); _shh = _sh[_sh.component=="head"].set_index("arm")
+chk("§6.2/§1 reversal share of alpha: rule clusterizers 20-25%, controls 38-42%, trained 8-13%, at most 42% of any portfolio (N123)",
+    (round(100*_shr.drop(["k1","random"]).share.min()), round(100*_shr.drop(["k1","random"]).share.max())) == (20, 25)
+    and (round(100*_shr.loc["random","share"]), round(100*_shr.loc["k1","share"])) == (38, 42)
+    and (round(100*_shh.share.min()), round(100*_shh.share.max())) == (8, 13) and round(100*_sh.share.max()) == 42 and len(_sh) == 28)
+_rk1 = _stf[(_stf.component=="rule")&(_stf.arm=="k1")].iloc[0]; _crs = _stf[(_stf.component=="rule")&~_stf.arm.isin(["k1","random"])]
+chk("§6.2 text: K=1 alpha falls from 3.63% to 2.11%; every clusterizer stays at 3.09% or more (gross one, N123)", (round(RS*_rk1.alpha6,2), round(RS*_rk1.alpha7,2), round(RS*_crs.alpha7.min(),2)) == (3.63, 2.11, 3.09))
 _e2 = _st[(_st.era=="2009-2024")&(_st.component=="rule")]; chk("era 2009-24 seven-factor rule: 12 t 2.6-3.6, K=1 1.5, random 1.7", band(_e2[~_e2.arm.isin(["k1","random"])].t7,2.6,3.6,1) and round(_e2[_e2.arm=="k1"].t7.iloc[0],1)==1.5 and round(_e2[_e2.arm=="random"].t7.iloc[0],1)==1.7)
 _e3 = _st[(_st.era=="2009-2024")&(_st.component=="head")]; chk("era 2009-24 seven-factor trained: 12 t 2.3-5.3, K=1 2.1, random 2.2 (§6.2 sec:spanning sentence, N86)", band(_e3[~_e3.arm.isin(["k1","random"])].t7,2.3,5.3,1) and round(_e3[_e3.arm=="k1"].t7.iloc[0],1)==2.1 and round(_e3[_e3.arm=="random"].t7.iloc[0],1)==2.2)
 _k1 = pd.read_csv(E+"k1_regressor_v3_cal6913.csv")
-for _c,_v in (("rule",(4.48,5.73,6.9,8.2,0.69,2.3)),("head",(2.39,4.70,5.8,9.4,0.40,1.7))):
+for _c,_v in (("rule",(2.24,2.86,6.9,8.2,0.34,2.3)),("head",(2.39,4.70,5.8,9.4,0.40,1.7))):
+    _f = RS if _c == "rule" else 1.0   # N123: rule-based alphas printed at gross one; beta (book on book), t and R2 are scale-free
     _cc = _k1[(_k1.component==_c)&(_k1.arm!="random")]; _rr = _k1[(_k1.component==_c)&(_k1.arm=="random")].iloc[0]
-    chk(f"tab:k1span {_c}: alpha {_v[0]}-{_v[1]}, t {_v[2]}-{_v[3]}, random {_v[4]} ({_v[5]}); 12/12 significant", band(_cc.alpha_on_k1,_v[0],_v[1]) and band(_cc.t_on_k1,_v[2],_v[3],1) and (round(_rr.alpha_on_k1,2),round(_rr.t_on_k1,1))==(_v[4],_v[5]) and int((_cc.t_on_k1.abs()>1.96).sum())==12)
+    chk(f"tab:k1span {_c}: alpha {_v[0]}-{_v[1]}, t {_v[2]}-{_v[3]}, random {_v[4]} ({_v[5]}); 12/12 significant", band(_f*_cc.alpha_on_k1,_v[0],_v[1]) and band(_cc.t_on_k1,_v[2],_v[3],1) and (round(_f*_rr.alpha_on_k1,2),round(_rr.t_on_k1,1))==(_v[4],_v[5]) and int((_cc.t_on_k1.abs()>1.96).sum())==12 and len(_cc)==12)
 
-_k1c = {"rule":((0.37,0.59),(0.53,0.81),(4.37,5.67),(6.9,8.3),(0.93,0.97,0.64,2.1)), "head":((0.42,0.65),(0.48,0.69),(2.46,4.77),(5.8,9.5),(0.90,0.92,0.39,1.7))}
+_k1c = {"rule":((0.37,0.59),(0.53,0.81),(2.19,2.84),(6.9,8.3),(0.93,0.97,0.32,2.1)), "head":((0.42,0.65),(0.48,0.69),(2.46,4.77),(5.8,9.5),(0.90,0.92,0.39,1.7))}   # rule +FF6 alphas at gross one (N123)
 for _c,(_b,_r2,_a6,_t6,_rn) in _k1c.items():
     _cc = _k1[(_k1.component==_c)&(_k1.arm!="random")]; _rr = _k1[(_k1.component==_c)&(_k1.arm=="random")].iloc[0]
     chk(f"tab:k1span {_c}: beta {_b[0]}-{_b[1]}, R2 {_r2[0]}-{_r2[1]}, +FF6 alpha {_a6[0]}-{_a6[1]} t {_t6[0]}-{_t6[1]}; random beta {_rn[0]} R2 {_rn[1]} +FF6 {_rn[2]} ({_rn[3]})",
-        band(_cc.beta_k1,*_b) and band(_cc.R2_k1,*_r2) and band(_cc.alpha_on_k1_ff6,*_a6) and band(_cc.t_on_k1_ff6,*_t6,1) and (round(_rr.beta_k1,2),round(_rr.R2_k1,2),round(_rr.alpha_on_k1_ff6,2),round(_rr.t_on_k1_ff6,1))==_rn)
+        band(_cc.beta_k1,*_b) and band(_cc.R2_k1,*_r2) and band((RS if _c=="rule" else 1.0)*_cc.alpha_on_k1_ff6,*_a6) and band(_cc.t_on_k1_ff6,*_t6,1) and (round(_rr.beta_k1,2),round(_rr.R2_k1,2),round((RS if _c=="rule" else 1.0)*_rr.alpha_on_k1_ff6,2),round(_rr.t_on_k1_ff6,1))==_rn)
+_a6 = _stf.set_index(["component","arm"]).alpha6
+for _c,_lo,_hi,_rn in (("rule",52,68,9),("head",41,68,8)):
+    _kk = _k1[_k1.component==_c].set_index("arm"); _pc = 100*_kk.alpha_on_k1/_a6.loc[_c].reindex(_kk.index)
+    chk(f"§1/§6.2 alpha kept against the K=1 portfolio, {_c}: clusterizers {_lo}%-{_hi}%, random {_rn}% (N123: §1 prints 41%-68% and 8%-9%)", (round(_pc.drop("random").min()), round(_pc.drop("random").max()), round(_pc["random"])) == (_lo,_hi,_rn) and len(_pc)==13)
 
 # N111: §6.2:137 / §1:106 share of the FF5+MOM alpha (tab:spanning, strev_spanning alpha6, era full) that a clusterizer keeps against the K=1 book (tab:k1span alpha_on_k1); §1 words it "between two fifths and two thirds"
 for _c,_lo,_hi in (("rule",52,68),("head",41,68)):
     _sh = _k1[(_k1.component==_c)&(_k1.arm!="random")].merge(_stf[(_stf.component==_c)][["arm","alpha6"]], on="arm", how="inner"); assert len(_sh)==12, (_c, len(_sh))  # arm names agree across the two producers (sssnetpre in both)
     _pct = 100*_sh.alpha_on_k1/_sh.alpha6
-    chk(f"§6.2 alpha kept against the K=1 book, {_c}: {_lo}%-{_hi}% of the FF5+MOM alpha (12 arms; §1 'two fifths'-'two thirds')", (round(_pct.min()), round(_pct.max()))==(_lo,_hi))
+    chk(f"§6.2 alpha kept against the K=1 book, {_c}: {_lo}%-{_hi}% of the FF5+MOM alpha (12 arms; §1 prints the pooled 41%-68%, N123)", (round(_pct.min()), round(_pct.max()))==(_lo,_hi))
+
+print("== N123 (2026-11-10): rule-based levels at gross one, and the percentages that replaced verbal fractions ==")
+_nt = pd.read_csv(E+"naive_turnover_v3_cal6913.csv", index_col=0); _ntc = _nt.drop(["k1","random"]); assert len(_ntc) == 12
+chk("tab:moments rule volatility 2.38-3.09, K=1 4.65, random 4.41, mean 2.70 (gross one)", band(100*RS*_ntc.ann_vol, 2.38, 3.09) and (round(100*RS*_nt.loc["k1","ann_vol"],2), round(100*RS*_nt.loc["random","ann_vol"],2), round(100*RS*_ntc.ann_vol.mean(),2)) == (4.65, 4.41, 2.70))
+_rf6 = _stf[(_stf.component=="rule")&~_stf.arm.isin(["k1","random"])]
+chk("tab:moments rule alpha 4.03-4.40, mean 4.20 (gross one)", band(RS*_rf6.alpha6, 4.03, 4.40) and round(RS*_rf6.alpha6.mean(),2) == 4.20 and len(_rf6) == 12)
+_vr = [round(100*(1-_ntc.ann_vol.mean()/_nt.loc[c,"ann_vol"])) for c in ("k1","random")]
+chk("§1: rule-based portfolio 39%-42% less volatile than either control", sorted(_vr) == [39, 42])
+_le = pd.read_csv(E+"lens_extras_v3_cal6913.csv", index_col=0).drop(["k1","random"]); _lf = pd.read_csv(E+"lens_v3_full_stages_cal6913.csv", index_col=0).drop(["k1","random"])
+chk("§6.1/§6.2/§1/§7: five PCs absorb 39%-56% of a real partition's variance share; FF6 at most 50%", (round(100*(1-_le.ret_5PC.max())), round(100*(1-_le.ret_5PC.min()))) == (39, 56) and round(100*(1-_lf.ret_FF6.min())) == 50 and len(_le) == 12 and len(_lf) == 12)
+_er = pd.read_csv(E+"era_ratios_v3_cal6913.csv"); _rho = float(_er[_er.armset.astype(str).str.startswith("19")].rho_bar.iloc[0])
+chk("§3.7 footnote: using rho in place of rho^2 raises the volatility ratios by 36% (factor sqrt(1+rho))", round(100*(np.sqrt(1+_rho)-1)) == 36)
+_pcr = pd.read_csv(E+"pc_spanning_v3_cal6913.csv"); _pcr = _pcr[(_pcr.component=="rule")&(_pcr.design=="ff6")].set_index("arm")
+chk("§6.2 rule market loadings 0.023-0.029, K=1 0.036, random 0.035 (gross one)", band(RS*_pcr.drop(["k1","random"]).b_MktRF, 0.023, 0.029, 3) and (round(RS*_pcr.loc["k1","b_MktRF"],3), round(RS*_pcr.loc["random","b_MktRF"],3)) == (0.036, 0.035))
 
 print("== §6.2 principal-component factors (pc_spanning_v3 / pc_spanning_rule_shiftm1_v3) [N81] ==")
 _H = pd.read_csv(E+"pc_spanning_v3_cal6913.csv"); _Rm = pd.read_csv(E+"pc_spanning_rule_shiftm1_v3_cal6913.csv"); _Rm["component"] = "rule"

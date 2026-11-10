@@ -2,7 +2,12 @@
 
 Conventions (see the manuscript, §3.4 and §3.6):
 * A *rule-based* book is the deterministic five-day reversal rule applied to one partition; gross
-  exposure 2 (±1/n per side). One series per arm: ``rule_books/{arm}.csv`` with columns Date, DailyPnL.
+  exposure 2 (±1/n per side) as implemented and as stored. One series per arm: ``rule_books/{arm}.csv``
+  with columns Date, DailyPnL. Since 2026-11-10 the manuscript reports the rule-based portfolio at gross
+  exposure one (its eq. naivew uses ±1/(2n) per side), the gross exposure of the trained books: every
+  rule-based alpha, volatility, return and factor loading it prints is the stored value times
+  ``RULE_REPORT_SCALE``. Sharpe ratios, t-statistics, R^2, percentage changes and loadings on another
+  rule-based book are unaffected. The stored books and every result CSV stay at gross exposure 2.
 * A *trained* book is the neural trading head run on the same partition under one training seed;
   gross exposure 1. Five seeds per arm: ``head_logs/{arm}_seed{1,2,3,4,5}.csv``.
 * Every series is reindexed to the common calendar (6,913 days) and asserted complete.
@@ -21,6 +26,10 @@ import paths
 from analysis.common_calendar import CAL
 
 IDX = pd.DatetimeIndex(CAL)
+
+RULE_REPORT_SCALE = 0.5
+"""Multiply a stored rule-based level (alpha, volatility, return, factor loading) by this to get the value the
+manuscript prints: the books are stored at gross exposure 2, the paper reports them at gross exposure one."""
 
 
 def _read(path: Path) -> pd.Series:

@@ -226,58 +226,45 @@
 %% confirmations, then the noise ledger (N22) as the reason ranking was
 %% never going to resolve.
 
-This section compares the 12 clusterizers against the variation the design itself produces when a training run or a partition draw is repeated. Their partitions disagree, yet the books they produce move together, and their Sharpe ratios separate the top of the ranking from the bottom without separating neighbors in the middle. \secref{sec:field} measures how far the gap between two clusterizers moves when only the training run changes, and uses that dispersion as the benchmark for the ranking. \secref{sec:pseed} redraws the seed behind each partition and finds that the leader of the ranking depends on the draw. \secref{sec:formal} runs the formal tests. \secref{sec:gradient} follows the differences between clusterizers at three points along the pipeline, from the partition to the payoff, and draws the consequence for choosing among them. \secref{sec:window} turns to the two inputs that do move the results, the estimation window and the number of groups.
+In this section, we ask whether clusterizers based on different clustering rules recover different information. We compare the differences among the 12 clusterizers with the variation that the design produces across head-seed reruns and across partition draws. We find that although the partitions of the 12 clusterizers disagree, their portfolios move together. The Sharpe ratios of these portfolios distinguish the clusterizers at the top of the ranking from those at the bottom, but they do not distinguish neighboring clusterizers in the middle. First, we measure how much the gap between two clusterizers varies across head-seed reruns and use that dispersion as the benchmark for the ranking (\secref{sec:field}). Next, we redraw the partitions under new partition seeds and find that the first-ranked clusterizer depends on the partition draw (\secref{sec:pseed}). After the formal tests of \secref{sec:formal}, we compare the clusterizers at successive stages of the pipeline, from the partition through the positions to the payoff. We then discuss what the comparison implies for choosing among the clusterizers (\secref{sec:gradient}). Finally, we run the clusterizers with other estimation windows and other numbers of groups. Either setting can change the Sharpe ratio by an amount of the same order as the gap between the best and the worst clusterizer (\secref{sec:window}).
 
-\subsection{Variation across Training Runs}
+\subsection{Variation across Head-Seed Reruns}
 \label{sec:field}
 
-Most adjacent gaps in the Sharpe ranking are smaller than the run-to-run
-variation in the gap itself. A ranking compares two arms, so the dispersion a
-gap must be judged against is the dispersion of the difference between them,
-not of either arm's level. The two are not interchangeable here, and the reason
-can be measured. In the $12 \times 5$ matrix of per-seed Sharpe ratios, $27\%$
-of the variance is a shift shared by every arm: a seed that trains one
-configuration well trains all 12 well. The five seed means span $0.41$,
-half the $0.83$ between the best and the worst clusterizer. A shared shift
-moves every arm together and can reorder nothing. Only the interaction between
-arm and seed can, and it carries $8\%$ of the variance.
+Most adjacent gaps in the Sharpe ranking are smaller than the variation of the
+gap itself across head-seed reruns. A gap in the ranking compares two portfolios, so the
+dispersion that a gap must be judged against is the dispersion of the difference
+between them. This paired dispersion differs substantially from the dispersion
+of either portfolio's level because of a shift shared by all 12 portfolios. Because a shared shift moves all 12 portfolios together, it cannot change their ranking. This shift accounts for $27\%$ of the variance in the $12 \times 5$ matrix of per-seed Sharpe ratios. In other words, a head seed that trains one configuration well trains all 12 well. Across the five head seeds, the mean Sharpe ratio of the 12 portfolios has a range of $0.41$. This range is $50\%$ of the gap of $0.83$ between the best and the worst clusterizer. The interaction between configuration and head seed
+accounts for $8\%$ of the variance. Only this interaction can change the ranking.
 
-Pooled across the 11 adjacent pairs, the standard deviation of a gap across its
-five training runs is $0.103$, on 44 degrees of freedom, with a $95\%$ interval
-of $[0.085, 0.130]$. Measured on the levels instead, the dispersion is $0.168$
-on 48 degrees of freedom, a fifth of the span between the best and the worst clusterizer. We report
-both and judge the gaps against the paired figure, which is the error term a
-comparison across a common set of seeds calls for.\footnote{This is a different
-safeguard from the data-snooping corrections of \citet{white2000reality},
+We judge each gap against the paired dispersion. A comparison across a common set of head seeds calls for this error term.\footnote{Judging the gaps
+against the paired dispersion is a different safeguard from the data-snooping
+corrections of \citet{white2000reality},
 \citet{hansen2011mcs}, and \citet{bailey2014deflated}, which take each measured
 statistic as given and protect a comparison against selection across many
-tests. The dispersion measured here is the statistic's own run-to-run noise, so
-the two safeguards are complements.}
+tests. The dispersion measured here is the statistic's own noise across
+head-seed reruns, so the paired dispersion and the data-snooping corrections are complements.} We pool the standard deviation of a gap across its five head-seed runs over the 11 adjacent pairs. The pooled standard deviation is $0.103$, on 44 degrees of freedom. Its $95\%$ interval is $[0.085, 0.130]$. Measured on the levels instead, the dispersion is $0.168$, on 48 degrees of freedom. This dispersion is $20\%$ of the gap between the best and the worst clusterizer. We report both dispersions.
 
-The 12 mean-of-per-seed Sharpe ratios span $1.742$ to $2.567$, and nine of the
-11 adjacent gaps are smaller than $0.103$; the count is eight at the interval's
-lower end and nine at its upper. Both exceptions sit at the ends of the
-ranking. $k$-means on returns leads the second clusterizer by $0.139$, and
-\textsc{gics} leads spectral clustering at the bottom by $0.245$, the only gap
-that also exceeds the dispersion of the levels. The nine gaps between them run
-from $0.001$ to $0.090$.
+The 12 mean per-seed Sharpe ratios range from $1.742$ to $2.567$. Nine of the
+11 adjacent gaps are smaller than $0.103$. The count is eight against the lower
+end of the $95\%$ interval and nine against its upper end. Both exceptions are
+at the ends of the ranking. At the top, the gap between $k$-means on returns and the second clusterizer is $0.139$. At the bottom, the gap between \textsc{gics} and unsigned spectral clustering is $0.245$. This is the only gap that also exceeds the dispersion of the levels. The
+nine gaps between them range from $0.001$ to $0.090$.
 
-Even the separation at the top does not fix the leader. $k$-means on returns is
-first at four of the five seeds and complete linkage at the fifth. Only the
-bottom of the ranking is fixed: spectral clustering is last at every seed. The
-ordering is therefore not expected to replicate between neighbors
-(\figref{fig:field_ruler}).
+Although the gap at the top of the ranking exceeds the paired dispersion, the first-ranked clusterizer is not the same at every head seed. Complete linkage replaces $k$-means on returns in first place at one of the five head seeds. Only the bottom of the ranking is stable, with unsigned spectral clustering last at every head seed. We therefore do not expect the order of neighboring clusterizers to
+replicate (\figref{fig:field_ruler}).
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\linewidth]{fig_field_ruler}
 \caption{Per-seed Sharpe ratios against the dispersion of a gap. This figure plots
-the per-seed Sharpe ratios of the 14 arms at the trained component over the
-$6{,}913$-day window. Each row is one arm: circles are its five per-seed Sharpe ratios, the tick its mean. The bar at the top right is not an interval around a
-center; its \emph{length} is one pooled paired-difference standard deviation, $0.103$, the distance two adjacent means must exceed, and it is meant to be laid
-against the horizontal distance between two neighboring ticks. Nine of the 11
-gaps between adjacent clusterizer means fall inside it; the two that do not are
-marked, at the top and the bottom of the ranking. Measured on the levels instead the dispersion is $0.168$, and by that wider figure 10 of the 11 gaps fall inside. Both controls sit below every clusterizer run.}
+the per-seed Sharpe ratios of the 14 trained portfolios over the
+$6{,}913$-day sample. Each row is one portfolio, with circles at its five per-seed Sharpe ratios and a tick at their mean. The bar at the top right is not an interval around a
+center. Its \emph{length} is one pooled paired-difference standard deviation, $0.103$. Two adjacent means are distinguished only if they differ by more than this length. The bar is meant to be compared
+with the horizontal distance between two neighboring ticks. Nine of the 11
+gaps between adjacent clusterizer means fall inside it. The two that do not are
+marked, at the top and the bottom of the ranking. Measured on the levels instead, the dispersion is $0.168$. Against that wider dispersion, 10 of the 11 gaps fall inside. Both controls are below every head-seed run of every clusterizer.}
 \label{fig:field_ruler}
 \end{figure}
 
@@ -285,14 +272,13 @@ marked, at the top and the bottom of the ranking. Measured on the levels instead
 \subsection{Variation across Partition Draws}
 \label{sec:pseed}
 
-The training-seed dispersion of \secref{sec:field} leaves out the variation in the partition itself. Every stochastic clusterizer's daily partitions were generated once and cached, and all five training runs use the same partitions (\secref{sec:seeds}). Redrawing the partition measures how much that draw moves the results. This subsection is reported on a different basis from the rest of the paper: five partition draws, each traded by a single training run at head seed $42$, so that the partition axis is isolated. The five training seeds of \secref{sec:seeds} do not enter here.
+The dispersion across head seeds in \secref{sec:field} does not include the variation in the partition itself, because all five head-seed runs use the same precomputed partitions of each stochastic clusterizer (\secref{sec:seeds}). To measure how much the partition draw changes the results, we depart from the design used in the rest of the paper. In the trained trading component, we train the trading head at a single head seed, $42$, on each of five partition draws, so that only the partition varies. The five head seeds of \secref{sec:seeds} are not used here.
 
-For the nine stochastic clusterizers, each redrawn five times (partition seeds $1$ to $5$; the cached partition of the rest of the paper is a separate draw), the adjusted Rand index (\textsc{ari}; \citealp{hubert1985comparing}) between two draws of the same clusterizer averages $0.30$, against $0.19$ between two different clusterizers. Expressed as disagreement, one minus the index, a redraw of the seed produces $87\%$ of the disagreement that a change of clusterizer produces. The average hides three levels that do not overlap. The four trading-driven clusterizers agree with their own redraw at $0.21$ to $0.28$, the four other stochastic clusterizers at $0.32$ to $0.45$, and \textsc{sssnet} at $0.18$, so stability against the seed is a property of the family.
+We redraw the partitions of each of the nine stochastic clusterizers under five partition seeds, $1$ to $5$. The precomputed partition used in the rest of the paper is a separate draw. The adjusted Rand index (\textsc{ari}; \citealp{hubert1985comparing}) between two partition draws of the same clusterizer averages $0.30$, against $0.19$ between two different clusterizers. If we measure disagreement as one minus the index, a redraw of the partition seed produces $87\%$ of the disagreement that a change of clusterizer produces. The four trading-driven clusterizers agree with their own redraws at an \textsc{ari} of $0.21$ to $0.28$. For the four other stochastic clusterizers, this \textsc{ari} ranges from $0.32$ to $0.45$. The \textsc{sssnet} clusterizer agrees with its own redraws at $0.18$. These ranges do not overlap, so stability against the partition seed is a property of the clusterizer family.
 
-Redrawing the partition moves the Sharpe ratios as well; the largest range grows from $0.21$ under the fixed rule to $0.38$ under the neural trading head, though not every clusterizer moves more. At the rule-based component, which has no training noise, the draw already moves the leader (\figref{fig:pseed_flip}a): spectral clustering is last under all five seeds, but $k$-means on returns is first under only three of them, Sharpe (graph) and PCA loadings under one each. The largest range across the five draws is $0.21$, for $k$-means on returns, $36\%$ of the $0.58$ between the best and the worst of the 45 rule-based books (nine clusterizers at five partition seeds); the random control, whose labels are redrawn daily under any seed, moves $0.08$.
+Redrawing the partition also changes the Sharpe ratios. In the rule-based trading component, which has no training noise, the largest range across the five partition draws is $0.21$. The partition draw already changes the first-ranked clusterizer (\figref{fig:pseed_flip}a). Among the nine stochastic clusterizers, unsigned spectral clustering is last under all five partition seeds. In contrast, $k$-means on returns is first under three of the five seeds. Sharpe (graph) and PCA loadings are each first under one of the remaining two. The nine clusterizers, each traded under five partition seeds, give 45 rule-based portfolios. The largest rule-based range, for $k$-means on returns, is $36\%$ of the gap of $0.58$ between the best and the worst of these portfolios. For comparison, the Sharpe ratio of the random control, whose labels are redrawn daily under any partition seed, has a range of $0.08$ across the five draws.
 
-Under the neural trading head the leader still depends on the draw and the movement is larger. When the head is rerun with its own seed pinned on the same redrawn partitions, $k$-means is first at four of the five draws and \textsc{sponge} at the other. The largest range across the five draws grows by three quarters, to $0.38$ for \textsc{sponge}, and the random control moves $0.39$
-(\figref{fig:pseed_flip}b), as much as it moves across the five head seeds ($0.41$, \figref{fig:field_ruler}). The trained component, which might be expected to average the draw away, instead enlarges it, and for a partition that carries no information it converts the draw into as much variation as a refit does. \textsc{sssnet}, redrawn like the others, moves by $0.15$ at the rule-based component and by $0.13$ under the head, the fifth-largest and the smallest ranges among the nine. A ranking computed from one partition draw per clusterizer therefore carries a source of variation that rerunning the training leaves in place and enlarges.
+In the trained component, the first-ranked clusterizer still depends on the partition draw, and the Sharpe ratios vary more across partition draws than in the rule-based component. When we train the trading head on the same redrawn partitions with its head seed fixed, $k$-means on returns is first at four of the five partition draws. \textsc{sponge} is first at the remaining draw. The largest range across the five partition draws increases by $77\%$, to $0.38$ for \textsc{sponge}. The Sharpe ratio of the random control, whose partition contains no information, has a range of $0.39$ across the five draws (\figref{fig:pseed_flip}b). This range is about as large as the largest clusterizer range and as the range of the random control across its own five head-seed runs ($0.41$, \figref{fig:field_ruler}). Overall, the trained component enlarges the effect of the partition draw. An exception is \textsc{sssnet}. Its range falls from $0.15$ in the rule-based component to $0.13$ in the trained component. Among the nine, it is the fifth-largest range in the rule-based component and the smallest in the trained component. A ranking based on one partition draw per clusterizer therefore contains a source of variation that head-seed reruns do not remove and that the trained component enlarges.
 %% ⚠ N84 (2026-09-01): sec:pseed now uses partition seeds {1,2,3,4,5} (head 42 pinned); the two comment blocks below describe the retired {42,1,123} basis. Numbers: repo analysis/results_5seed + figures/scripts/fig_pseed_flip_v3.py (computed from the books).
 %% HEAD layer, 9 rules + random, head seed 42, ps{42,1,123}, ALL
 %% verified vs run CSVs (2026-08-17 night, jobs 61623872+61637228):
@@ -315,11 +301,11 @@ Under the neural trading head the leader still depends on the draw and the movem
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\linewidth]{fig_pseed_flip}
-\caption{Redrawing the partition seed at each trading component. This figure plots the Sharpe ratio of each stochastic clusterizer under five partition seeds. The labels on the horizontal axis name those partition seeds, not the training seeds of \secref{sec:seeds}, which are held fixed here. (a)
-The rule-based component is deterministic, so every movement is the
-partition draw itself. Spectral clustering is last under all five
-seeds; $k$-means (black) is first under three of them, and the largest range is $0.21$. The panel tracks the nine stochastic clusterizers; the three deterministic ones, with no seed to redraw, are the dashed horizontals. (b) The trained component, with the head seed pinned at $42$ and the same nine clusterizers. $k$-means (black) is first at
-seeds $2$ to $5$, \textsc{sponge} (dashed) at seed $1$. The largest range across the five draws is larger here than at the rule-based component, and so is the random control's. The random control is red in both
+\caption{Redrawing the partition seed in each trading component. This figure plots the Sharpe ratio of each stochastic clusterizer under five partition seeds. The labels on the horizontal axis name those partition seeds. The rule-based component has no head seed, and panel (b) uses a single head seed (\secref{sec:seeds}). The two panels have separate vertical axes. (a)
+The rule-based component is deterministic, so every change in Sharpe ratio comes from the
+partition draw. The panel shows the nine stochastic clusterizers. The three deterministic clusterizers, which have no partition seed to redraw, are the dashed horizontal lines. Unsigned spectral clustering, the lowest gray line, is last under all five
+partition seeds. The $k$-means clusterizer (black) is first under three of them. The largest range is $0.21$. (b) The trained component, with the head seed fixed at $42$ and the same nine clusterizers. The $k$-means clusterizer (black) is first at
+partition seeds $2$ to $5$. \textsc{sponge} (dashed) is first at partition seed $1$. The largest range across the five partition draws is larger here than in the rule-based component. The range of the random control is also larger. The random control is red in both
 panels.}
 \label{fig:pseed_flip}
 \end{figure}
@@ -343,11 +329,13 @@ panels.}
 
 
 
-Formal tests reach the same conclusion, that the ranking separates its top from its bottom but not its neighbors. The comparisons above use no hypothesis test; \tabref{tab:formal} reports tests on the 12 clusterizers' seed-averaged books at the matched 60-day window, over the $6{,}913$ days all arms share. A model confidence set at the $90\%$ level keeps six of the 12 clusterizers, the six with the highest Sharpe ratios, so it divides the ranking in the middle rather than removing only the weakest arms; the two elimination statistics differ, $T_R$ keeping two. The set holds the partition draw of \secref{sec:pseed} fixed and could only widen with it. Pairwise Ledoit--Wolf tests find 21 of 66 differences that survive a Holm correction \citep{holm1979simple}, none of them between neighbors in the ranking. The adjacent pair closest to significance, the sector taxonomy against spectral clustering at the bottom of the ranking, has a raw bootstrap $p$-value of $0.004$ that the correction raises to $0.15$. The Sortino--Sharpe pair, the one clean objective contrast in the design, differs by $0.13$ with a standard error of $0.09$.
+Consistent with the comparisons so far, which we made without a hypothesis test, formal tests distinguish the clusterizers at the top of the ranking from those at the bottom, but they do not distinguish neighboring clusterizers. \tabref{tab:formal} reports tests on the seed-averaged portfolios of the 12 clusterizers at the common 60-day estimation window, over the $6{,}913$-day sample that all configurations share. A model confidence set at the $90\%$ level keeps six of the 12 clusterizers under the elimination statistic $T_{\max}$, which compares each clusterizer with the average of the set. These six have the highest Sharpe ratios, so the set divides the ranking in the middle. Under the other elimination statistic, $T_R$, which compares the clusterizers pair by pair, the set keeps two. We compute the set from portfolios traded on the precomputed partitions, one partition draw per clusterizer. Adding the variation across partition draws measured in \secref{sec:pseed} could only widen the set.
 
-Part of the spread is the annualization itself. Daily Sharpe ratios are scaled by $\sqrt{252}$, which assumes away serial dependence. On non-overlapping $21$-day returns, $329$ blocks in place of $6{,}913$ days, the spread across the 12 seed-averaged books falls from $0.88$ to $0.40$, the $90\%$ set keeps 11 of the 12 under $T_{\max}$ and nine under $T_R$, and one of the 66 pairs survives Holm. The separation between clusterizers is visible day by day and modest at monthly frequency.
+In pairwise Ledoit--Wolf tests, 21 of the 66 differences remain significant after a Holm correction \citep{holm1979simple}, but none of these 21 differences is between neighbors in the ranking. Among adjacent pairs, the closest to significance is \textsc{gics} against unsigned spectral clustering, at the bottom of the ranking. Its raw bootstrap $p$-value of $0.004$ rises to $0.15$ after the Holm correction. The Sortino and Sharpe clusterizers are the only clean contrast between two objectives in the design. Their Sharpe ratios differ by $0.13$, with a standard error of $0.09$.
 
-The gap to the controls survives at both horizons. Every clusterizer earns a higher Sharpe ratio than both controls, the confidence set discards both, and the pairwise gap is significant for all 12 against each control daily. At $21$ days five separate from $\K=1$ and five from the random control, a loss of power rather than a change of sign.
+Part of the spread of Sharpe ratios across clusterizers comes from the annualization. Daily Sharpe ratios are scaled by $\sqrt{252}$, which assumes that daily returns are serially independent. We recompute the Sharpe ratios on non-overlapping $21$-day returns, $329$ blocks in place of $6{,}913$ days. On these returns, the spread across the 12 seed-averaged portfolios falls from $0.88$ to $0.40$. On the same returns, the $90\%$ confidence set keeps 11 of the 12 clusterizers under $T_{\max}$. Under $T_R$, it keeps nine. One of the 66 pairwise differences remains significant after the Holm correction at this horizon. Overall, the separation between clusterizers is visible day by day and modest at monthly frequency.
+
+However, the gap to the controls keeps its sign at both horizons. Every clusterizer earns a higher Sharpe ratio than both controls. A confidence set computed over the 12 clusterizers and the two controls discards both controls. In daily returns, the pairwise gap to each control is significant for all 12 clusterizers. At the $21$-day horizon, where the tests have less power, five clusterizers differ significantly from the $\K=1$ control. Five also differ significantly from the random control.
 
 %%  THE CASE EITHER WAY, for the coauthors:
 %%  CUT: §5.1-5.2 already make the point informally and more readably;
@@ -375,17 +363,17 @@ Model confidence set, $90\%$ & which clusterizers could be best?
   & keeps $6$ of $12$ under $T_{\max}$ and $2$ under $T_R$ \\
 Ledoit--Wolf, all pairs & which differences are real?
   & $21$ of $66$ past Holm; none adjacent \\
-Sortino vs.\ Sharpe & does the objective matter?
+Sortino vs.\ Sharpe & does the objective change the Sharpe ratio?
   & $+0.1260$ (s.e.\ $0.0919$) \\
 Non-overlapping $21$-day returns & does $\sqrt{252}$ inflate the spread?
   & spread $0.8758 \to 0.4044$; $90\%$ set keeps $11$ of $12$ under $T_{\max}$, $9$ under $T_R$; $1$ of $66$ past Holm \\
-Every clusterizer vs.\ both controls & do all clusterizers beat both controls?
+Every clusterizer vs.\ both controls & does every clusterizer exceed both controls?
   & yes: $12$ of $12$ above both, at both horizons \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\footnotesize
-\item \emph{Notes.} This table reports the outcome of each test on the 12 clusterizers' seed-averaged payoffs; $T_{\max}$ and $T_R$ are the two elimination statistics of the model confidence set. All five rows are computed on one basis: the 12 clusterizers at the matched 60-day window, over the $6{,}913$ trading days every arm shares (\secref{sec:panel}), on seed-averaged payoffs, so the spreads are not comparable with the paired dispersion of \secref{sec:field}. Model confidence sets follow
-\citet{hansen2011mcs}; pairwise tests follow \citet{ledoit2008robust}, on a circular block bootstrap (block $21$ trading days, $5{,}000$ draws, studentized bootstrap $p$-values). ``Past Holm'' counts the pairs whose difference survives the Holm step-down correction \citep{holm1979simple} over the $66$ pairs at the $5\%$ family-wise level.
+\item \emph{Notes.} This table reports the outcome of each test on the seed-averaged payoffs of the 12 clusterizers. The two elimination statistics of the model confidence set are $T_{\max}$, which compares each clusterizer with the average of the set, and $T_R$, which compares the clusterizers pair by pair. All five rows use the 12 clusterizers, and the last row also uses the two controls. Every row uses the common 60-day estimation window, the $6{,}913$-day sample that every configuration shares (\secref{sec:panel}), and seed-averaged payoffs. The spreads are therefore not comparable with the gap between the best and the worst clusterizer or with the paired dispersion of \secref{sec:field}, both of which are computed from per-seed Sharpe ratios. Model confidence sets follow
+\citet{hansen2011mcs}. Pairwise tests follow \citet{ledoit2008robust}, on a circular block bootstrap (block $21$ trading days, $5{,}000$ draws, studentized bootstrap $p$-values). ``Past Holm'' counts the pairs whose difference remains significant after the Holm step-down correction \citep{holm1979simple} over the $66$ pairs at the $5\%$ family-wise level.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -394,21 +382,18 @@ Every clusterizer vs.\ both controls & do all clusterizers beat both controls?
 \subsection{Between-Clusterizer Differences and the Choice among Clusterizers}
 \label{sec:gradient}
 
-Two different clusterizers' books correlate at $0.61$ on average in their daily position vectors. Whether $0.61$ is close or far requires a reference point, and the design supplies an internal one. Every
-configuration is fitted five times (\secref{sec:seeds}), so we can
-measure how much one clusterizer differs from itself when it is
-refitted at a fixed partition. We run that comparison at three points along the pipeline
-(\tabref{tab:gradient}): the partition, the positions it induces, and the payoff
-those positions earn. At each point the comparison reports how much two different
-clusterizers resemble each other, how much one clusterizer resembles itself under a
-redraw of its own randomness, and the ratio of the two.
+On average, the daily position vectors of two different clusterizers' portfolios correlate at $0.61$. To judge whether a correlation of $0.61$ is high or low, we need a reference point. We take it from within the design. Every
+configuration of the trained component is trained at five head seeds (\secref{sec:seeds}), so we can
+measure how much one clusterizer differs from its own head-seed rerun at a fixed partition. We run the comparison on the partition, on the positions it induces, and on the payoff
+those positions earn (\tabref{tab:gradient}). At each stage, we report how similar two different
+clusterizers are, how similar one clusterizer is to itself, and the ratio of the two similarities. The comparison of a clusterizer with itself uses a new partition seed at the partition stage and a new head seed at the position and payoff stages.
 
-In the partition itself the ratio of the two indices is $0.65$ ($0.193$ against $0.296$), so two clusterizers resemble each other about two thirds as much as a clusterizer resembles its own redraw. Expressed as disagreement, one minus each index, the same two numbers give the result of \secref{sec:pseed}. In the positions the partition induces the ratio rises to $0.87$, and in the payoffs those positions earn it reaches $1.01$. Two different clusterizers produce payoffs that correlate as
-strongly as one clusterizer does with itself refitted. 
+In the partitions, two different clusterizers agree at an \textsc{ari} of $0.193$, against $0.296$ for two partition draws of the same clusterizer. The ratio of the two indices is $0.65$, so two clusterizers are $65\%$ as similar to each other as a clusterizer is to its own redraw. In the positions that the partition induces, the ratio rises to $0.87$, and in the payoffs that those positions earn, it reaches $1.01$. In other words, two different clusterizers produce payoffs that correlate as
+strongly as the payoffs of one clusterizer and its own head-seed rerun.
 
 \begin{table}[tb]
 \centering
-\caption{Similarity between clusterizers and to their own refits at three stages of the pipeline}
+\caption{Similarity between clusterizers and of each clusterizer with itself in partitions, positions, and payoffs}
 \label{tab:gradient}
 \begin{threeparttable}
 \small
@@ -422,43 +407,44 @@ Daily payoff, trained component & $0.815$ & $0.805$ & $1.01$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\footnotesize
-\item \emph{Notes.} This table reports how similar two clusterizers are at three stages of the pipeline, how similar a clusterizer is to its own refit, and the ratio of the two. \textsc{ari} is the adjusted Rand index. In the partition row the across-clusterizer cell covers all 66 pairs of the 12, while the against-itself cell covers the nine stochastic clusterizers, whose partitions were redrawn, on the refit days inside the same window; the position and payoff rows cover all 12 in both columns. The ``against itself'' column is likewise not the same object in every row: in the first row it is the same algorithm
-at a redrawn \emph{partition} seed, in the last two the same partition
-at a redrawn \emph{head} seed. Adjusted Rand indices are computed day
-by day on the names two partitions share; every pair overlaps on at least $95\%$ of the names
-except those involving the sector taxonomy, whose snapshot covers about
-two thirds of the traded universe. Against either control the index is $0.000$ over all 24 pairs, which is why the controls are not shown. Positions are the daily weight vectors,
-correlated across the union of the two books' names with absent names
-entered at zero, on all $6{,}913$ common days and averaged over the five seeds. Payoff correlations are per seed and pair arms at the same
-seed, so the seed is not itself a source of difference; seed-averaging the payoffs first raises the across-clusterizer figure to $0.886$ and is not comparable to the row shown. 
+\item \emph{Notes.} For partitions, positions, and payoffs, this table reports how similar two clusterizers are, how similar a clusterizer is to itself under a new partition seed or a new head seed, and the ratio of the two similarities. The abbreviation \textsc{ari} stands for the adjusted Rand index. In the partition row, the across-clusterizer cell covers all 66 pairs of the 12 clusterizers. The against-itself cell covers the nine stochastic clusterizers, whose partitions were redrawn, on the days on which the partitions were re-estimated within the same $6{,}913$-day sample. The position and payoff rows cover all 12 clusterizers in both columns. The ``against itself'' column is likewise not the same object in every row. In the first row, it is the same algorithm
+at a redrawn \emph{partition} seed. In the last two rows, it is the same partition
+at a redrawn \emph{head} seed. We compute adjusted Rand indices day
+by day on the stocks that two partitions share. Every pair overlaps on at least $95\%$ of the stocks,
+except the pairs involving \textsc{gics}, whose snapshot covers about $65\%$ of the traded universe. Against either control the index is $0.000$ over all 24 pairs, which is why the controls are not shown. Positions are the daily weight vectors,
+correlated across the union of the stocks in the two portfolios, with absent stocks
+entered at zero, on all $6{,}913$ common days and averaged over the five head seeds. Payoff correlations are computed per head seed and pair two portfolios at the same
+head seed, so the head seed is not itself a source of difference. Seed-averaging the payoffs before computing the correlation raises the across-clusterizer correlation to $0.886$, which is not comparable to the row shown.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-\figref{fig:bet_corr} shows that the resemblance is nearly uniform across pairs. No pair of clusterizers stands out and none falls away: the 12 clusterizers' pairwise position correlations run from $0.581$ to $0.657$, and every one of them lies between $81\%$ and $96\%$ of the diagonal of its own row. Sorting the clusterizers by Sharpe ratio produces no
-block structure, so the arms at the bottom of the ranking hold much the same positions as the leaders, at higher volatility (\secref{sec:hedge}). The small differences that remain follow the families rather than the Sharpe ranking. The two hierarchical clusterizers are the most similar pair among the 12 ($0.657$ against an average of $0.61$ over all pairs) and the eigenstructure clusterizers are mildly cohesive ($0.635$). The four trading-driven
-clusterizers, which share an objective but not a representation, are as similar to each other as to the other clusterizers ($0.604$ within, $0.604$ against the others).
+\figref{fig:bet_corr} shows that the similarity is nearly uniform across pairs. No pair of clusterizers is much more or much less correlated than the others. The pairwise position correlations of the 12 clusterizers range from $0.581$ to $0.657$. Each pairwise correlation is between $81\%$ and $96\%$ of the diagonal entry of its row. The diagonal entry is the clusterizer's correlation with its own head-seed rerun. Sorting the clusterizers by Sharpe ratio does not produce a
+block structure, so the portfolios at the bottom of the ranking hold much the same positions as the portfolios at the top, but with higher volatility (\secref{sec:hedge}). The small differences that remain follow the clusterizer families. The two hierarchical clusterizers are the most similar pair among the 12, at $0.657$ against an average of $0.61$ over all pairs. The eigenstructure clusterizers correlate with each other at $0.635$, somewhat above that average. In contrast, the four trading-driven
+clusterizers share an objective and differ in representation, but they are as similar to each other as to the other clusterizers ($0.604$ within, $0.604$ against the others).
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\linewidth]{fig_bet_corr}
-\caption{Position-vector correlation between arms. This figure shows the daily position-vector correlation between every pair of the 14 arms at the trained component over the common $6{,}913$-day window, ordered by Sharpe ratio. The diagonal is not one: it is each
-arm against itself at a different seed, so every cell can be compared against the diagonal of its own row. The two controls are set off by a
+\caption{Position-vector correlation between portfolios. This figure shows the daily position-vector correlation between every pair of the 14 trained portfolios over the common $6{,}913$-day sample, ordered by the mean per-seed Sharpe ratio, as in \figref{fig:field_ruler}. The diagonal is not one. Each diagonal cell is the correlation between a
+configuration's portfolio and the portfolio of its head-seed rerun, so every cell can be compared with the diagonal of its own row. Each off-diagonal cell pairs two portfolios at the same head seed and averages over the five head seeds. The two controls are set off by a
 divider line.}
 \label{fig:bet_corr}
 \end{figure}
 
-The controls give a reference for how low the correlation falls between books that differ in substance. Relative to a clusterizer's correlation with its own refit, $0.704$, the correlation drops by $0.09$ between two clusterizers (to $0.612$) and by $0.25$ between a clusterizer and a control (to $0.450$); the first drop is $36\%$ of the second. The two controls correlate with each other at $0.71$, more than either correlates with its own refit under a redrawn head seed, $0.55$ and $0.51$; every clusterizer's own-refit correlation is $0.67$ to $0.74$. No clustering and a random partition therefore deliver much the same book, and retraining on a structureless signal is noisier than retraining on any partition. The instability is in the fit rather than the partition. The $\K=1$ control has no partition seed to redraw, and the random control's labels carry no structure under any seed, so the random control's Sharpe ratio moves as much when the label stream is redrawn as when the training seed is ($0.39$ across partition draws against $0.41$ across head seeds, \secref{sec:pseed}).
+We use the controls as a reference for how low the correlation falls between portfolios that differ in substance. Against this reference, two different clusterizers produce portfolios that are much closer to each other than to a control. A clusterizer's portfolio correlates with its own head-seed rerun at $0.704$. Between two different clusterizers, the correlation drops by $0.09$, to $0.612$. Between a clusterizer and a control, it drops by $0.25$, to $0.450$. The first drop is $36\%$ of the second.
 
-Because the 12 books are this similar, ex ante selection among individual clusterizers does not improve upon a simple diversified combination of their books. The equal-weight book earns a Sharpe ratio of $2.505$ on the seed-averaged payoff, above nine of the 12 books on that convention. Re-selecting the trailing best clusterizer each January leaves a gap to the equal-weight book whose confidence interval covers zero at every look-back considered (\figref{fig:select_vs_ew}). The result is familiar from the forecast-combination literature: when candidates are exchangeable up to noise, equal weights are hard to beat \citep{timmermann2006forecast}.
+The two controls correlate with each other at $0.71$. Each control correlates less with its own head-seed rerun ($0.55$ for the $\K=1$ control and $0.51$ for the random control) than with the other control, so the $\K=1$ control and the random control produce much the same portfolio. By comparison, every clusterizer's correlation with its own head-seed rerun is $0.67$ to $0.74$. In other words, head-seed reruns are noisier on a control's partition, which has no structure, than on any clusterizer's partition. Because the partition is the same in every head-seed rerun, this instability arises in fitting the trading head. For the random control, whose labels have no structure under any partition seed, a redraw of the partition changes the Sharpe ratio as much as a new head seed does (\secref{sec:pseed}).
 
-Five of the 12 clusterizers, however, sit reliably below the equal-weight book, by $0.17$ to $0.60$ in Sharpe ratio; the intervals are from a circular block bootstrap over days (block $21$, $B = 5{,}000$). One of the five, Sharpe (EW), the exponentially weighted variant, has a gap of $0.27$ against a range of $0.30$ across its own five partition draws, so its shortfall is not separated from the movement its own partition seed produces; of the other four, two clear their range and two have deterministic partitions and no such range to clear.
-Three clusterizers score above the equal-weight book, $k$-means, Sharpe (graph), and complete linkage, by $0.27$, $0.13$, and $0.05$; only $k$-means' interval excludes zero, $[0.10, 0.44]$. Its margin of $0.27$ is about the size of the $0.29$ range its own five partition draws produce, so the one advantage the day bootstrap resolves is not separated from the partition axis. Differences of this size do not identify a best clusterizer. They do identify the clusterizers to avoid, and the clusterizers furthest below the equal-weight book are the most volatile (\secref{sec:hedge}).
+Because the 12 portfolios are this similar, ex ante selection among individual clusterizers does not improve upon a simple diversified combination of their portfolios. The equal-weight portfolio combines the portfolios of the 12 clusterizers in equal proportions. On the seed-averaged payoff, it earns a Sharpe ratio of $2.505$, which exceeds the Sharpe ratios of nine of the 12 portfolios on that convention. When we re-select each January the clusterizer with the highest trailing Sharpe ratio, the gap to the equal-weight portfolio has a confidence interval that covers zero at every look-back we consider (\figref{fig:select_vs_ew}). This result is consistent with the forecast-combination literature, which finds that equal weights are hard to beat when candidates are exchangeable up to noise \citep{timmermann2006forecast}.
+
+Although comparisons with the equal-weight portfolio do not identify a best clusterizer, they identify the clusterizers to avoid. Five of the 12 clusterizers are below the equal-weight portfolio by $0.17$ to $0.60$ in Sharpe ratio, with confidence intervals that exclude zero. They are average linkage, Sharpe, Sharpe (EW), \textsc{gics}, and unsigned spectral clustering. The confidence intervals come from a circular block bootstrap over days (block $21$, $B = 5{,}000$). One of the five is the Sharpe (EW) clusterizer, which weights recent days exponentially. It falls short by $0.27$, against a range of $0.30$ across its own five partition draws. Its shortfall is therefore within the variation that its partition seed produces. Of the other four, two fall short by more than their range across partition draws. The remaining two have deterministic partitions, so they have no such range.
+Three clusterizers earn a higher Sharpe ratio than the equal-weight portfolio. Of these three, $k$-means on returns has the largest margin, $0.27$. The margin is $0.13$ for Sharpe (graph) and $0.05$ for complete linkage. Of the three, only the interval of $k$-means on returns, $[0.10, 0.44]$, excludes zero. Even so, its margin of $0.27$ is about the size of the $0.29$ range across its own five partition draws (\secref{sec:pseed}). The advantage that the bootstrap over days detects is therefore within the variation across partition draws. The clusterizers furthest below the equal-weight portfolio have the most volatile portfolios (\secref{sec:hedge}).
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\linewidth]{fig_select_vs_ew}
-\caption{Selecting the trailing best clusterizer against holding all 12. This figure plots two comparisons of the seed-averaged trained books. (a) Cumulative log return of the equal-weight book and of three selection rules, each of which re-selects on the first trading day of each calendar year the clusterizer with the highest Sharpe ratio over the trailing one, three, or five years and holds it for the year; series are scaled to equal volatility. (b) Each clusterizer's Sharpe ratio minus the equal-weight book's, with $95\%$ circular block-bootstrap intervals (block $21$, $5{,}000$ draws); black marks the clusterizers whose interval excludes zero, gray those whose interval includes it. All books are seed-averaged trained books over the $6{,}913$-day sample, and panel (b) is ordered by that convention's Sharpe ratio rather than by the mean-of-per-seed ranking of \figref{fig:field_ruler}.}
+\caption{Selecting the trailing best clusterizer against holding all 12. This figure compares the equal-weight portfolio of the seed-averaged trained portfolios with three selection rules (a) and with each clusterizer (b). (a) Cumulative log return of the equal-weight portfolio and of three selection rules, each of which re-selects on the first trading day of each calendar year the clusterizer with the highest Sharpe ratio over the trailing one, three, or five years and holds it for the year. The series are scaled to equal volatility. (b) Each clusterizer's Sharpe ratio minus that of the equal-weight portfolio, with $95\%$ circular block-bootstrap intervals (block $21$, $5{,}000$ draws). Black marks the clusterizers whose interval excludes zero, and gray those whose interval includes it. All portfolios are seed-averaged trained portfolios over the $6{,}913$-day sample. Panel (b) is ordered by the Sharpe ratio of the seed-averaged payoff, and \figref{fig:field_ruler} by the mean per-seed Sharpe ratio.}
 \label{fig:select_vs_ew}
 \end{figure}
 
@@ -488,9 +474,11 @@ Three clusterizers score above the equal-weight book, $k$-means, Sharpe (graph),
 
 \subsection{The Estimation Window and the Number of Groups}
 \label{sec:window}
-Two upstream inputs move the Sharpe ratio on the scale of the span between clusterizers: the length of a clusterizer's estimation window, which moves it by as much as the whole span, and the number of groups $\K$, which moves it by up to $0.36$ away from the $\K = 30$ used throughout, more than two fifths of the span. The comparisons above hold both fixed. Holding the algorithm, the panel, the trading head, and the seeds fixed, we lengthen the window from $21$ days to $252$. Spectral clustering gains $+0.88$ in Sharpe ratio and PCA loadings $+0.66$, each monotone across the intermediate windows and paired by seed, while average linkage, which uses the same correlation matrix, moves $0.00$. The difference between those responses is the clean comparison, because the arms use the same input; against average linkage, the window response of spectral clustering is $+0.88$ and of PCA loadings $+0.67$, the same sign in every seed. The two clusterizers that gain are the two that use individual eigenvectors of the correlation matrix, and three arms registered in advance to separate that account from its rival (that low starters gain most) move as the eigenvector account predicts (\appref{app:window}).
+The comparisons above hold fixed the estimation window and the number of groups, which are inputs to the clusterizers. Each of these inputs can change the Sharpe ratio by an amount of the same order as the gap of $0.83$ between the best and the worst clusterizer (\secref{sec:field}). Specifically, lengthening the estimation window raises the Sharpe ratio of unsigned spectral clustering by as much as that whole gap. Relative to the $\K = 30$ used throughout, other numbers of groups change the Sharpe ratio by up to $0.36$. This change is $44\%$ of the gap.
 
-The number of groups is the second input. Of five clusterizers swept at $\K \in \{10, 30, 50\}$ (five seeds each, \appref{app:ksweep}), three rise monotonically in $\K$, while $k$-means on returns and spectral clustering peak at $30$ and fall by $0.09$ and $0.14$ between $30$ groups and $50$. For the four other than spectral clustering, coarsening to $10$ groups costs $0.20$ to $0.36$ in Sharpe ratio, and refining to $50$ changes it by $-0.09$ to $+0.22$. The gain from more groups cannot be split between finer structure and the finer demeaning of \secref{sec:mechanism} without a random control at each $\K$, which was not run; one run per $\K$ would not suffice (\appref{app:ksweep}). A downstream Sharpe ratio therefore distinguishes changes in the information supplied to the clusterizer and in the number of groups, but discriminates much less sharply among algorithms given the same input.
+Holding the algorithm, the panel, the trading head, and the head seeds fixed, we lengthen the estimation window from $21$ days to $252$. Measured in pairs at the same head seed, the change in Sharpe ratio is $+0.88$ for unsigned spectral clustering and $+0.66$ for PCA loadings. Each gain is monotone across the intermediate estimation windows. In contrast, the Sharpe ratio of average linkage, which uses the same correlation matrix, changes by $0.00$ from the start of the sweep to its end, although it peaks in between (\appref{app:window}). The difference between those responses is the clean comparison, because the three clusterizers use the same input. Net of the response of average linkage, which is slightly negative and rounds to $0.00$, the response to the estimation window is $+0.88$ for unsigned spectral clustering and $+0.67$ for PCA loadings. The response has the same sign at every head seed. The two clusterizers that gain are the two that use individual eigenvectors of the correlation matrix. To separate this eigenvector explanation from a rival explanation, in which the configurations that start low gain most, we registered three configurations in advance: average linkage at $\K=10$, the random control, and PCA loadings at $\K=50$. The first two start low and do not use eigenvectors, so the rival explanation predicts large gains for them. The eigenvector explanation predicts almost no gain. The Sharpe ratios of all three configurations change as the eigenvector explanation predicts (\appref{app:window}).
+
+For the number of groups, we sweep five clusterizers over $\K \in \{10, 30, 50\}$, with five head seeds each (\appref{app:ksweep}). The Sharpe ratios of three of them rise monotonically in $\K$. Those of $k$-means on returns and unsigned spectral clustering peak at $30$ groups. Between $30$ groups and $50$, the Sharpe ratio falls by $0.09$ for $k$-means on returns and by $0.14$ for unsigned spectral clustering. For the four clusterizers other than unsigned spectral clustering, coarsening to $10$ groups lowers the Sharpe ratio by $0.20$ to $0.36$. For the same four, refining to $50$ groups changes the Sharpe ratio by $-0.09$ to $+0.22$. Without a random control at each $\K$, which we did not run, the gain from more groups cannot be split between finer structure and the finer demeaning within groups of \secref{sec:mechanism}. Moreover, one run of the random control per $\K$ would not suffice (\appref{app:ksweep}). Overall, the Sharpe ratio of the portfolio distinguishes changes in the information given to the clusterizer and in the number of groups much more clearly than it distinguishes clusterizers that receive the same input.
 
 %% Source: discriminating cells, three seeds each, gate-clean,
 %% spot-verified against recomputed SRs 2026-08-16 night:

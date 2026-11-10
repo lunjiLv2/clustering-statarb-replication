@@ -24,10 +24,10 @@ audit:             ## L1: every gate in audit/ (verify_printed and the seed-lang
 	$(PY) audit/check_figures_text.py
 checksums:         ## record SHA-256 / row counts / date ranges of every data file
 	$(PY) tools/checksums.py write
-paper-sync:        ## authors: refresh paper/ from the working manuscript (CSA_MANUSCRIPT_SRC, default ../JFEC_OUP)
-	SRC=$${CSA_MANUSCRIPT_SRC:-../JFEC_OUP}; cp $$SRC/sections/0*.tex $$SRC/sections/A_supplementary.tex paper/sections/; \
-	cp $$SRC/main.tex $$SRC/refs.bib $$SRC/preamble-oup.tex paper/; \
-	cp $$SRC/*.sty $$SRC/*.bst $$SRC/*.cls paper/; \
+paper-sync:        ## authors: refresh paper/ from the working manuscript (CSA_MANUSCRIPT_SRC, default ../SSRNv2; ../JFEC_OUP still works)
+	SRC=$${CSA_MANUSCRIPT_SRC:-../SSRNv2}; cp $$SRC/sections/0*.tex $$SRC/sections/A_supplementary.tex paper/sections/; \
+	cp $$SRC/main.tex $$SRC/refs.bib paper/; \
+	for f in $$SRC/preamble*.tex $$SRC/*.sty $$SRC/*.bst $$SRC/*.cls; do [ -f "$$f" ] && cp "$$f" paper/ || true; done; \
 	for f in paper/figures/*.pdf; do s=$$SRC/figures/$$(basename $$f); [ -f $$s ] && cp $$s paper/figures/ || echo "paper-sync: $$s not in the manuscript yet, kept the repo copy"; done; \
 	cp $$SRC/figures/fig_pipeline.tex paper/figures/; \
 	cp $$SRC/figures/pipeline/corr_2014-07-07.pdf $$SRC/figures/pipeline/demean.pdf $$SRC/figures/pipeline/signal.pdf $$SRC/figures/pipeline/zmat.pdf paper/figures/pipeline/

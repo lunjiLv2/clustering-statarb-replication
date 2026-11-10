@@ -18,6 +18,11 @@ Updated 2026-09-01 (CORRECTIONS N91). Everything below the line is the build-sit
 - [x] **paper/ re-snapshot at the submitted state** (2026-09-02): `paper/` equals the submitted manuscript and now also carries
       `figures/fig_pipeline.tex`, its four insets and the class/style/bst files, so a clean checkout compiles the 46-page PDF
       whose text layer matches the submitted one on every page; nine gates rerun, 0 FAIL (verify_printed 114/114).
+- [x] **paper/ re-pointed to the SSRN version 2 build** (2026-11-10, CORRECTIONS N123): `paper/` now equals `../SSRNv2`
+      (plain article class; the JFEC snapshot is commit 7b3a7f2); rule-based levels are printed at gross exposure one
+      (`analysis.books.RULE_REPORT_SCALE`); the standalone build matches SSRNv2/main.pdf on 47 of 47 pages; gates rerun,
+      0 FAIL (verify_printed 128/128; check_figures_text 10/10). Committed on branch `ssrnv2-gross-one` (user's go-ahead
+      2026-11-10); not merged into main, not pushed.
 - [x] Deleted on the user's word (2026-09-01): `analysis/results_5seed/`, `TODO.md`, `audit/verify_printed.py.bak_5seed_k1span`, the superseded `fig_ff_curve` script/PDF/preview.
 
 ---
