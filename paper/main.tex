@@ -24,7 +24,7 @@ We thank NVIDIA Corporation and ASU Research Computing: the computations in this
 
 \begin{abstract}
 \noindent
-Previous studies in clustering-based statistical arbitrage usually evaluate clustering and the trading model together. In our study, we separate the contributions of clustering and the trading rule using 27 years of data on large US equities. We trade by using 12 clusterizers, a no-clustering control, and a random-partition control with a fixed cross-sectional rule and a neural trading head. We find that clustering lowers portfolio volatility by $28\%$ to $42\%$ and increases alpha, whereas the trading head contributes mainly through increasing alpha. Although different clusterizers obey qualitatively different rules, their portfolios are closely correlated and differ in Sharpe ratio mainly through volatility. Most clusterizers' portfolios retain their alpha that baseline factors and portfolios built on per-stock peer regressions together cannot explain.
+Previous studies in clustering-based statistical arbitrage usually evaluate clustering and the trading model together. In our study, we separate the contributions of clustering and the trading model using 27 years of data on large US equities. We trade based on 12 clusterizers, a no-clustering control, and a random-partition control, each with a fixed trading rule and with a neural trading head. We find that clustering lowers portfolio volatility by $28\%$ to $42\%$ and increases alpha, whereas the neural trading head contributes mainly through increasing alpha. Although different clusterizers obey qualitatively different rules, their portfolios are closely correlated and differ in Sharpe ratio mainly through volatility. For most clusterizers, the portfolio keeps a significant alpha when baseline factors and portfolios built on per-stock peer regressions are used together as regressors.
 \\[8pt]
 \noindent\textbf{Keywords:} statistical arbitrage, clustering, signed graphs, Sharpe ratio, factor models\\
 \noindent\textbf{JEL classification:} C58, G11, C38
@@ -52,7 +52,7 @@ partitions derived from them are provided in their place. The factor
 returns were derived from a publicly available source, the Kenneth R.
 French data library
 (\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}).
-The derived data underlying the tables and figures are available on Zenodo at \href{https://doi.org/\ZenodoDOI}{\texttt{https://doi.org/\allowbreak\ZenodoDOI}} under a CC BY 4.0 license \citep{zhu2026replicationdata}. They include the daily return of every portfolio, the positions of the trained runs, the partition caches, and the training logs. The code,
+The derived data underlying the tables and figures are available on Zenodo at \href{https://doi.org/\ZenodoDOI}{\texttt{https://doi.org/\allowbreak\ZenodoDOI}} under a CC BY 4.0 license \citep{zhu2026replicationdata}. They include the daily return of every portfolio, the portfolio weights from the runs of the neural trading head, the partition caches, and the training logs. The code,
 with the checks that tie the printed values to these files, is available
 at \href{https://github.com/lzwbh/clustering-statarb-replication}{\texttt{https://github.com/lzwbh/\allowbreak clustering-statarb-replication}} under an
 MIT license.

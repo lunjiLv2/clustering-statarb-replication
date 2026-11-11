@@ -13,7 +13,7 @@ CL = [a for a in paths.ARMS if a not in ("k1", "random")]; S = paths.SEEDS
 M = pd.DataFrame({a: [books.sharpe(books.head_book(a, s)) for s in S] for a in CL}, index=S).T
 gm = M.values.mean(); arm = M.mean(1); seed = M.mean(0); tot = ((M.values - gm) ** 2).sum()
 ss_seed = len(CL) * ((seed - gm) ** 2).sum(); ss_arm = len(S) * ((arm - gm) ** 2).sum(); ss_int = tot - ss_seed - ss_arm
-chk("§5.1: 12x5 matrix, 27% of the variance is a shared seed shift, interaction 8%", (round(100 * ss_seed / tot), round(100 * ss_int / tot)) == (27, 8), f"{100*ss_seed/tot:.1f} {100*ss_int/tot:.1f}")
+chk("§5.1: 12x5 matrix, 65% of the variance is the clusterizer means, 27% a shared seed shift, interaction 8% (N124)", (round(100 * ss_arm / tot), round(100 * ss_seed / tot), round(100 * ss_int / tot)) == (65, 27, 8), f"{100*ss_arm/tot:.1f} {100*ss_seed/tot:.1f} {100*ss_int/tot:.1f}")
 chk("§5.1: five seed means span 0.41, 50% of the 0.83 between best and worst clusterizer (N123)", (round(seed.max() - seed.min(), 2), round(arm.max() - arm.min(), 2), round(100 * (seed.max() - seed.min()) / (arm.max() - arm.min()))) == (0.41, 0.83, 50))
 _kw = pd.read_csv(paths.RESULTS / "ksweep_v3_cal6913.csv").pivot(index="arm", columns="K", values="sharpe_mps"); _dk = pd.concat([(_kw[10] - _kw[30]).abs(), (_kw[50] - _kw[30]).abs()], axis=1).max(axis=1)
 chk("§5.5: other numbers of groups change the Sharpe ratio by up to 0.36, 44% of the 0.83 gap (N123)", (round(_dk.max(), 2), round(100 * _dk.max() / (arm.max() - arm.min()))) == (0.36, 44))

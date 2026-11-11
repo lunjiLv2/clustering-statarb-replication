@@ -16,9 +16,9 @@ import style, paths
 from analysis.books import RULE_REPORT_SCALE   # N123: rule-based levels at gross exposure one
 
 plt.rcParams.update({"font.size": 9.2})
-LABEL = {"kmeans_ret": "$k$-means on returns", "pca_load": "PCA loadings", "agglo_avg": "Average linkage",
+LABEL = {"kmeans_ret": "$k$-means on residuals", "pca_load": "PCA loadings", "agglo_avg": "Average linkage",
          "agglo_complete": "Complete linkage", "spectral_unsigned": "Spectral (unsigned)", "gics": "GICS",
-         "sponge_w60": "SPONGE", "fv2a_w60": "Sharpe (EW)", "fv3sm_w60": "Sharpe (graph)", "sharpe_fixed_w60": "Sharpe",
+         "sponge_w60": "SPONGE", "fv2a_w60": "Sharpe (EWMA)", "fv3sm_w60": "Sharpe (graph)", "sharpe_fixed_w60": "Sharpe",
          "sortino_w60": "Sortino", "sssnetpre": "SSSNET", "k1": "No clustering ($K{=}1$)", "random": "Random partition"}
 CTRL = ("k1", "random")
 d = pd.read_csv(paths.RESULTS / "strev_spanning_v3_cal6913.csv")
@@ -28,7 +28,7 @@ LO, HI = min(d.alpha6.min(), d.alpha7.min()), max(d.alpha6.max(), d.alpha7.max()
 assert set(d.arm) == set(LABEL) and len(d) == 28, "expected the 14 arms at both components on the full sample"
 
 fig, axes = plt.subplots(1, 2, figsize=(6.4, 3.9), sharey=False, sharex=True)
-for ax, comp, title in zip(axes, ("rule", "head"), ("(a) rule-based component", "(b) trained component")):
+for ax, comp, title in zip(axes, ("rule", "head"), ("(a) fixed trading rule", "(b) neural trading head")):
     p = d[d.component == comp].set_index("arm").sort_values("alpha6", ascending=True)   # top of the axis = highest alpha6
     y = np.arange(len(p))
     guide = p.drop(list(CTRL)).alpha7.min()

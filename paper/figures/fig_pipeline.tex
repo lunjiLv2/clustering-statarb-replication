@@ -79,9 +79,9 @@
                            \textcolor{figvary}{configurations}};
 \node[gun] at (\GX,-268)  {\textsc{group}\\ \textsc{demeaning} $s_{it}$};
 \node[gun] at (\GX,-338)  {\textsc{the portfolio} $w_{it}$\\[1.0pt]
-                           fixed; two variants\\[1.0pt]
+                           two trading models\\[1.0pt]
                            $\times\,2 = 28$ portfolios};
-\node[gun] at (\GX,-434)  {\textsc{payoff} $\pi_t$};
+\node[gun] at (\GX,-434)  {\textsc{return} $\pi_t$};
 \node[gun] at (\GX,-466)  {\textsc{moments} $\mu,\sigma$};
 % =====================================================================
 %  1. the panel
@@ -104,7 +104,7 @@
   panel $\widetilde{\mathbf{R}} = (\tilde r_{it})$, formed each trading day on the
   $60$-day estimation window.};
 \node[tx,text width=228pt] at (\CL,-78)
- {{\color{figgray}\itshape Ten of the 14 use $\mathbf{C}$ or a function of it. Of the other four, one uses $\widetilde{\mathbf{R}}$ directly and three use neither, although the sector table covers only part of the portfolio and the rest is placed by correlation. Every configuration receives the same $\mathbf{C}$.}};
+ {{\color{figgray}\itshape Ten of the 14 configurations use $\mathbf{C}$ or a function of it. Of the other four, one uses $\widetilde{\mathbf{R}}$ directly and three use neither, although \textsc{gics} places the stocks outside its snapshot by correlation. Every configuration that uses $\mathbf{C}$ receives the same $\mathbf{C}$.}};
 \node[anchor=north east] at (\IX,-42)
  {\includegraphics[width=\IW pt]{\figinsetdir corr_2014-07-07.pdf}};
 \node[ic] at (\IX,-115.5) {$\mathbf{C}$ on 7 Jul 2014};
@@ -128,17 +128,17 @@
 \node[fb] at (156,-242.4) {Taxonomy};
 \node[fb,text=figvary] at (156,-255.3) {Controls};
 \foreach \y/\r/\d in {%
-  -147.8/{$k$-means on returns}/{$\widetilde{\mathbf{R}}$},
+  -147.8/{$k$-means on residuals}/{$\widetilde{\mathbf{R}}$},
   -156.4/{average linkage}/{$\mathbf{C}$},
   -165.0/{complete linkage}/{$\mathbf{C}$},
-  -173.6/{spectral, unsigned}/{$|\mathbf{C}|$},
+  -173.6/{spectral (unsigned)}/{$|\mathbf{C}|$},
   -182.2/{PCA loadings}/{eig $\mathbf{C}$},
   -190.8/{\textsc{sponge}$_{\mathrm{sym}}$}/{$\mathbf{C}^{+},\mathbf{C}^{-}$},
   -199.4/{\textsc{sssnet}}/{signed $\mathbf{C}$},
-  -208.0/{Sharpe}/{$\mathbf{C}$ and the payoff},
-  -216.6/{Sortino}/{$\mathbf{C}$ and the payoff},
-  -225.2/{Sharpe (EW)}/{$\mathbf{C}$ and the payoff},
-  -233.8/{Sharpe (graph)}/{$\mathbf{C}$ and the payoff},
+  -208.0/{Sharpe}/{$\mathbf{C}$ and $\widetilde{\mathbf{R}}$},
+  -216.6/{Sortino}/{$\mathbf{C}$ and $\widetilde{\mathbf{R}}$},
+  -225.2/{Sharpe (EWMA)}/{$\mathbf{C}$ and $\widetilde{\mathbf{R}}$},
+  -233.8/{Sharpe (graph)}/{$\mathbf{C}$ and $\widetilde{\mathbf{R}}$},
   -242.4/{\textsc{gics}}/{nothing, where covered},
   -251.0/{$K=1$ (no clustering)}/{nothing},
   -259.6/{random partition}/{nothing}}
@@ -155,7 +155,7 @@
  {$s_{it} = \tilde r_{it} - |C_{k(i)}|^{-1}\sum\nolimits_{j \in C_{k(i)}} \tilde r_{jt}$};
 \node[tx,text width=228pt] at (\CL,-285)
  {{\color{figgray}\itshape The market is removed above. The mean of the stock's group is removed here.
-   A group of size one leaves nothing to remove, and the portfolio does not trade those stocks that day.}};
+   In a group of size one, $s_{it}$ is zero, so the portfolio does not trade that stock on that day.}};
 \node[anchor=north east] at (\IX,-267.6)
  {\includegraphics[width=\IW pt]{\figinsetdir demean.pdf}};
 \node[ic] at (\IX,-322.8) {group means, 7 Jul 2014};
@@ -163,8 +163,7 @@
 %  6. STAGE TWO -- pinned, run in two variants
 % =====================================================================
 \node[tx,text width=228pt] at (\CL,-338)
- {\textbf{(a) Rule-based.} Five-day sum of $s_{it}$, sign flipped: long what has fallen
-  behind its peers, short what has run ahead, equal weight each side. Gross $1$, net $0$: dollar neutral by construction, with no fitted parameter.};
+ {\textbf{(a) Fixed trading rule.} Five-day sum of $s_{it}$, sign flipped: long what has underperformed its group, short what has outperformed it, equal weight each side. Gross $1$, net $0$: dollar neutral by construction, with no fitted parameter.};
 \draw[draw=figrule,line width=0.25pt,dash pattern=on 1.2pt off 1.4pt]
       (\CL,-378) -- (333,-378);
 \node[tx,text width=228pt] at (\CL,-380)
@@ -181,18 +180,18 @@
 \node[tx] at (\CL,-433)
  {$\pi_t = \sum\nolimits_i w_{it}\, r_{i,t+1}$};
 \node[tx] at (\CL,-449)
- {{\color{figgray}\itshape Market residuals build the partition and the signal. The payoff is earned on raw returns.}};
+ {{\color{figgray}\itshape Market residuals build the partition and the signal. The portfolio earns raw returns.}};
 % =====================================================================
 %  8. the estimand -- the pair, measured separately
 % =====================================================================
 \node[tx,font=\scriptsize\linespread{0.96}\selectfont] at (\CL,-465)
- {The estimand is the pair $\mathbf{Z}\mapsto\bigl(\mu(\mathbf{Z}),\sigma(\mathbf{Z})\bigr)$,
-  reported as two numbers rather than as one Sharpe ratio.};
+ {The estimand is the map $\mathbf{Z}\mapsto\bigl(\mu(\mathbf{Z}),\sigma(\mathbf{Z})\bigr)$.
+  We report its two parts separately.};
 \draw[draw=figink,line width=0.45pt] (\CL,-479) rectangle (\CR,-493);
 \draw[draw=figink,line width=0.45pt] (273,-479) -- (273,-493);
 \node[font=\scriptsize\selectfont,anchor=west,text=figink] at (112,-486)
  {$\mu(\mathbf{Z}) = \mathbb{E}\bigl[\pi_t(\mathbf{Z})\bigr]$:
-  {\itshape\color{figgray}the mean of the payoff}};
+  {\itshape\color{figgray}the mean return}};
 \node[font=\scriptsize\selectfont,anchor=west,text=figink] at (280,-486)
  {$\sigma(\mathbf{Z}) = \operatorname{sd}\bigl[\pi_t(\mathbf{Z})\bigr]$:
   {\itshape\color{figgray}its volatility}};

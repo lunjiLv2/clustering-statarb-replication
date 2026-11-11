@@ -14,7 +14,7 @@ from analysis import books
 plt.rcParams.update({"font.size": 11.2, "legend.fontsize": 10})   # print-size batch 2026-08-30
 
 STOCH = {"kmeans_ret": "$k$-means", "pca_load": "PCA loadings", "sssnetpre": "SSSNET", "fv3sm_w60": "Sharpe (graph)",
-         "sharpe_fixed_w60": "Sharpe", "sponge_w60": "SPONGE", "sortino_w60": "Sortino", "fv2a_w60": "Sharpe (EW)",
+         "sharpe_fixed_w60": "Sharpe", "sponge_w60": "SPONGE", "sortino_w60": "Sortino", "fv2a_w60": "Sharpe (EWMA)",
          "spectral_unsigned": "Spectral"}
 DET = {"agglo_complete": "Complete linkage", "agglo_avg": "Average linkage", "gics": "GICS"}
 PS = (1, 2, 3, 4, 5)
@@ -38,7 +38,7 @@ ax.annotate("deterministic clusterizers", (0.02, det["gics"]), xytext=(0, -11), 
 ax.plot(X, rule["random"], color=RED, lw=1.6, marker="o", ms=3, zorder=3)
 ax.annotate("random", (L, rule["random"][L]), xytext=(5, 0), textcoords="offset points", va="center", fontsize=10, color=RED)
 ax.set_xticks(X); ax.set_xticklabels(XT); ax.set_xlim(-0.25, L + 0.95); ax.set_ylabel("Sharpe ratio")
-ax.set_title("(a) rule-based component,\nnine clusterizers redrawn", fontsize=11.2, loc="left")
+ax.set_title("(a) fixed trading rule,\nnine clusterizers redrawn", fontsize=11.2, loc="left")
 for a in STOCH:
     c, lw, ms, z, ls = (BLACK, 1.8, 3.2, 4, "-") if a == "kmeans_ret" else (MID, 1.5, 3.0, 4, (0, (5, 2))) if a == "sponge_w60" else (GREY, 1.0, 2.5, 2, "-")
     bx.plot(X, head[a], color=c, lw=lw, marker="o", ms=ms, zorder=z, ls=ls)
@@ -47,7 +47,7 @@ bx.annotate("SPONGE", (2, head["sponge_w60"][2]), xytext=(0, -12), textcoords="o
 bx.plot(X, head["random"], color=RED, lw=1.6, marker="o", ms=3, zorder=3)
 bx.annotate("random", (L, head["random"][L]), xytext=(5, 0), textcoords="offset points", va="center", fontsize=10, color=RED)
 bx.set_xticks(X); bx.set_xticklabels(XT); bx.set_xlim(-0.25, L + 0.85)
-bx.set_title("(b) trained component,\nhead seed pinned", fontsize=11.2, loc="left")
+bx.set_title("(b) neural trading head,\nhead seed fixed", fontsize=11.2, loc="left")
 fig.tight_layout(w_pad=2.2); style.save(fig, "fig_pseed_flip", dpi=150)
 print("  rule ranges:", {STOCH[a]: round(max(v) - min(v), 3) for a, v in rule.items() if a in STOCH})
 print("  head ranges:", {STOCH[a]: round(max(v) - min(v), 3) for a, v in head.items() if a in STOCH})

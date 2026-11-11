@@ -117,11 +117,9 @@
 
 In this section, we hold every element of a statistical arbitrage
 pipeline fixed except for the clusterizer and the trading model. We also state what the resulting comparison estimates. In a clustering-based statistical arbitrage strategy, a \emph{clusterizer} first divides the $\N_t$ stocks of the day
-into $\K$ groups. It maps the day's panel of market residuals, the stock returns hedged against the market, to a
-partition. Then, a trading model bets on relative value within each
-group. Each partition is passed to a rule-based trading component, which uses a fixed cross-sectional rule, and to a trained trading component, which uses a
-neural trading head. Throughout, we use \emph{clusterizer} for the algorithm, \emph{clustering} for the operation it performs, and \emph{partition} for the grouping it produces. The pipeline follows the deep statistical arbitrage designs of \citet{guijarro2025deep} and
-\citet{epstein2025attention}. \citet{Jinetal2023}, within the spectral family, and \citet{brutti2026orthogonal} also compare partitions within a similar pipeline.
+into $\K$ groups. It takes as input the panel of market residuals, which are stock returns hedged against the market, and returns a partition. Then, a trading model bets on relative value within each
+group. Each partition is passed to a fixed trading rule and to a neural trading head. Throughout, we use \emph{clusterizer} for the algorithm, \emph{clustering} for the operation it performs, and \emph{partition} for the grouping it produces. The pipeline follows the deep statistical arbitrage designs of \citet{guijarro2025deep} and
+\citet{epstein2025attention}. \citet{brutti2026orthogonal} also compare partitions within a similar pipeline, and \citet{Jinetal2023} do so within the spectral family.
 
 Write the day-$t$ partition $\Part_t$ as a membership matrix
 %
@@ -133,41 +131,36 @@ Write the day-$t$ partition $\Part_t$ as a membership matrix
 %
 so that $[\Zmat_t]_{ik} = 1$ exactly when stock $i$ belongs to group $k$,
 and the constraint states that every stock belongs to exactly one group. Each data-driven clusterizer re-estimates $\Zmat_t$ every trading day from the panel of market
-residuals. Equivalently, the membership matrix $\Zmat_t$ is a
-one-hot factor loading matrix with unit weight. Although an unrestricted
-$\Lam_t \in \real^{\N_t \times \K}$ ($\K$ principal components,
-say) allows every stock to load on every factor, both matrices are rank-$\K$
-descriptions of the same cross-section, which makes them comparable. In \secref{sec:factor}, we use
+residuals. The membership matrix $\Zmat_t$ is also a one-hot factor loading matrix with unit weight. An unrestricted loading matrix $\Lam_t \in \real^{\N_t \times \K}$, such as the loadings on $\K$ principal components, allows every stock to load on every factor. Both matrices have rank $\K$ and describe the same cross-section, so we can compare them. In \secref{sec:factor}, we use
 the loading-matrix equivalence of \eqnref{eq:membership} directly and
 compare $\Zmat_t$ with principal components at the same rank~$\K$.
 
-The trading components build long--short portfolios from a partition $\Zmat$. Let $\pi_t(\Zmat)$ denote the \emph{payoff} of such a portfolio, its daily return. We estimate the map
+The trading models build long--short portfolios from a partition $\Zmat$. Let $\pi_t(\Zmat)$ denote the daily return of such a portfolio. We estimate the map
 %
 \begin{equation}\label{eq:estimand}
   \Zmat \;\longmapsto\; \bigl(\mu(\Zmat),\, \sigma(\Zmat)\bigr),
   \qquad
   \mu(\Zmat) = \Exp\bigl[\pi_t(\Zmat)\bigr],
   \qquad
-  \sigma^2(\Zmat) = \Var\bigl[\pi_t(\Zmat)\bigr],
-\end{equation}
+  \sigma^2(\Zmat) = \Var\bigl[\pi_t(\Zmat)\bigr]. \end{equation}
 %
-and the organizing claim of this article, which we test in \secref{sec:split}, is that clustering changes the payoff volatility $\sigma$ proportionally more than it changes the mean payoff $\mu$. \figref{fig:pipeline} illustrates the pipeline that produces $\pi_t$. We call each pairing of a clusterizer or control with a trading component a \emph{configuration}. Within a trading component, all configurations share every stage except the partition.
+The main claim of this article is that clustering changes the return volatility $\sigma$ proportionally more than it changes the mean return $\mu$. We test this claim in \secref{sec:split}. \figref{fig:pipeline} illustrates the pipeline that produces $\pi_t$. We call each pairing of a clusterizer or control with a trading model a \emph{configuration}. Within a trading model, all configurations share every stage except the partition.
 
 \begin{figure}[p]
 \centering
 \resizebox{\textwidth}{!}{\input{figures/fig_pipeline}}
-\caption{The strategy pipeline. This figure shows each stage of the pipeline as a horizontal band. Within a trading component, the configurations differ only in the partition band, whose second column lists the input each clusterizer uses. The portfolio band shows the rule-based and the trained component. Every other band is common to all configurations. The blue dashed line marks the raw returns, which enter the payoff untransformed. The four insets are computed for 7~July 2014 from the panel and from the $k$-means partition the runs used ($\K=30$, re-estimated daily). On that day, the universe contains $\N_t = 500$ stocks, which fill all 30 groups. The largest group contains $78$ stocks. Six groups contain a single stock each, and the portfolio does not trade these six stocks. The correlation matrix $\Cmat$ is ordered by that day's groups, and the columns of the membership matrix $\Zmat_t$ are sorted by group size. The paths show the cumulative group-demeaned residual (\secref{sec:components}), in percent, of 26 of the $478$ eligible stocks over 30 days. The shading marks the five-day signal window of the rule-based component.}
+\caption{The strategy pipeline. This figure shows each stage of the pipeline as a horizontal band. Within a trading model, the configurations differ only in the partition band, whose second column lists the input each clusterizer uses. The portfolio band shows the fixed trading rule and the neural trading head. Every other band is common to all configurations. The blue dashed line marks the raw returns, which enter the portfolio return untransformed. The four insets are computed for 7~July 2014 from the panel and from that day's partition of $k$-means on residuals ($\K=30$). On that day, the universe contains $\N_t = 500$ stocks, which fill all 30 groups. The largest group contains $78$ stocks. Six groups contain a single stock each, and the portfolio does not trade these six stocks. The correlation matrix $\Cmat$ is ordered by that day's groups, and the columns of the membership matrix $\Zmat_t$ are sorted by group size. The paths show the cumulative group-demeaned residual (\secref{sec:components}), in percent, over 30 days for 26 of the $478$ stocks that are in the universe on all 30 days. The shading marks the five-day signal window of the fixed trading rule.}
 \label{fig:pipeline}
 \end{figure}
 
 \subsection{The Panel}
 \label{sec:panel}
 
-We build the panel from daily CRSP data obtained through WRDS, covering
+We build the panel from daily CRSP data, obtained through WRDS and covering
 1990 to 2024. The traded universe is the 500 stocks
 with the largest market capitalization as of the \emph{previous} close,
-reselected daily. We restrict the universe in this way to keep the comparison among large and liquid stocks. The daily reselection uses information available at the previous close. The stocks must be common shares with a full history of market residuals over the clusterizers' estimation window.\footnote{CRSP share codes $10$, $11$, and $12$.} The return is CRSP's close-to-close return adjusted for splits and dividends.\footnote{The panel's date labels run one trading day ahead of the Fama--French calendar. We correct this offset before every regression on factor returns (\appref{app:calendar}). No statistic computed within the panel depends on it.} Every result in this article is computed on $6{,}913$ out-of-sample trading days, from 8 July 1997 to 27 December 2024. These days are shared by all 14 configurations of each trading component (the 12 clusterizers and the two controls). The neural trading head is pre-trained on the first $1{,}000$ days on which a portfolio can be
-formed, and the walk-forward loop starts on the trading day that follows this pre-training sample.
+reselected daily. We restrict the universe in this way to keep the comparison among large and liquid stocks. The daily reselection uses information available at the previous close. The stocks must be common shares with a full history of market residuals over the clusterizers' estimation window.\footnote{CRSP share codes $10$, $11$, and $12$.} The return is CRSP's close-to-close return adjusted for splits and dividends.\footnote{The panel's date labels run one trading day ahead of the Fama--French calendar. We correct this offset before every regression on factor returns (\appref{app:calendar}). No statistic computed within the panel depends on it.} Every result in this article is computed on $6{,}913$ out-of-sample trading days, from 8 July 1997 to 27 December 2024. These days are shared by all 14 configurations of each trading model (the 12 clusterizers and the two controls). The neural trading head is pre-trained on the first $1{,}000$ days on which a portfolio can be
+formed, and the out-of-sample period starts on the trading day that follows this pre-training sample.
 
 %%  ⚠ DECISION PENDING (2026-08-15). The split-adjustment material was
 %%  drafted in the body and MOVED to Appendix A.1 at the author's
@@ -182,8 +175,7 @@ formed, and the walk-forward loop starts on the trading day that follows this pr
 To remove the market factor, we residualize every stock's return
 against the S\&P~500 exchange-traded fund (SPY) using a single-factor
 market model. 
-Using $r_{it}$ for the raw return on stock $i$ and $r_{mt}$ for the
-market return,
+Let $r_{it}$ denote the raw return on stock $i$, and let $r_{mt}$ denote the market return. Then
 %
 \begin{equation}\label{eq:residual}
   \tilde r_{it} \;=\; r_{it} - \hat\beta_{it}\, r_{mt},
@@ -195,12 +187,12 @@ market return,
 \end{equation}
 %
 where the market beta is estimated over the beta window, the 60 trading days ending at $t$
-inclusive. The length of the beta window follows \citet{avellaneda2010statistical}. The ratio in \eqnref{eq:residual} is the least-squares slope from a regression of $r_i$ on $r_m$ with an intercept. We call the market-hedged return $\tilde r_{it}$ the \emph{market residual} of stock $i$. Because we do not subtract the intercept, the market residual differs from the regression residual by the intercept. A position formed at the close of day $t$ earns the next day's return, $r_{i,t+1}$. This return lies outside every window used for estimation, including the beta window and the clusterizers' estimation window, so no position uses information about the return it earns. All 14 configurations of each trading component use this beta window and the same timing of positions and returns.\footnote{Ending the beta window at $t-1$ instead, with fixed partitions and without rerunning the trained component, changes each rule-based portfolio's Sharpe ratio by less than $0.04$, which is well within the variation across head-seed reruns in \secref{sec:field}. The volatility reduction from clustering is unchanged to the first decimal. The alpha advantage over either control is marginally larger, so the convention retained here is conservative.} \tabref{tab:windows} lists every look-back window used in this article.
+inclusive. The length of the beta window follows \citet{avellaneda2010statistical}. The ratio in \eqnref{eq:residual} is the least-squares slope from a regression of $r_i$ on $r_m$ with an intercept. We call the market-hedged return $\tilde r_{it}$ the \emph{market residual} of stock $i$. Because we do not subtract the intercept, the market residual differs from the regression residual by the intercept. A position formed at the close of day $t$ earns the next day's return, $r_{i,t+1}$. This return lies outside every window used for estimation, including the beta window and the clusterizers' estimation window, so no position uses information about the return it earns. All 14 configurations of each trading model use this beta window and the same timing of positions and returns.\footnote{When we end the beta window at $t-1$ and rerun the fixed trading rule on the same partitions, the Sharpe ratio of each of its portfolios changes by less than $0.04$. This change is well within the variation across head-seed reruns in \secref{sec:field}. The volatility reduction from clustering is unchanged to the first decimal. The alpha advantage over either control is marginally larger, so the convention retained here is conservative.} \tabref{tab:windows} lists every look-back window used in this article.
 
 \eqnref{eq:residual} does not involve $\Zmat_t$, and we compute it
 for the whole panel before any partition is formed. The panel of market residuals $\widetilde{\Rmat} = (\tilde r_{it})$ is therefore a common input, and every
 clusterizer applies its map $\widetilde{\Rmat} \mapsto \Zmat_t$
-to this same panel. The clustering and the trading signal use the market residuals $\tilde r_{it}$, but the payoff $\pi_t$ in \eqnref{eq:estimand} is earned on the raw returns $r_{it}$.
+to this same panel. The clustering and the trading signal use the market residuals $\tilde r_{it}$, but the portfolio return $\pi_t$ in \eqnref{eq:estimand} is earned on the raw returns $r_{it}$.
 
 
 \subsection{The Clusterizers}
@@ -209,9 +201,8 @@ to this same panel. The clustering and the trading signal use the market residua
 We compare the 12 clusterizers, using a common 60-day estimation window wherever the partition is estimated from returns or correlations. The four trading-driven clusterizers also evaluate their trading objective on a longer trailing window of market residuals (\appref{app:rules}).
 \tabref{tab:methods} lists the 12 clusterizers by
 family, with the input that each clusterizer uses and how each is
-constructed.\footnote{We omit density-based clustering (DBSCAN, OPTICS), which has been standard in pairs selection since \citet{SARMENTO2020113490}. It returns a variable number of clusters and discards unclustered stocks, so it does not fit a design that uses the same $\K$ for all data-driven clusterizers. In \appref{app:singleton}, we find that the cost of discarding stocks lies within the variation of a single configuration across head-seed reruns. We also omit modularity-based community detection, which chooses its own $\K$, and single-linkage clustering, which is prone to chaining.} Each clusterizer receives the same panel of market residuals
-$\widetilde{\Rmat}$ and passes its partition $\Zmat_t$ to the same trading stage. Every clusterizer except \textsc{gics} targets the same $\K$. The number of groups of \textsc{gics} is the number of sectors in its snapshot. Throughout, we set $\K$ to $30$, following the fixed-$\K$ benchmark of \citet{Jinetal2023}. We report results for $\K = 10$ and $\K = 50$ in \secref{sec:window} and \appref{app:ksweep}. We run each clusterizer at one pre-specified setting and do not tune its settings to its trading results,
-because our question is how clearly the Sharpe ratio of the resulting portfolio distinguishes different partitions. We present each clusterizer's construction in \appref{app:rules} and the partitions it produces in \appref{app:sizes}.
+constructed.\footnote{We omit density-based clustering (DBSCAN, OPTICS), which has been standard in pairs selection since \citet{SARMENTO2020113490}. It returns a variable number of clusters and discards unclustered stocks, so it does not fit a design that uses the same $\K$ for all data-driven clusterizers. In \appref{app:singleton}, we find that the cost of discarding stocks lies within the variation of a single configuration across head-seed reruns. We also omit modularity-based community detection, which chooses its own $\K$, and single-linkage clustering, which is prone to chaining.}  Every clusterizer except \textsc{gics} targets the same $\K$. The number of groups of \textsc{gics} is the number of sectors in its snapshot. Throughout, we set $\K$ to $30$, following the fixed-$\K$ benchmark of \citet{Jinetal2023}. We report results for $\K = 10$ and $\K = 50$ in \secref{sec:window} and \appref{app:ksweep}. We run each clusterizer at one pre-specified setting and do not tune its settings to its trading results,
+because we ask whether the portfolios built on different partitions differ clearly in Sharpe ratio. We present each clusterizer's construction in \appref{app:rules} and the partitions it produces in \appref{app:sizes}.
 
 \begin{table}[htbp]
 \centering
@@ -226,7 +217,7 @@ because our question is how clearly the Sharpe ratio of the resulting portfolio 
 Clusterizer & Input & Estimation window (days) & Construction \\
 \midrule
 \multicolumn{4}{@{}l}{\emph{Geometric}}\\
-$k$-means on returns & $\widetilde{\Rmat}$ directly & $60$
+$k$-means on residuals & $\widetilde{\Rmat}$ directly & $60$
   & $k$-means on the vectors of market residuals in Euclidean space;
     does not form a correlation matrix \\
 \addlinespace
@@ -241,10 +232,7 @@ Spectral (unsigned) & eigenvectors of $|\Cmat|$ & $60$
   & spectral clustering on the unsigned correlation \\
 PCA loadings & eigenvectors of $\Cmat$ & $60$
   & $k$-means on the 10 leading eigenvector coordinates \\
-\textsc{sponge} & a signed-Laplacian pencil & $60$\tnote{a}
-  & the symmetric variant \textsc{sponge}$_{\text{sym}}$, on the positive
-    and negative parts of $\Cmat$; unlike the row above it uses the
-    sign\tnote{b} \\
+\textsc{sponge} & $\Cmat^{+}$ and $\Cmat^{-}$ & $60$\tnote{a} & the symmetric variant \textsc{sponge}$_{\text{sym}}$, on the positive and negative parts of $\Cmat$; unlike spectral (unsigned) clustering, it uses the sign of each correlation\tnote{b} \\
 \addlinespace
 \multicolumn{4}{@{}l}{\emph{Learned} \citep{he2022sssnet}}\\
 \textsc{sssnet} & $\Cmat$, as a signed graph & $60$
@@ -252,26 +240,24 @@ PCA loadings & eigenvectors of $\Cmat$ & $60$
     warm-started from \textsc{sponge}\tnote{c} \\
 \addlinespace
 \multicolumn{4}{@{}l}{\emph{Trading-driven}}\\
-Sharpe & $\Cmat$ and the payoff & $60$
+Sharpe & $\Cmat$ and $\widetilde{\Rmat}$ & $60$
   & a soft assignment optimized against the realized Sharpe ratio of
     the portfolio it produces, hardened by $\arg\max$ \\
-Sortino & $\Cmat$ and the payoff & $60$
+Sortino & $\Cmat$ and $\widetilde{\Rmat}$ & $60$
   & the same, downside deviation replacing the standard deviation \\
-Sharpe (EW) & $\Cmat$ and the payoff & $60$
+Sharpe (EWMA) & $\Cmat$ and $\widetilde{\Rmat}$ & $60$
   & the same objective exponentially weighted, decay $0.99$\tnote{d} \\
-Sharpe (graph) & $\Cmat$ and the payoff & $60$
-  & the assignment comes from a signed-graph network, and the objective
-    matches the trading signal's 30-day horizon \\
+Sharpe (graph) & $\Cmat$ and $\widetilde{\Rmat}$ & $60$
+  & the assignment comes from a signed-graph network, and the objective uses the 30-day signal window of the neural trading head \\
 \addlinespace
 \multicolumn{4}{@{}l}{\emph{Taxonomy} \citep{bhojraj2003whats}}\\
 \textsc{gics} & nothing, on the stocks it
-  covers & --- & a static sector classification; stocks outside the table are
-    placed by correlation\tnote{e} \\
+  covers & --- & a static sector classification; stocks outside the snapshot are placed by correlation\tnote{e} \\
 \addlinespace
 \midrule
 \multicolumn{4}{@{}l}{\emph{Controls}}\\
 No clustering ($\K=1$) & nothing & ---
-  & a single group that contains all stocks, so the trading rule demeans against the whole
+  & a single group that contains all stocks, so the trading model demeans against the whole
     cross-section \\
 Random partition & nothing & ---
   & a uniform random partition redrawn each day, matched to the real partitions in $\K$ \\
@@ -284,38 +270,32 @@ same $\K$. The four trading-driven clusterizers also evaluate their trading obje
 60 trading days. Although the original implementation of \textsc{sponge} uses a 21-day
 estimation window, we use its 60-day variant so that a comparison across clusterizers is not a comparison of estimation windows.
 This substitution does not disadvantage \textsc{sponge}
-(\appref{app:names}). The \textsc{gics} clusterizer and the two controls,
-marked ---, do not form any correlation matrix, except that \textsc{gics} uses correlation to place the stocks that its table does not cover (note e).
+(\appref{app:names}). The \textsc{gics} clusterizer and the two controls do not estimate their groups from market residuals, so their estimation window is marked ---. \textsc{gics} uses correlation only to place the stocks that its snapshot does not cover (note e).
 \item[b] Clusterizers handle groups of fewer than two members in different ways.
 The \textsc{sponge}, Sharpe, and Sortino clusterizers reassign such a member to its most
 correlated group. The other nine clusterizers leave such a member in place, so the trading
-stage drops it. For the three that reassign, the reassignment is immaterial. Under $k$-means on returns, the only clusterizer with a material singleton rate, the deletion changes the traded portfolio. We measure the cost of this deletion in \appref{app:singleton}.
-\item[c] \textsc{sssnet} is run in advance to produce a fixed set of daily partitions that all five head seeds share, like the other stochastic clusterizers (\appref{app:sssnet}).
+stage drops it. For the three clusterizers that reassign, the reassignment is immaterial. Only $k$-means on residuals produces many single-stock groups, so deleting these stocks changes its traded portfolio. We measure the cost of this deletion in \appref{app:singleton}.
+\item[c] Like the other stochastic clusterizers, \textsc{sssnet} is run in advance to produce a fixed set of daily partitions that all five head seeds share (\appref{app:sssnet}).
 %% v3-VERIFIED 2026-08-20 (coverage 54-73%, fill ~35%, exactly 10 groups):
 %% measured from partitions_v3/labelcache_gics vs labelcache_kmeans_ret over the
 %% 6,944 OOS days. Do NOT restore the old-panel 48-68 / 40 / 10.9 in the number pass.
-\item[d] Sharpe (EW) differs from Sharpe in more than the weighting, so the
-clean contrast is Sharpe against Sortino.
-\item[e] The \textsc{gics} table is a single snapshot covering roughly $54\%$ to $73\%$ of the
-universe by era, so it has survivorship and coverage bias by construction.
+\item[d] Sharpe (EWMA) differs from Sharpe in its implementation as well as in the weighting (\appref{app:rules}), so we compare objectives by comparing Sharpe with Sortino.
+\item[e] The \textsc{gics} labels come from a single snapshot, so they are not point-in-time. The snapshot covers $54\%$ to $73\%$ of the universe, depending on the year.
 The stocks that it does not cover are assigned to the group they correlate with most strongly. These stocks make up about $35\%$ of the portfolio on a given
 day. The \textsc{gics} partition that is
-traded is therefore a taxonomy--correlation hybrid. The \emph{Input} column records only the taxonomy.
+traded is therefore a taxonomy--correlation hybrid. The \emph{Input} column describes only the stocks that the snapshot covers.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-The families in \tabref{tab:methods} differ in the information they use as well as in the algorithm. For example, the sensitivity of the Sharpe ratio to the length of the estimation window is concentrated in the clusterizers that use individual eigenvectors of the correlation matrix (\secref{sec:window}). The four trading-driven clusterizers choose the partition to maximize the Sharpe or Sortino ratio, but as a group they do not rank higher than the other clusterizers in Sharpe ratio. In the trained component, three of the four trading-driven clusterizers finish in the lower half of the Sharpe-ratio ranking. The exception is Sharpe (graph), which finishes near the top (\secref{sec:field}). Finally, we include \textsc{gics} to give the
+The families in \tabref{tab:methods} differ in the information they use as well as in the algorithm. For example, the Sharpe ratio depends on the length of the estimation window mainly for the clusterizers that use individual eigenvectors of the correlation matrix (\secref{sec:window}). The four trading-driven clusterizers choose the partition to maximize the Sharpe or Sortino ratio, but as a group they do not rank higher than the other clusterizers in Sharpe ratio. Under the neural trading head, three of the four trading-driven clusterizers finish in the lower half of the Sharpe-ratio ranking. The exception is Sharpe (graph), which finishes near the top (\secref{sec:field}). Finally, we include \textsc{gics} to give the
 comparison a non-statistical reference point. Note e of \tabref{tab:methods} states its coverage caveat.
 
 
-\subsection{The Rule-Based and Trained Components}
+\subsection{The Fixed Trading Rule and the Neural Trading Head}
 \label{sec:components}
 
-The rule-based component trades based on every partition with a fixed cross-sectional rule
-that has no learned parameter. The trained component trades based on the same partitions with a neural trading head fitted on a Sharpe-ratio loss. Both trading components begin by demeaning the market residuals within the groups of the same daily partitions. For a position formed on a given day, the rule-based component uses the partition estimated one day earlier than the trained component does (\appref{app:rules}). On each day, we
-subtract from every stock's market residual the average market residual of its own
-group and obtain the \emph{group-demeaned residual} of stock $i$,
+The fixed trading rule trades based on every partition and has no fitted parameter. The neural trading head trades based on the same partitions and is fitted on a Sharpe-ratio loss. Both trading models begin by demeaning the market residuals within the groups of the same daily partitions. For a position formed on a given day, the fixed trading rule uses the partition estimated one day earlier than the neural trading head does (\appref{app:rules}). On each day, the \emph{group-demeaned residual} of stock $i$ is its market residual minus the average market residual of its own group,
 %
 \begin{equation}\label{eq:relsig}
   s_{it} \;=\; \tilde r_{it} \;-\; \frac{1}{|C_{k(i)}|}
@@ -325,7 +305,7 @@ group and obtain the \emph{group-demeaned residual} of stock $i$,
 where $C_{k(i)}$ is the group that contains stock $i$. Residualizing against the market in
 \eqnref{eq:residual} removes the market from each return, and demeaning within the group in \eqnref{eq:relsig} then removes the mean market residual of the stock's group.
 
-The fixed rule sums the group-demeaned residual of \eqnref{eq:relsig} over the past five days, the signal window of the rule-based component. It holds every stock with a negative sum long and every stock with a positive sum short, equally weighted within each side:
+The fixed trading rule sums the group-demeaned residual of \eqnref{eq:relsig} over the past five days, its signal window. It holds every stock with a negative sum long and every stock with a positive sum short, equally weighted within each side:
 %
 \begin{equation}\label{eq:naivew}
   w_{it} \;=\;
@@ -335,16 +315,13 @@ The fixed rule sums the group-demeaned residual of \eqnref{eq:relsig} over the p
   \end{cases},
 \end{equation}
 %
-with $n^{+}_{t}$ and $n^{-}_{t}$ the number of stocks on each side. The fixed
-rule is adapted from \citet{Jinetal2023}, where they trade the same
-within-cluster reversal on raw returns. They normalize the weights within
-each cluster, whereas the fixed rule normalizes them across the portfolio. The rule-based portfolio is a mean-reversion bet that buys the stocks that have recently underperformed their group and sells the stocks that have recently outperformed it. \eqnref{eq:naivew} gives a gross exposure $\sum_i |w_{it}|$ of $1$ and a net exposure $\sum_i w_{it}$ of $0$, so the rule-based portfolios are dollar neutral by construction.\footnote{The implementation uses weights of $\pm 1/n^{\pm}_{t}$, which give a gross exposure of $2$. Every rule-based number in this article is computed on the portfolio scaled to gross exposure one, the gross exposure of the trained portfolios. The scaling halves alphas, volatilities, and factor loadings and leaves Sharpe ratios, $t$-statistics, and $R^2$ unchanged.} Moreover, each rule-based portfolio is fully determined by its partition.
+with $n^{+}_{t}$ and $n^{-}_{t}$ the number of stocks on each side. The fixed trading rule is adapted from \citet{Jinetal2023}, who trade the same within-cluster reversal on raw returns. They normalize the weights within
+each cluster, whereas the fixed trading rule normalizes them across the portfolio. The fixed trading rule is a mean-reversion strategy that buys the stocks that have recently underperformed their group and sells the stocks that have recently outperformed it. \eqnref{eq:naivew} gives a gross exposure $\sum_i |w_{it}|$ of $1$ and a net exposure $\sum_i w_{it}$ of $0$, so the portfolios of the fixed trading rule are dollar neutral by construction.\footnote{The implementation uses weights of $\pm 1/n^{\pm}_{t}$, which give a gross exposure of $2$. Every number for the fixed trading rule in this article is computed on the portfolio scaled to gross exposure one, so that it matches the portfolios of the neural trading head. The scaling halves alphas, volatilities, and factor loadings and leaves Sharpe ratios, $t$-statistics, and $R^2$ unchanged.} Moreover, each portfolio of the fixed trading rule is fully determined by its partition.
 
-The trained component replaces the fixed rule with a \emph{neural trading
-head} in the design of \citet{guijarro2025deep}. The head applies a convolutional
+The \emph{neural trading head} follows the design of \citet{guijarro2025deep}. The head applies a convolutional
 extractor to the path of the group-demeaned residual and a scoring network to the extractor's output.
 We replace the transformer of \citet{guijarro2025deep} with the long convolution of
-\citet{fu2023simple}, as \citet{epstein2025attention} do. For each stock, the head takes as input the 30-day path of running sums of the group-demeaned residual of \eqnref{eq:relsig} and returns a weight through a fixed chain,
+\citet{fu2023simple}, as \citet{epstein2025attention} do. For each stock, the head takes as input the 30-day path of running sums of the group-demeaned residual of \eqnref{eq:relsig} and returns a weight through the following chain,
 %
 \[
   x_{it}\ \xrightarrow{\ \mathrm{Conv}_{2,4,8}\ }\ u_{it}\ \xrightarrow{\ \mathrm{LongConv}\ }\ h_{it}
@@ -354,16 +331,16 @@ We replace the transformer of \citet{guijarro2025deep} with the long convolution
 \]
 %
 The chain begins with a multi-scale convolution and a long convolution that has one kernel weight per day of the signal window. A two-layer scoring network then maps $h_{it}$ to a score $g_{it}$. Finally, the head clamps the score softly and divides it by the sum of the absolute clamped scores across stocks, so the portfolio has gross exposure one. We fit the parameters to maximize the in-sample
-Sharpe ratio of the payoff in \eqnref{eq:payoff}, less three
-regularization penalties. Because this objective divides by the standard deviation of the payoff, training rewards a balanced portfolio with lower payoff volatility as well as a higher mean payoff.
+Sharpe ratio of the portfolio return in \eqnref{eq:payoff}, less three
+regularization penalties. Because this objective divides by the standard deviation of the portfolio return, training rewards a balanced portfolio with lower return volatility as well as a higher mean return.
 
-The head is pre-trained on the first $1{,}000$ days. It is then refit every $125$ trading days on its training window, which always covers the most recent $1{,}000$ days. We train separate heads for every configuration of the trained component, with the same architecture, hyperparameters, and learning-rate schedule. Early stopping uses the last $15\%$ of the training window as its validation set.
-We present the architecture, the objective, and the schedule in \appref{app:head}. The neural trading head differs from the fixed rule both in its fitted parameters and in its signal window, $30$ days against five. In \secref{sec:head}, we separate the effect of the fitted model from the effect of the signal window by rerunning the fixed rule on a $30$-day signal window.
+The head is pre-trained on the first $1{,}000$ days. It is then refit every $125$ trading days on its training window, which always covers the most recent $1{,}000$ days. We train separate heads for every configuration of the neural trading head, with the same architecture, hyperparameters, and learning-rate schedule. Early stopping uses the last $15\%$ of the training window as its validation set.
+We present the architecture, the objective, and the schedule in \appref{app:head}. The neural trading head differs from the fixed trading rule both in its fitted parameters and in its signal window. The signal window is $30$ days for the neural trading head and five days for the fixed trading rule. In \secref{sec:head}, we separate the effect of the fitted model from the effect of the signal window by rerunning the fixed trading rule on a $30$-day signal window.
 
-Rescaling the weights to gross exposure one does not constrain the net exposure $\sum_i w_{it}$, so the trained portfolios are not dollar neutral. Their mean absolute net exposure ranges from $0.06$ to $0.18$, against zero for the rule-based portfolios of \eqnref{eq:naivew}.
+Rescaling the weights to gross exposure one does not constrain the net exposure $\sum_i w_{it}$, so the portfolios of the neural trading head are not dollar neutral. Their mean absolute net exposure ranges from $0.06$ to $0.18$, against zero for the portfolios of the fixed trading rule (\eqnref{eq:naivew}).
 We screen every run for days on which its portfolio is one-sided, that is, has no long position or no short position. Every run reported in this article passes the screen.
 
-The payoff of \eqnref{eq:estimand} is the same function of the weights in either trading component,
+The portfolio return of \eqnref{eq:estimand} is the same function of the weights in either trading model,
 %
 \begin{equation}\label{eq:payoff}
   \pi_t \;=\; \sum_i w_{it}\, r_{i,t+1},
@@ -437,24 +414,23 @@ where the return on the right is the \emph{raw} return of \eqnref{eq:residual}.
 \subsection{The Two Controls}
 \label{sec:controls}
 
-To measure what clustering contributes to trading performance, we compare every result below against two controls. The no-clustering control ($\K = 1$) puts all stocks in a single group, so each stock's market residual is demeaned against the average of all stocks. The $\K = 1$ control tests whether clustering is worth performing at
-all. The random-partition control assigns each stock to one of $\K$ groups uniformly at
+To measure what clustering contributes to trading performance, we compare every result below against two controls. The no-clustering control ($\K = 1$) puts all stocks in a single group, so each stock's market residual is demeaned against the average of all stocks. We use the $\K = 1$ control to assess whether clustering improves trading performance. The random-partition control assigns each stock to one of $\K$ groups uniformly at
 random, independently across stocks, and redraws the assignment every trading day.
 It does not use the panel of market residuals
-$\widetilde{\Rmat}$. The random control forms 30 groups, the same as every clusterizer except \textsc{gics} targets. It also uses the same demeaning within groups, the same trading components, and the same signal windows as the configurations of the clusterizers. Compared with those configurations, the random control lacks only the \emph{information} in their groups. It therefore separates the mechanical effect of demeaning within groups from the effect of the information in the groups. The random control differs from the placebo of \citet{brutti2026orthogonal}. Their placebo permutes long and short assignments within clusters and thereby tests the signal with a fixed partition.
+$\widetilde{\Rmat}$. The random control forms 30 groups, the same as every clusterizer except \textsc{gics} targets. It also uses the same demeaning within groups, the same trading models, and the same signal windows as the configurations of the clusterizers. Compared with those configurations, the random control lacks only the \emph{information} in their groups. It therefore separates the mechanical effect of demeaning within groups from the effect of the information in the groups. The random control differs from the placebo of \citet{brutti2026orthogonal}. Their placebo permutes long and short assignments within clusters, so it tests the signal for a fixed partition. In contrast, our random control keeps the signal and replaces the partition.
 
 
 
 \subsection{The Seeds and Conventions}
 \label{sec:seeds}
 
-We train each configuration of the trained component with five head seeds, $\{1, 2, 3, 4, 5\}$. The head seed sets the initialization of the trading head, so the dispersion across head seeds measures the variation of the fitted model for a fixed partition. Unless stated otherwise, every dispersion figure below is computed across a configuration's own head-seed runs. This includes the pooled standard deviation of paired differences, which we use in \secref{sec:invariance} as the benchmark for the ranking.
+We train each configuration of the neural trading head with five head seeds, $\{1, 2, 3, 4, 5\}$. The head seed sets the initialization of the trading head, so the standard deviation across head seeds measures the variation of the fitted model for a fixed partition. Unless stated otherwise, every standard deviation of a per-run statistic, such as the Sharpe ratio, is computed across a configuration's own head-seed runs. This includes the pooled standard deviation of the Sharpe-ratio gap between two configurations across the five head seeds. In \secref{sec:invariance}, we compare the gaps in the ranking with this standard deviation.
 
 Nine of the 12 clusterizers are stochastic. The deterministic ones are average linkage, complete linkage, and \textsc{gics}. We generate the daily partitions of each stochastic clusterizer in advance and use the same partitions in all five head-seed runs, so a head seed changes only the fitted head. We redraw the partitions under other partition seeds for \secref{sec:pseed} and reuse those redraws in \secref{sec:gradient}.
 
-Throughout, the Sharpe ratio of a payoff series is $\sqrt{252}$ times its mean divided by its standard deviation. We do not subtract a risk-free rate, because the return of a self-financing long-short portfolio is already an excess return. All payoffs are measured before trading costs, which we consider in \secref{sec:costs}. Tables report either the mean per-seed Sharpe ratio (the mean of the five per-seed Sharpe ratios) or the
-Sharpe ratio of the seed-averaged payoff, as each table note states.
-Averaging the payoffs across head seeds before computing the Sharpe ratio cancels part of the variation between head-seed runs, so the Sharpe ratio of the seed-averaged payoff exceeds the mean per-seed Sharpe ratio by $0.16$ to $0.22$.
+Throughout, the Sharpe ratio of a return series is $\sqrt{252}$ times its mean divided by its standard deviation. We do not subtract a risk-free rate, because the return of a long--short portfolio with zero or small net exposure is close to an excess return. All portfolio returns are measured before trading costs, which we consider in \secref{sec:costs}. Tables report either the mean per-seed Sharpe ratio (the mean of the five per-seed Sharpe ratios) or the
+Sharpe ratio of the seed-averaged return, as each table note states.
+Because averaging the portfolio returns across head seeds cancels part of the variation between head-seed runs, the Sharpe ratio of the seed-averaged return exceeds the mean per-seed Sharpe ratio by $0.16$ to $0.22$.
 %%---------------------------------------------------------------------
 %%  §3.5 SCOPE DECISION, 2026-08-15 (author's call).
 %%  Lead with the three head fits, which are real, and state the scope of
@@ -665,11 +641,11 @@ Averaging the payoffs across head seeds before computing the Sharpe ratio cancel
 %%    function body, max|diff| 0.0. (CLAUDE.md §2, verified 2026-08-12.)
 %%---------------------------------------------------------------------
 
-\subsection{Design Resolution}
+\subsection{Statistical Precision of the Comparisons}
 \label{sec:resolution}
 
 
-We close this section by asking which differences between configurations the design can resolve. A Sharpe ratio is the ratio of the payoffs' mean and volatility. We will be analyzing the two moments separately. For a return series of length $T$ and volatility $\sigma$, their standard errors are
+We close this section by asking which differences between configurations the design can detect. A Sharpe ratio is the ratio of the mean and the volatility of the portfolio returns. We analyze the two moments separately. For a return series of length $T$ and volatility $\sigma$, the standard errors of the estimated volatility and the estimated mean are
 %
 \begin{equation}\label{eq:twose}
   \operatorname{se}(\hat\sigma) \;=\; \frac{\sigma}{\sqrt{2T}},
@@ -677,9 +653,9 @@ We close this section by asking which differences between configurations the des
   \operatorname{se}(\hat\mu) \;=\; \frac{\sigma}{\sqrt{T}}.
 \end{equation}
 %
-The volatility is therefore estimated more accurately than the mean, with a standard error $1/\sqrt{2}$ times as large. For each moment, we compare its spread across configurations with its standard error.
+The volatility is therefore estimated more precisely than the mean. Its standard error is $1/\sqrt{2}$ times that of the mean. For each moment, we compare its standard deviation across configurations with its standard error.
 
-We use 19 configurations of the trained component (\appref{app:names}). Besides the 14 above, they include five variants that run average linkage, complete linkage, $k$-means on returns, PCA loadings, and spectral (unsigned) with a 21-day estimation window. Because these configurations trade the same stocks on the same days, their seed-averaged payoffs correlate at $\bar\rho = 0.854$. When two configurations are compared, the part of their estimation error that they share cancels, so the measurement error we use below is the part that they do not share.\footnote{The errors in estimated variances are correlated at the square of the correlation between the underlying series, so the shared part of the volatility error is $\bar\rho^{\,2} = 0.854^2 = 0.729$. Using $\bar\rho$ in place of $\bar\rho^{\,2}$ for the volatility error would raise the volatility ratios reported here by $36\%$. We measure the correlation on seed-averaged payoffs. On single head-seed runs, it ranges from $0.757$ to $0.799$.}
+We use 19 configurations of the neural trading head (\appref{app:names}). Besides the 14 configurations of \tabref{tab:methods}, they include five variants that run average linkage, complete linkage, $k$-means on residuals, PCA loadings, and spectral (unsigned) with a 21-day estimation window. Because these configurations trade the same stocks on the same days, their seed-averaged returns are highly correlated, with an average pairwise correlation of $\bar\rho = 0.854$. When we compare two configurations, the estimation error that is common to both cancels. The standard error that we use below therefore measures only the remaining part.\footnote{The errors in estimated variances are correlated at the square of the correlation between the underlying series, so the errors in the estimated volatilities of two configurations are correlated at about $\bar\rho^{\,2} = 0.854^2 = 0.729$. Using $\bar\rho$ in place of $\bar\rho^{\,2}$ for the error in the estimated volatility would raise the ratios for volatility in the next paragraph by $36\%$. On single head-seed runs, it ranges from $0.757$ to $0.799$.}
 
 %%  ⚠ SUPERSEDED 2026-11-05. The provenance block below is the v2 panel (6,941 days).
 %%  The printed ratios are v3 (five head seeds, 6,913-day common calendar, SET19).
@@ -718,7 +694,7 @@ We use 19 configurations of the trained component (\appref{app:names}). Besides 
 %%  ⚠ The arm set is SET19, not the fourteen described above. Say so, or the
 %%    row silently changes with the field.
 
-Relative to their measurement error, differences in volatility are much larger than differences in mean return. Specifically, we split the sample at $2001$, $2009$, and $2016$. Within each of the four periods, we measure the standard deviation of each moment across the 19 configurations. In every period, differences in volatility are between $13$ and $21$ times their own measurement error, with no trend across periods. Differences in mean return fall from $2.2$ times their measurement error in the first period to less than their measurement error in the last two periods. The ratio of these differences to their measurement error is $0.98$ in the third period and $0.63$ in the fourth.
+Differences in volatility are much larger than differences in mean return when each is measured relative to its own standard error. We split the sample into four periods: 1997--2001, 2002--2009, 2010--2016, and 2017--2024. Within each of the four periods, we measure the standard deviation of each moment across the 19 configurations. In every period, differences in volatility are between $13$ and $21$ times their own standard error, with no trend across periods. Differences in mean return fall from $2.2$ times their standard error in the first period to less than their standard error in the last two periods. The ratio of these differences to their standard error is $0.98$ in the third period and $0.63$ in the fourth.
 
 %%---------------------------------------------------------------------
 %%  §4.1 DRAFT, 2026-08-15. STRUCTURE DECIDED WITH THE AUTHOR:

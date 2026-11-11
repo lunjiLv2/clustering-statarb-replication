@@ -27,7 +27,7 @@ plt.rcParams.update({"font.size": 10.5, "legend.fontsize": 9.5})   # print-size 
 SEEDS = tuple(paths.SEEDS)
 RULES = [a for a in paths.ARMS if a not in ("k1", "random")]
 CTRL = ["k1", "random"]
-LABEL = dict(style.NAME, kmeans_ret="$k$-means on returns", spectral_unsigned="Spectral (unsigned)",
+LABEL = dict(style.NAME, kmeans_ret="$k$-means on residuals", spectral_unsigned="Spectral (unsigned)",
              k1="No clustering ($K=1$)", random="Random partition")
 
 for a in RULES + CTRL:
@@ -67,12 +67,12 @@ x0 = hi_x - 0.06 * (hi_x - lo_x) - paired                    # free-standing, ri
 ax.plot([x0, x0 + paired], [top, top], "-", color="black", lw=1.6, zorder=5)
 for x in (x0, x0 + paired):
     ax.plot([x, x], [top - 0.17, top + 0.17], "-", color="black", lw=1.6, zorder=5)
-ax.annotate(f"one paired-difference s.d. (${paired:.3f}$):\n"
+ax.annotate(f"pooled s.d. of a gap across head seeds (${paired:.3f}$):\n"
             "the distance two adjacent means must exceed",
             (x0 + paired / 2, top), xytext=(0, 7), textcoords="offset points",
             ha="center", va="bottom", fontsize=8.8, linespacing=1.25)
 ax.axhline(len(CTRL) - 0.5, color="0.75", lw=0.7, ls=(0, (4, 3)))
-ax.set_xlabel("Sharpe ratio, trained component")
+ax.set_xlabel("Sharpe ratio, neural trading head")
 fig.tight_layout(); style.save(fig, "fig_field_ruler", dpi=150)
 
 gaps = means.values[:-1] - means.values[1:]

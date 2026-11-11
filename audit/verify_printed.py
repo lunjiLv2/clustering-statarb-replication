@@ -49,7 +49,10 @@ print("== lens (lens_extras / full_stages) ==")
 l = pd.read_csv(E+"lens_extras_v3_cal6913.csv"); g = l[l.arm=="gics"].iloc[0]; km = l[l.arm=="kmeans_ret"].iloc[0]
 chk("gics 10 groups / 322-name / floor 0.028", (round(g.eff_K,1), round(g.lens_N), round(g.dof_floor,3)) == (10.0, 322, 0.028))
 chk("kmeans after-5PC 0.160 / 60%", (round(km.R2_after_5PC,3), round(km.ret_5PC*100)) == (0.160, 60))
-cl = l[~l.arm.isin(["k1","random"])]; chk("block-bootstrap SE band 0.001-0.005", (round(cl[[c for c in l.columns if c.startswith("se_")]].min().min(),3), round(cl[[c for c in l.columns if c.startswith("se_")]].max().max(),3)) == (0.001, 0.005))
+cl = l[~l.arm.isin(["k1","random"])]; chk("block-bootstrap SE band 0.1-0.5 percentage points (§6.1 prints pp since round 39)", (round(100*cl[[c for c in l.columns if c.startswith("se_")]].min().min(),1), round(100*cl[[c for c in l.columns if c.startswith("se_")]].max().max(),1)) == (0.1, 0.5))
+chk("A.10: the random control's floor is 5.97% on the lens panel (GICS 2.8%)", round(100*l[l.arm=="random"].iloc[0].dof_floor,2) == 5.97)
+_bc = pd.read_csv(E+"bet_corr_matrix_v3_12arm_cal6913.csv", index_col=0); _bcl = [a for a in _bc.index if a not in ("k1","random")]; _iu = np.triu_indices(12, 1); _off = _bc.loc[_bcl,_bcl].to_numpy()[_iu]
+chk("§5.4 weights: 66 clusterizer pairs 0.581-0.657, mean 0.61; controls 0.71 with each other, 0.55/0.51 with their own rerun", len(_off)==66 and (round(_off.min(),3), round(_off.max(),3), round(_off.mean(),2)) == (0.581, 0.657, 0.61) and round(_bc.loc["k1","random"],2) == 0.71 and (round(_bc.loc["k1","k1"],2), round(_bc.loc["random","random"],2)) == (0.55, 0.51))
 chk("5PC retention band 44-61%", band(cl.ret_5PC*100, 44, 61, 0))
 f = pd.read_csv(E+"lens_v3_full_stages_cal6913.csv"); kf = f[f.arm=="kmeans_ret"].iloc[0]
 chk("kmeans FF stages .246/.206/.185/.178", [round(kf[c],3) for c in ("R2_after_CAPM","R2_after_FF3","R2_after_FF5","R2_after_FF6")] == [0.246, 0.206, 0.185, 0.178])
@@ -264,6 +267,8 @@ for _c,_lo,_hi in (("rule",52,68),("head",41,68)):
     _pct = 100*_sh.alpha_on_k1/_sh.alpha6
     chk(f"§6.2 alpha kept against the K=1 book, {_c}: {_lo}%-{_hi}% of the FF5+MOM alpha (12 arms; §1 prints the pooled 41%-68%, N123)", (round(_pct.min()), round(_pct.max()))==(_lo,_hi))
 
+_nsr = pd.read_csv(E+"naive_turnover_v3_cal6913.csv", index_col=0).naive_SR; _nsc = _nsr.drop(["k1","random"])
+chk("§6.4 (round 39): fixed-rule gross Sharpe 1.46-1.78 for the 12 clusterizers against 0.83 for K=1, every clusterizer above K=1 (cf. Brutti et al. Table 2)", len(_nsc) == 12 and band(_nsc, 1.46, 1.78) and round(_nsr["k1"], 2) == 0.83 and bool((_nsc > _nsr["k1"]).all()))
 print("== N123 (2026-11-10): rule-based levels at gross one, and the percentages that replaced verbal fractions ==")
 _nt = pd.read_csv(E+"naive_turnover_v3_cal6913.csv", index_col=0); _ntc = _nt.drop(["k1","random"]); assert len(_ntc) == 12
 chk("tab:moments rule volatility 2.38-3.09, K=1 4.65, random 4.41, mean 2.70 (gross one)", band(100*RS*_ntc.ann_vol, 2.38, 3.09) and (round(100*RS*_nt.loc["k1","ann_vol"],2), round(100*RS*_nt.loc["random","ann_vol"],2), round(100*RS*_ntc.ann_vol.mean(),2)) == (4.65, 4.41, 2.70))

@@ -19,7 +19,7 @@ ARMS = [("kmeans_ret", "$k$-means on returns"), ("agglo_complete", "Complete lin
         ("agglo_avg", "Average linkage"), ("spectral_unsigned", "Spectral (unsigned)")]
 # Five arms do not fit on one line at this width; the tick labels wrap onto two lines and the gap
 # between neighbours is asserted on the rendered canvas below, not eyeballed.
-TICK = {"kmeans_ret": "$k$-means\non returns", "agglo_complete": "Complete\nlinkage", "pca_load": "PCA\nloadings",
+TICK = {"kmeans_ret": "$k$-means\non residuals", "agglo_complete": "Complete\nlinkage", "pca_load": "PCA\nloadings",
         "agglo_avg": "Average\nlinkage", "spectral_unsigned": "Spectral\n(unsigned)"}
 per_seed = lambda a, v="": [books.sharpe(b) for b in books.head_books(a, v).values()]
 n = len(paths.SEEDS)
@@ -37,7 +37,7 @@ for i, (a, lab) in enumerate(ARMS):
     print(f"  {a:<20s} w60 {m60:.4f} (sd {sd:.4f})  w21 {m21:.4f}  move {m21 - m60:+.4f}  {'inside sd' if abs(m21 - m60) < sd else 'outside sd'}")
 ax.set_xticks(range(len(ARMS))); ax.set_xticklabels([TICK[a] for a, _ in ARMS], fontsize=8.6, linespacing=1.15)
 ax.set_xlim(-0.55, len(ARMS) - 0.45)
-ax.set_ylabel("Sharpe ratio, trained component")
+ax.set_ylabel("Sharpe ratio, neural trading head")
 # the two windows are labelled where they separate most (the second arm), not in a legend box
 _a1 = ARMS[1][0]; _w60, _w21 = per_seed(_a1), per_seed(_a1, "_w21")
 ax.annotate("$60$-day window", (1, max(_w60)), xytext=(12, 6), textcoords="offset points", ha="left", fontsize=8.8, color="0.30")

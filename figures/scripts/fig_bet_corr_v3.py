@@ -71,7 +71,7 @@ for i in range(n):
 ax.axhline(len(RULES) - 0.5, color=style.CONTROL_RED, lw=1.5); ax.axvline(len(RULES) - 0.5, color=style.CONTROL_RED, lw=1.5)
 ax.set_xticks(np.arange(-.5, n, 1), minor=True); ax.set_yticks(np.arange(-.5, n, 1), minor=True)
 ax.grid(which="minor", color="white", lw=0.6, alpha=0.55); ax.tick_params(which="minor", length=0)
-cb = fig.colorbar(im, ax=ax, fraction=0.040, pad=0.02); cb.set_label("position correlation", fontsize=9.5); cb.ax.tick_params(labelsize=9.2)
+cb = fig.colorbar(im, ax=ax, fraction=0.040, pad=0.02); cb.set_label("correlation of portfolio weights", fontsize=9.5); cb.ax.tick_params(labelsize=9.2)
 fig.tight_layout(); style.save(fig, "fig_bet_corr", dpi=160)
 off = [M[i, j] for i in range(len(RULES)) for j in range(i + 1, len(RULES))]; dia = [M[i, i] for i in range(len(RULES))]
 print(f"  clusterizers: off-diagonal mean {np.mean(off):.4f} | own-refit diagonal mean {np.mean(dia):.4f} | ratio {np.mean(off) / np.mean(dia):.3f}")

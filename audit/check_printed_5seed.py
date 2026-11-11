@@ -47,6 +47,8 @@ def main() -> int:
     chk("trained vol band low 2.88", min(tv[a] for a in CL), 2.88)
     chk("trained vol band high 3.80", max(tv[a] for a in CL), 3.80)
     chk("trained vol k1 5.07", tv["k1"], 5.07); chk("trained vol random 4.89", tv["random"], 4.89)
+    # round 39 (2026-11-10): §4.1 prints "Each control's volatility is 1.1 to 1.3 percentage points above the top of this band"
+    chk("§4.1 controls 1.1/1.3 pp above the trained band top", sorted(round(tv[c] - max(tv[a] for a in CL), 1) for c in CTL), [1.1, 1.3])
     chk("trained alpha band low 5.89", min(ta[a] for a in CL), 5.89)
     chk("trained alpha band high 7.02", max(ta[a] for a in CL), 7.02)
     chk("trained alpha k1 5.44", ta["k1"], 5.44); chk("trained alpha random 5.33", ta["random"], 5.33)

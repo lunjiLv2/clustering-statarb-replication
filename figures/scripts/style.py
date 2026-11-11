@@ -27,7 +27,7 @@ GREY = "0.68"                # the other clusterizers when one is highlighted
 NAME = {"kmeans_ret": "k-means", "sssnet_w60": "SSSNET", "sssnetpre": "SSSNET",
         "agglo_complete": "Complete linkage", "fv3sm_w60": "Sharpe (graph)", "sponge_w60": "SPONGE",
         "pca_load": "PCA loadings", "agglo_avg": "Average linkage", "sortino_w60": "Sortino",
-        "fv2a_w60": "Sharpe (EW)", "sharpe_fixed_w60": "Sharpe", "gics": "GICS",
+        "fv2a_w60": "Sharpe (EWMA)", "sharpe_fixed_w60": "Sharpe", "gics": "GICS",
         "spectral_unsigned": "Spectral", "k1": "no clustering ($K=1$)", "random": "random partition"}
 """Display names of the arms, as printed in the manuscript's tables."""
 

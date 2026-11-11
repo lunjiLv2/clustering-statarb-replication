@@ -28,18 +28,18 @@
 \section{Appendix: Data, Implementation, and Additional Results}
 \label{app:supp}
 
-In Appendices~\ref{app:rules} to~\ref{app:calendar}, we document the construction of each clusterizer, the treatment of degenerate groups, the realized partition sizes, the architecture and training schedule of the trading head, the identifiers under which every configuration was run, the sweep over the number of groups, and the calendar offset between the panel and the factor file. In Appendices~\ref{app:dose} to~\ref{app:costs}, we report the additional results in the order of the sections they support: an experiment that degrades a real partition continuously toward a random partition, the mechanism behind the estimation-window effect, robustness checks on the factor and peer comparisons, and the full transaction-cost calculation. Data and code are available as described in the Data availability statement.
+In Appendices~\ref{app:rules} to~\ref{app:calendar}, we document the construction of each clusterizer, the treatment of degenerate groups, the realized partition sizes, the architecture and training schedule of the trading head, the identifiers under which every configuration was run, the reruns with other numbers of groups, and the calendar offset between the panel and the factor file. In Appendices~\ref{app:dose} to~\ref{app:costs}, we report the additional results in the order of the sections they support: an experiment that degrades a real partition continuously toward a random partition, the mechanism behind the estimation-window effect, robustness checks on the factor and peer comparisons, and the full transaction-cost calculation. Data and code are available as described in the Data availability statement.
 
 \subsection{The Clusterizers in Detail}
 \label{app:rules}
 
 All clusterizers receive the same input: the day's universe of $\N_t$ stocks
 (\secref{sec:panel}) and the market residuals over the estimation window,
-$\mathbf{R}_{\mathrm{tr}} \in \real^{60 \times \N_t}$. For a position formed at the close of day $t$, the trained trading component uses the partition estimated on the 60 days ending at $t$, and the rule-based trading component uses the partition estimated on the 60 days ending at $t-1$. For each component, the estimation window ends the day before the day to which the partition is applied. In the trained component, the partition is applied on day $t+1$, when the position earns its return. In the rule-based component, it is applied on day $t$. The four trading-driven clusterizers also evaluate their objective on a longer trailing window of market residuals, described below. All clusterizers except \textsc{gics} target $\K = 30$ groups. Where a correlation matrix appears,
+$\mathbf{R}_{\mathrm{tr}} \in \real^{60 \times \N_t}$. For a position formed at the close of day $t$, the neural trading head uses the partition estimated on the 60 days ending at $t$, and the fixed trading rule uses the partition estimated on the 60 days ending at $t-1$. For each trading model, the estimation window ends the day before the day to which the partition is applied. Under the neural trading head, the partition is applied on day $t+1$, when the position earns its return. Under the fixed trading rule, it is applied on day $t$. The four trading-driven clusterizers also evaluate their objective on a longer trailing window of market residuals, described below. All clusterizers except \textsc{gics} target $\K = 30$ groups. Where a correlation matrix appears,
 it is $\Cmat = \operatorname{corr}(\mathbf{R}_{\mathrm{tr}})$, the
 $\N_t \times \N_t$ sample correlation matrix of the stocks' market residuals over the estimation window.
 
-\paragraph{$k$-means on returns.} Each stock is treated as a point in
+\paragraph{$k$-means on residuals.} Each stock is treated as a point in
 $\real^{60}$, the vector of its 60 market residuals over the estimation window. We partition those points by $k$-means with
 Euclidean distance ($30$ groups, $4$
 restarts), without forming a correlation matrix. Because the coordinates are
@@ -67,22 +67,19 @@ In this paper, \textsc{sponge} always means that variant. The
 correlation matrix is split into its positive part
 $\Cmat^{+} = \max(\Cmat, 0)$ and its negative part
 $\Cmat^{-} = \max(-\Cmat, 0)$. The method then
-solves a generalized eigenproblem on the two signed-graph Laplacians,
-with both regularization parameters set to $1$, to find groups with
-positive correlation within them and negative correlation between them.
+solves a generalized eigenproblem on the two signed-graph Laplacians to find groups with
+positive correlation within them and negative correlation between them. Both regularization parameters are set to $1$.
 We obtain the labels by $k$-means on the resulting embedding. The \textsc{sponge} clusterizer uses the sign of each correlation, whereas the unsigned spectral clusterizer uses only its absolute value. A
-post-processing step reassigns members of groups smaller than two to
+post-processing step reassigns the members of singleton groups to
 their most correlated group.
 
 \paragraph{\textsc{sssnet}.} The \textsc{sssnet} clusterizer is the signed-graph neural
 network of \citet{he2022sssnet}, trained on a clustering objective. The signed graph is
-built from the same correlation matrix $\Cmat$ over the 60-day estimation window, with the identity as the node features. Training is warm-started from a \textsc{sponge}
-partition. As first implemented in our pipeline, \textsc{sssnet} computed its partition at run time from a random-number stream shared with the trading head.\label{app:sssnet} In this paper, we run \textsc{sssnet} in advance, with a separate random seed for each day, to produce a fixed set of daily partitions for the whole period from 23 July 1993 to 30 December 2024. As with the other eight stochastic clusterizers, the five head-seed runs share these partitions. The partitions of \textsc{sssnet} under partition seeds $1$ to $5$ are generated in the same way. Across the five partition draws, the Sharpe ratio of the rule-based \textsc{sssnet} portfolio has a range of $0.15$. This is the fifth-largest range among the nine stochastic clusterizers. Across the same five partition draws, the Sharpe ratio of the trained \textsc{sssnet} portfolio at head seed $42$ ranges from $2.398$ to $2.527$. This range of $0.13$ is the smallest among the nine (\secref{sec:pseed}).
+built from the same correlation matrix $\Cmat$ over the 60-day estimation window. The node features are the identity matrix. Training is warm-started from a \textsc{sponge}
+partition. As first implemented in our pipeline, \textsc{sssnet} computed its partition at run time from a random-number stream shared with the trading head.\label{app:sssnet} In this paper, we run \textsc{sssnet} in advance, with a separate random seed for each day, to produce a fixed set of daily partitions for the whole period from 23 July 1993 to 30 December 2024. As with the other eight stochastic clusterizers, the five head-seed runs of \textsc{sssnet} share these partitions. The partitions of \textsc{sssnet} under partition seeds $1$ to $5$ are generated in the same way. Under the fixed trading rule, the Sharpe ratio of the \textsc{sssnet} portfolio has a range of $0.15$ across the five partition draws. This is the fifth-largest range among the nine stochastic clusterizers. Under the neural trading head at head seed $42$, the Sharpe ratio of the \textsc{sssnet} portfolio ranges from $2.398$ to $2.527$ across the same five partition draws. This range of $0.13$ is the smallest among the nine (\secref{sec:pseed}).
 
 \paragraph{The trading-driven family.} Four clusterizers replace the
-clustering criterion with a trading objective. Each optimizes a soft assignment matrix
-over $\K$ groups directly against the payoff of the rule-based portfolio that the
-assignment would produce and then converts it to a hard assignment by argmax. The objective is
+clustering criterion with a trading objective. Each optimizes a soft assignment matrix over $\K$ groups directly against the return that the fixed trading rule would earn with that assignment. It then converts the matrix to a hard assignment by argmax. The objective is
 evaluated on the market residuals of the trailing $252$ trading days, ending the
 day before the partition is applied, so no return from that day
 onward enters the partition. All four warm-start from a \textsc{sponge} partition, balance
@@ -92,14 +89,13 @@ differ in the objective and in the parameterization.
 \emph{Sharpe} maximizes the plain Sharpe ratio of the resulting portfolio, and
 \emph{Sortino} replaces the standard deviation in that objective with
 the downside deviation.
-\emph{Sharpe (EW)} is a variant of \emph{Sharpe} that weights
+\emph{Sharpe (EWMA)} is a variant of \emph{Sharpe} that weights
 recent days exponentially, with a daily decay of $0.99$ over $252$ days. The
-oldest day therefore receives $8\%$ of the newest day's weight. It also differs from \emph{Sharpe} in its objective, which uses unnormalized bets and group means taken from the soft assignment, whereas \emph{Sharpe} uses bets normalized to gross exposure one and group means taken from the hard assignment. For this reason, the clean contrast between two objectives is \emph{Sharpe} against \emph{Sortino} (\tabref{tab:methods}, note d).
-\emph{Sharpe (graph)} produces the assignment with a signed-graph network in place of free logits, and it evaluates the objective on a
-30-day horizon, the length of the trained component's signal window.
+oldest day therefore receives $8\%$ of the newest day's weight. It also differs from \emph{Sharpe} in its objective, which uses unnormalized portfolio weights and group means taken from the soft assignment, whereas \emph{Sharpe} uses portfolio weights normalized to gross exposure one and group means taken from the hard assignment. For this reason, the clean contrast between two objectives is \emph{Sharpe} against \emph{Sortino} (\tabref{tab:methods}, note d).
+\emph{Sharpe (graph)} produces the assignment with a signed-graph network in place of free logits, and it evaluates the objective with a 30-day signal window, the same signal window as the neural trading head.
 
 \paragraph{\textsc{gics}.} The \textsc{gics} clusterizer uses a static sector table from a single S\&P
-1500 snapshot. The taxonomy itself does not use return data. The table covers $54\%$ to $73\%$ of the universe depending on the era. The remaining
+1500 snapshot. The taxonomy itself does not use return data. The table covers $54\%$ to $73\%$ of the universe, depending on the year. The remaining
 stocks are
 assigned to the group with which they correlate most strongly. They make up about $35\%$ of the portfolio on a given day, so the traded \textsc{gics} partition
 is a taxonomy--correlation hybrid. Its realized number
@@ -131,23 +127,20 @@ same repair. Every other clusterizer passes its labels on unrepaired. The
 trading stage then deletes every member of such a group
 from that day's portfolio.
 
-The difference between the two policies is immaterial to the traded portfolio for 11 of the 12 clusterizers and material for $k$-means on returns. Where
+The difference between the two policies is immaterial to the traded portfolio for 11 of the 12 clusterizers. For $k$-means on residuals, however, it is material. Where
 the repair applies, it has almost nothing to repair ($0.13$
 groups per day for \textsc{sponge}, a handful of days in the whole
-sample for the other two clusterizers). Every clusterizer except $k$-means on returns
-produces at most $0.6$ singletons per day. In contrast, $k$-means on returns produces $9.8$ singleton labels per day, which the trading stage deletes as $8.65$ stocks per day. In the trained component, its traded portfolio contains $491.3$ stocks, against $499.5$ to
-$500.0$ for every other trained portfolio.
+sample for the other two clusterizers). Every clusterizer except $k$-means on residuals
+produces at most $0.6$ singletons per day. In contrast, $k$-means on residuals produces $9.8$ singleton labels per day. Because of these singletons, the trading stage deletes $8.65$ stocks per day. Under the neural trading head, its traded portfolio contains $491.3$ stocks, against $499.5$ to $500.0$ for every other portfolio.
 
-We measure the cost of the difference between the two policies and find it too small to detect on this panel. In a second configuration, we trade based on the same partitions of $k$-means on returns after merging their singleton members. This configuration applies the \textsc{sponge} policy to $k$-means on returns. Although the mean per-seed Sharpe ratio of that portfolio is $0.04$ lower and the portfolio is $0.05$ percentage points more volatile, neither difference exceeds its own dispersion. Specifically, the difference in Sharpe ratio between the two portfolios has $t=-0.9$ on four degrees of freedom and changes sign across the five head seeds. The volatility gap ranges from $0.00$ to $+0.24$ across the five head seeds.
-This difference in Sharpe ratio is smaller than the standard deviation of the Sharpe ratio of $k$-means on returns across its own head-seed runs, $0.112$. Applying either policy to all clusterizers would therefore change the Sharpe ratio of $k$-means on returns, the leading clusterizer, by less than its variation across head-seed runs. Imposing the deletion policy on \textsc{sponge} would also require rebuilding all of its partitions, for a change of about $0.1$ stocks per day. The repair can also empty a label, so \textsc{sponge} realizes $29.9$ groups per day against a nominal $30$. The \textsc{sssnet} clusterizer, whose partition is warm-started from a \textsc{sponge} partition, realizes the same $29.9$ groups. Every other data-driven clusterizer realizes its nominal $\K$. We keep each clusterizer's own policy and state it.
+We measure the cost of the difference between the two policies and find it too small to detect on this panel. In a second configuration, we trade based on the same partitions of $k$-means on residuals after merging their singleton members. This configuration applies the \textsc{sponge} policy to $k$-means on residuals. Although the mean per-seed Sharpe ratio of that portfolio is $0.04$ lower and the portfolio is $0.05$ percentage points more volatile, neither difference exceeds its own standard deviation across head seeds. Specifically, the difference in Sharpe ratio between the two portfolios has $t=-0.9$ on four degrees of freedom and changes sign across the five head seeds. The volatility gap ranges from $0.00$ to $0.24$ percentage points across the five head seeds.
+This difference in Sharpe ratio is smaller than the standard deviation of the Sharpe ratio of $k$-means on residuals across its own head-seed runs, $0.112$. Applying either policy to all clusterizers would therefore change the Sharpe ratio of $k$-means on residuals, the leading clusterizer, by less than its variation across head-seed runs. Imposing the deletion policy on \textsc{sponge} would also require rebuilding all of its partitions, for a change of about $0.1$ stocks per day. The repair can also empty a label, so \textsc{sponge} realizes $29.9$ groups per day against a nominal $30$. The \textsc{sssnet} clusterizer, whose partition is warm-started from a \textsc{sponge} partition, realizes the same $29.9$ groups. Every other data-driven clusterizer realizes its nominal $\K$. We keep each clusterizer's own policy and state it.
 
 \subsection{Partition Size Distributions}
 \label{app:sizes}
 
 Except for \textsc{gics} and the $\K=1$ control, every clusterizer and control nominally targets
-$\K = 30$. Although the realized partitions differ widely (\tabref{tab:sizes}), these
-differences are not related to
-performance. Across the 12
+$\K = 30$. Although the realized partitions differ widely in effective $\K$ and in the size of the largest group (\tabref{tab:sizes}), effective $\K$ is not significantly related to the Sharpe ratio. Across the 12
 clusterizers, the Spearman correlation between effective $\K$ and the mean per-seed Sharpe ratio is $-0.15$ ($p = 0.63$).
 
 \begin{table}[htbp]
@@ -160,7 +153,7 @@ clusterizers, the Spearman correlation between effective $\K$ and the mean per-s
 \toprule
 Partition & Effective $\K$ & Largest group & Singletons/day & Groups $<5$/day \\
 \midrule
-Sharpe (EW)          & $29.26$ & $22.1$  & $0.00$ & $0.07$ \\
+Sharpe (EWMA)          & $29.26$ & $22.1$  & $0.00$ & $0.07$ \\
 Sortino              & $29.08$ & $23.1$  & $0.00$ & $0.06$ \\
 Sharpe               & $28.98$ & $23.5$  & $0.00$ & $0.08$ \\
 Sharpe (graph) & $28.58$ & $24.9$ & $0.01$ & $0.06$ \\
@@ -171,15 +164,15 @@ Spectral (unsigned) & $23.83$ & $40.7$ & $0.01$ & $0.95$ \\
 \textsc{sssnet} & $22.36$ & $40.8$ & $0.00$ & $1.81$ \\
 Complete linkage & $22.25$ & $49.8$ & $0.00$ & $0.38$ \\
 Average linkage & $12.09$ & $99.3$ & $0.55$ & $6.90$ \\
-$k$-means on returns & $9.90$ & $102.0$ & $9.81$ & $14.48$ \\
+$k$-means on residuals & $9.90$ & $102.0$ & $9.81$ & $14.48$ \\
 \textsc{gics} & $8.08$ & $55.4$ & $0.00$ & $0.66$ \\
 $\K=1$ & $1.00$  & $500.0$ & $0.00$ & $0.00$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\footnotesize
-\item \emph{Notes.} This table reports the realized shape of the partition of each clusterizer and control. Effective $\K$ is the inverse-Simpson index of the group-size distribution. All rows are measured over the $6{,}913$-day sample on the partitions used in the main results. Averaging instead over the five partition draws changes the effective $\K$ of $k$-means on returns from $9.90$ to $9.97$. It changes every other entry by at most $0.02$. Effective $\K$ is
+\item \emph{Notes.} This table reports the realized shape of the partition of each clusterizer and control. Effective $\K$ is the inverse-Simpson index of the group-size distribution. All rows are measured over the $6{,}913$-day sample on the partitions used in the main results. Averaging instead over the five partition draws changes the effective $\K$ of $k$-means on residuals from $9.90$ to $9.97$. It changes every other entry by at most $0.02$. Effective $\K$ is
 not the label count logged with each run. For
-$k$-means on returns, the two numbers diverge sharply. The $k$-means-on-returns partition has $30$ labels, of which roughly 10 are singletons. The trading
+$k$-means on residuals, the two numbers diverge sharply. The $k$-means-on-residuals partition has $30$ labels, of which roughly 10 are singletons. The trading
 stage removes the members of these singletons, so the number of groups traded is about 20.
 \end{tablenotes}
 \end{threeparttable}
@@ -195,7 +188,7 @@ stage removes the members of these singletons, so the number of groups traded is
 \subsection{The Trading Head}
 \label{app:head}
 
-The neural trading head maps the group-demeaned residual of \eqnref{eq:relsig} to a weight through the chain displayed in \secref{sec:components}, with clamp constant $c = 0.05$. Stock $i$ enters the head on day $t$ as the path of running
+The neural trading head maps the group-demeaned residual of \eqnref{eq:relsig} to a portfolio weight through the chain displayed in \secref{sec:components}, with clamp constant $c = 0.05$. Stock $i$ enters the head on day $t$ as the path of running
 sums of its group-demeaned residual of \eqnref{eq:relsig} over the 30-day signal window,
 %
 \begin{equation}\label{eq:headinput}
@@ -205,11 +198,7 @@ sums of its group-demeaned residual of \eqnref{eq:relsig} over the 30-day signal
 %
 This input has a single channel of length 30. Three
 convolutions of kernel width $2$, $4$, and $8$ run in parallel over
-that path (the sense in which the extractor is multi-scale). The
-branches are merged by a data-driven gate, which passes the day's cross-sectional
-amplitude spectrum, averaged over stocks and split into three frequency
-bands, through a softmax with a learned bias. The resulting
-weights pair the highest band with the narrowest kernel. The merged
+that path (the sense in which the convolution stage is multi-scale). A data-driven gate merges the branches. The gate averages the day's cross-sectional amplitude spectrum over stocks, splits it into three frequency bands, and passes the result through a softmax with a learned bias. The resulting gate weights pair the highest band with the narrowest kernel. The merged
 output then passes to a long-convolution layer, which learns a kernel as long as
 the signal window, soft-thresholds it toward zero, applies it in the
 frequency domain, and adds a learned skip connection. The score is
@@ -227,10 +216,10 @@ Writing $g_\theta$ for the resulting score and $f_\theta = c\tanh(g_\theta/c)$ f
        {\sqrt{\Var_{t \in \mathcal{T}}\bigl[\pi_t(\theta)\bigr]}},
 \end{equation}
 %
-with $\mathcal{T}$ the current training window and $\pi_t$ the payoff
+with $\mathcal{T}$ the current training window and $\pi_t$ the portfolio return
 of \eqnref{eq:payoff}. The clamp binds in practice. Across the runs of this article, the cross-sectional standard deviation of $g_\theta$ ranges from $0.05$ to $0.18$, with a median of $0.10$. A score of one standard deviation therefore already lies in the nonlinear region of the clamp. The loss used in the runs adds
-three regularization penalties to the negative of the in-sample Sharpe ratio.
-\tabref{tab:head} lists the head's settings, penalties included, as taken from the executed code.
+an $L^1$ penalty, a concentration penalty, and a pairwise ranking penalty to the negative of the in-sample Sharpe ratio.
+\tabref{tab:head} lists the head's settings, including the penalties, as they appear in the executed code.
 
 \begin{table}[htbp]
 \centering
@@ -256,7 +245,7 @@ three regularization penalties to the negative of the in-sample Sharpe ratio.
 \addlinespace
 \multicolumn{3}{@{}l}{\emph{Objective and sizing}}\\
 & Loss & Negative Sharpe ratio of the portfolio \\
-& Regularizers added to the loss & $L^1$ on raw bets $10^{-3}$; concentration $5\times10^{-3}$; margin ranking $0.05$\tnote{b} \\
+& Regularizers added to the loss & $L^1$ on raw scores $10^{-3}$; concentration $5\times10^{-3}$; pairwise ranking $0.05$\tnote{b} \\
 & Soft clamp on scores & $\pm 0.05$ ($c\tanh(g/c)$, before normalization) \\
 & Normalization & $\|w\|_1 = 1$, gross exposure $1.0$\tnote{a} \\
 \addlinespace
@@ -270,7 +259,7 @@ three regularization penalties to the negative of the in-sample Sharpe ratio.
 & Weight decay & $5\times10^{-4}$ \\
 & Batch size & $125$ days \\
 & Early-stopping patience, pre-train / fine-tune & $15$ / $10$ epochs \\
-& Validation split & last $15\%$ of each call \\
+& Validation split & last $15\%$ of each training sample \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\footnotesize
@@ -278,8 +267,8 @@ three regularization penalties to the negative of the in-sample Sharpe ratio.
 \item[a] The $L^1$ step fixes gross exposure and preserves the long-short ratio that the head produces. It does not impose dollar
 neutrality. Mean absolute net exposure is $0.06$ to $0.18$ on runs that pass the validity screen of \secref{sec:components} and $1.0$ on runs
 that fail it.
-\item[b] The $L^1$ term is the mean absolute raw bet $g_\theta$, before the soft clamp and the $L^1$ normalization. The margin term also acts on $g_\theta$. The code contains a hard position clip at $\pm 0.04$ and a volatility-targeting scalar applied at inference before a second $L^1$ rescaling. The clip never binds on any run-day of this article (largest $|w_{it}|$ is $0.006$), so the scalar cancels in the rescaling. Neither the clip nor the scalar changes any position. The
-concentration term is the Herfindahl index of the long leg plus that of the short leg. The margin term is a hinge of margin $0.01$ on the agreement in sign between the predicted and the realized ordering of $64$ random stock pairs per day. Gradients are clipped at norm $1$.
+\item[b] The $L^1$ term is the mean absolute raw score $g_\theta$, before the soft clamp and the $L^1$ normalization. The ranking term also acts on $g_\theta$. The code contains a hard clip of each portfolio weight at $\pm 0.04$ and a volatility-targeting scalar that is applied before a second $L^1$ rescaling when the portfolio weights are computed. The clip never binds on any run-day of this article (largest $|w_{it}|$ is $0.006$), so the scalar cancels in the rescaling. Neither the clip nor the scalar changes any portfolio weight. The
+concentration term is the Herfindahl index of the long leg plus that of the short leg. The ranking term draws $64$ random pairs of stocks per day and applies a hinge penalty, with a threshold of $0.01$, to the agreement in sign between the predicted and the realized ordering of each pair. Gradients are clipped at norm $1$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -293,24 +282,22 @@ concentration term is the Herfindahl index of the long leg plus that of the shor
 %%  SSSNET's description, not here. Add them if a referee asks for the
 %%  complete set.
 
-\paragraph{Reproducibility.} Four runs of the $k$-means-on-returns configuration at head seed $42$, on the same code and panel, return Sharpe ratios of $2.8243$, $2.8478$, $2.8868$, and $2.8940$ on the common calendar. They have a standard deviation of $0.033$ and a range of $0.07$. Floating-point
+\paragraph{Reproducibility.} Four runs of the $k$-means-on-residuals configuration at head seed $42$, on the same code and panel, return Sharpe ratios of $2.8243$, $2.8478$, $2.8868$, and $2.8940$ on the common calendar. They have a standard deviation of $0.033$ and a range of $0.07$. Floating-point
 arithmetic on the GPU is not reproducible at that scale, so
-differences within that range contain no information. Before use, we verified every weight file used in \secsref{sec:gradient}{sec:costs} by reconstructing the run's own logged payoff from it to machine precision. We also checked the $L^1$ norm of each exported weight vector against the run's logged gross leverage and against one, for all 12 clusterizers and both controls at five head seeds each.
+differences within that range contain no information. Before use, we verified every weight file used in \secsref{sec:gradient}{sec:costs} by reconstructing the run's own logged portfolio return from it to machine precision. We also checked the $L^1$ norm of each exported weight vector against the run's logged gross exposure and against one, for all 12 clusterizers and both controls at five head seeds each.
 
 \subsection{Identifiers and the 19 Configurations}
 \label{app:names}
 
 In the text, we refer to the clusterizers by descriptive names instead of the identifiers under which they were run. In the order of
-\tabref{tab:methods}, the mapping is as follows: $k$-means on returns is \texttt{kmeans\_ret};
+\tabref{tab:methods}, the mapping is as follows: $k$-means on residuals is \texttt{kmeans\_ret};
 average linkage is \texttt{agglo\_avg}; complete linkage is \texttt{agglo\_complete}; spectral (unsigned) is
 \texttt{spectral\_unsigned}; PCA loadings is \texttt{pca\_load};
-\textsc{sponge} and \textsc{sssnet} keep their names; Sharpe is \texttt{sharpe\_fixed}; Sortino is \texttt{sortino}; Sharpe (EW) is \texttt{fv2a}; Sharpe (graph) is \texttt{fv3sm}; \textsc{gics} is
-\texttt{gics}. The two controls are \texttt{k1} and \texttt{random}. The two peer-regression portfolios of \secref{sec:peer} come from separate runs, shipped as \texttt{peer\_w60} and \texttt{peer\_w252}. The suffixes give the length of the fit window. The identifiers of the estimation-window variants of the clusterizers end in the length of the estimation window, as in \texttt{agglo\_avg\_w252}.
+\textsc{sponge} and \textsc{sssnet} keep their names; Sharpe is \texttt{sharpe\_fixed}; Sortino is \texttt{sortino}; Sharpe (EWMA) is \texttt{fv2a}; Sharpe (graph) is \texttt{fv3sm}; \textsc{gics} is
+\texttt{gics}. The two controls are \texttt{k1} and \texttt{random}. The two peer-regression portfolios of \secref{sec:peer} come from separate runs, stored as \texttt{peer\_w60} and \texttt{peer\_w252}. The suffixes give the length of the fit window. The identifiers of the estimation-window variants of the clusterizers end in the length of the estimation window, as in \texttt{agglo\_avg\_w252}.
 
-To assess what the design can resolve (\secref{sec:resolution}), we use a
-wider set of 19 configurations than the main tables: the 12 clusterizers of \tabref{tab:methods}, the two controls, and five variants that run average linkage, complete linkage, $k$-means on returns, PCA loadings, and spectral (unsigned) with a 21-day estimation window. With a 60-day estimation window, \textsc{sponge} is one of the 12 clusterizers. In the
-rule-based component, the \textsc{sponge} portfolio earns a Sharpe ratio of $1.59$, against $1.50$
-for the original version with a 21-day estimation window. The common 60-day estimation window therefore does not disadvantage \textsc{sponge}. In the trained component, relative to the same clusterizers at $60$ days, the five variants with a $21$-day estimation window change the mean per-seed Sharpe ratio by $-0.39$ for PCA loadings and by $-0.36$ for unsigned spectral clustering. The change is $-0.31$ for complete linkage and $-0.07$ for $k$-means on returns. For average linkage, in contrast, it is $+0.11$.
+To assess which differences the design can detect (\secref{sec:resolution}), we use a
+wider set of 19 configurations than the main tables: the 12 clusterizers of \tabref{tab:methods}, the two controls, and five variants that run average linkage, complete linkage, $k$-means on residuals, PCA loadings, and spectral (unsigned) with a 21-day estimation window. The version of \textsc{sponge} among the 12 clusterizers uses the common 60-day estimation window. Under the fixed trading rule, its Sharpe ratio is $1.59$ with this window, against $1.50$ for the original version with a 21-day estimation window. The common 60-day estimation window therefore does not disadvantage \textsc{sponge}. Under the neural trading head, relative to the same clusterizers at $60$ days, the five variants with a $21$-day estimation window change the mean per-seed Sharpe ratio by $-0.39$ for PCA loadings and by $-0.36$ for unsigned spectral clustering. The change is $-0.31$ for complete linkage and $-0.07$ for $k$-means on residuals. For average linkage, in contrast, it is $+0.11$.
 
 \begin{table}[htbp]
 \centering
@@ -324,7 +311,7 @@ Window & Length & Role \\
 \midrule
 Beta window & $60$, ending at $t$ & Market beta of each stock (\secref{sec:resid}) \\
 Estimation window & $60$, or $21$ in five variants & Market residuals from which a partition is estimated (\appref{app:names}) \\
-Signal window & $5$ rule-based, $30$ trained & Market residuals that a trading component uses (\secref{sec:components}) \\
+Signal window & $5$ fixed rule, $30$ neural head & Market residuals that a trading model uses (\secref{sec:components}) \\
 Training window & $1{,}000$, refit every $125$ & Days on which the trading head is fitted (\secref{sec:components}) \\
 Objective window & $252$ & Days on which the trading-driven clusterizers evaluate their objective (\appref{app:rules}) \\
 Loading window & $252$ & Days on which the principal components and factor loadings are estimated (\secref{sec:lens}) \\
@@ -333,7 +320,7 @@ Fit window & $60$ or $252$ & Days over which a peer regression is fitted (\secre
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\footnotesize
-\item \emph{Notes.} Every window ends at $t$ or earlier for a position formed at the close of day $t$. \appref{app:rules} gives the exact end of each partition's estimation window, and \secref{sec:window} varies its length from $21$ to $252$ days.
+\item \emph{Notes.} Every window ends at $t$ or earlier for a position formed at the close of day $t$. \appref{app:rules} gives the exact end of each partition's estimation window, and \secref{sec:window} reports reruns with lengths from $21$ to $252$ days.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -342,14 +329,14 @@ Fit window & $60$ or $252$ & Days over which a peer regression is fitted (\secre
 \label{app:ksweep}
 
 Outside \secref{sec:window}, $\K$ is fixed at $30$ for every clusterizer except \textsc{gics}. We rerun five clusterizers at
-$\K = 10$ and $\K = 50$, with five head seeds each and everything else identical
-(\tabref{tab:ksweep}). In the trained component, the Sharpe ratios of average linkage, complete linkage, and PCA loadings rise monotonically in $\K$. Those of $k$-means on returns and unsigned spectral clustering peak at $\K=30$. From $30$ to $50$ groups, the Sharpe ratio falls by $0.09$ for $k$-means on returns and by $0.14$ for unsigned spectral clustering. The sweep does not include a random control at the new $\K$ values.
+$\K = 10$ and $\K = 50$, with five head seeds each
+(\tabref{tab:ksweep}). All other settings are unchanged. Under the neural trading head, the Sharpe ratios of average linkage, complete linkage, and PCA loadings rise monotonically in $\K$. Those of $k$-means on residuals and unsigned spectral clustering peak at $\K=30$. From $30$ to $50$ groups, the Sharpe ratio falls by $0.09$ for $k$-means on residuals and by $0.14$ for unsigned spectral clustering. These reruns do not include a random control at the new $\K$ values.
 A finer partition removes more cross-sectional variance from any panel, structured or not. For example, on the $494.3$ stocks of \secref{sec:mechanism}, the degrees-of-freedom floor $(\K-1)/(\N_t-1)$ is $1.8\%$ at $\K = 10$, $5.9\%$ at $\K = 30$, and $9.9\%$ at $\K = 50$. With
-the controls that we ran, the mechanical part of the gain therefore cannot be separated from the structural part. In the trained component at $\K=30$, the Sharpe ratio of the random control has a range of $0.39$ across its partition draws at a fixed head seed (\secref{sec:pseed}) and of $0.41$ across the five head seeds (\figref{fig:field_ruler}). Consequently, a subtraction based on one run of the random control per $\K$ would use a single draw from a distribution this wide, with no replicate against which to judge the result.
+the controls that we ran, the mechanical part of the gain therefore cannot be separated from the structural part. Under the neural trading head at $\K=30$, the Sharpe ratio of the random control has a range of $0.39$ across its partition draws at a fixed head seed (\secref{sec:pseed}) and of $0.41$ across the five head seeds (\figref{fig:field_ruler}). Consequently, a subtraction based on one run of the random control per $\K$ would use a single draw from such a wide distribution.
 
 \begin{table}[htbp]
 \centering
-\caption{Sharpe ratio by number of groups, trained component}
+\caption{Sharpe ratio by number of groups, neural trading head}
 \label{tab:ksweep}
 \begin{threeparttable}
 \small
@@ -357,7 +344,7 @@ the controls that we ran, the mechanical part of the gain therefore cannot be se
 \toprule
 & $\K=10$ & $\K=30$ & $\K=50$ \\
 \midrule
-$k$-means on returns & $2.21$ & $2.57$ & $2.48$ \\
+$k$-means on residuals & $2.21$ & $2.57$ & $2.48$ \\
 Average linkage & $1.95$ & $2.15$ & $2.37$ \\
 Complete linkage & $2.07$ & $2.34$ & $2.55$ \\
 PCA loadings & $1.99$ & $2.28$ & $2.32$ \\
@@ -366,7 +353,7 @@ Spectral (unsigned) & $1.69$ & $1.74$ & $1.61$ \\
 \end{tabular}
 \begin{tablenotes}[flushleft]\small
 \item \emph{Notes.} This table reports the Sharpe ratio of five clusterizers at three values of $\K$. Each cell is the mean per-seed Sharpe ratio over five head seeds, on the $6{,}913$-day sample of \secref{sec:panel}. The standard deviations across head seeds range from $0.09$ to $0.25$. Differences quoted in the text are computed on unrounded means. The remaining
-seven clusterizers were not swept.
+seven clusterizers were not rerun at other values of $\K$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -381,12 +368,11 @@ inconsistency. The $R^2$ between the panel's SPY return and the Fama--French mar
 $-0.06$ contemporaneously and at $+0.977$ at a lag of one day. Each
 of the eight largest SPY moves in the panel is dated one trading day
 after the Fama--French date of the same move. Every panel date is also
-a Fama--French trading day, so the offset is in the labels and cannot be attributed to the
-holidays.
+a Fama--French trading day, so the offset is in the labels and cannot be attributed to holidays.
 
-The rule-based and trained components also label their payoffs differently. The rule-based component records a payoff under the day on which the position was formed, and the trained component records it under the label of the day on which the payoff was realized. Because the panel's labels run one day ahead, a rule-based payoff is matched to the factor file on the same day. A trained payoff is matched to it with a one-day lag. In every regression in
-this paper, we pair each payoff with the factor return of
-the day on which the payoff was realized. Matching the payoffs of either trading component to the factor returns at the wrong
+The two trading models also label their returns differently. The fixed trading rule records a return under the day on which the position was formed, and the neural trading head records it under the label of the day on which the return was realized. Because the panel's labels run one day ahead, a return of the fixed trading rule is matched to the factor file on the same day. A return of the neural trading head is matched to it with a one-day lag. In every regression in
+this paper, we pair each portfolio return with the factor return of
+the day on which it was realized. Matching the portfolio returns of either trading model to the factor returns at the wrong
 lag reduces $R^2$ to below $0.01$ and assigns the factor premium
 to alpha. A misaligned regression therefore understates the factor exposure of the portfolios.
 
@@ -399,20 +385,18 @@ vendor or by a lag convention in the panel's construction, we record the offset 
 \subsection{Degrading One Partition toward a Random Partition}
 \label{app:dose}
 
-The 12 clusterizers produce three distinct levels of variance share: one for \textsc{gics}, one for $k$-means on returns, and one shared by the other ten clusterizers. However, we can construct intermediate levels. We take one partition draw of the PCA-loadings clusterizer and replace a fraction $q$ of each day's labels with
+Among the 12 clusterizers, the variance share takes distinct values for \textsc{gics}, for $k$-means on residuals, and for the other ten clusterizers together. However, we can construct intermediate values. We take one partition draw of the PCA-loadings clusterizer and replace a fraction $q$ of each day's labels with
 uniform random labels, so the partition degrades continuously from the
 real partition ($q=0$) toward a random partition ($q=1$).
-\figref{fig:dose} shows that, as $q$ rises, the variance share falls at every step, from $19.1\%$ to $5.88\%$. The volatility of the rule-based portfolio rises at every step, from $2.60\%$ to $4.42\%$. At full corruption, the variance share equals the degrees-of-freedom floor to three decimal places, and the
-two endpoints coincide with the PCA-loadings configuration and with the random control in the rule-based component. The reduction in portfolio volatility therefore varies continuously with the amount of real
+\figref{fig:dose} shows that, as $q$ rises, the variance share falls at every step, from $19.1\%$ to $5.88\%$. Under the fixed trading rule, portfolio volatility rises at every step, from $2.60\%$ to $4.42\%$. At full corruption, the variance share equals the degrees-of-freedom floor, $5.88\%$. The portfolio at $q=0$ is the PCA-loadings configuration, and the portfolio at $q=1$ coincides with the random control. The reduction in portfolio volatility therefore varies continuously with the amount of real
 comovement in the labels.
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=.9\linewidth]{fig_dose}
-\caption{Corrupting a real partition by redrawing a fraction of its labels. This figure plots annualized portfolio volatility against the variance share of the corrupted partition, the share of the cross-sectional variance of the day's market residuals that the partition removes. The horizontal axis runs from high to low variance share, so $q$ rises from left to right. Each point is a full $6{,}913$-day rule-based backtest of the
-PCA-loadings partition with a fraction $q$ of each day's labels
+\caption{Corrupting a real partition by redrawing a fraction of its labels. This figure plots annualized portfolio volatility against the variance share of the corrupted partition, the share of the cross-sectional variance of the day's market residuals that the partition removes. The horizontal axis runs from high to low variance share, so $q$ rises from left to right. Each point is a full $6{,}913$-day backtest of the fixed trading rule on the PCA-loadings partition with a fraction $q$ of each day's labels
 redrawn uniformly. Two independent corruption draws per $q$ nearly
-coincide. The dotted verticals mark
+coincide. The dotted vertical lines mark
 the degrees-of-freedom floor $(\K-1)/(\N-1)$ and the intact partition's
 variance share. The cross is the random control itself.}
 \label{fig:dose}
@@ -423,26 +407,26 @@ variance share. The cross is the random control itself.}
 
 
 
-In \secref{sec:window}, we find that a longer estimation window raises the Sharpe ratio of unsigned spectral clustering and of PCA loadings and leaves that of average linkage unchanged. We use random matrix theory to explain why the two clusterizers that gain should be the sensitive ones. Both clusterizers use individual eigenvectors of the sample
-correlation matrix. At $\N = 500$, a population eigenvalue must exceed $1 + \sqrt{\N/T}$ to be recoverable at all \citep{baik2005phase}. With an estimation window of $T = 21$ days, the threshold is $5.9$, so only the leading common mode can be recovered. With $T = 252$ days, the threshold is $2.4$, so sector-scale structure can also be recovered. However, a rival explanation fits the same six observations, three clusterizers at two estimation windows. The largest gains go to the clusterizers that started lowest. When we regress the gain over the whole sweep on the Sharpe ratio at the $21$-day estimation window, we obtain $r = -0.93$.
+In \secref{sec:window}, we find that a longer estimation window raises the Sharpe ratio of unsigned spectral clustering and of PCA loadings and leaves that of average linkage unchanged. We use random matrix theory to explain why these two clusterizers gain. Both clusterizers use individual eigenvectors of the sample
+correlation matrix. At $\N = 500$, a population eigenvalue must exceed $1 + \sqrt{\N/T}$ to be recoverable at all \citep{baik2005phase}. With an estimation window of $T = 21$ days, the threshold is $5.9$, so only the leading common mode can be recovered. With $T = 252$ days, the threshold is $2.4$, so sector-scale structure can also be recovered. However, a rival explanation fits the same six observations, three clusterizers at two estimation windows. The largest gains go to the clusterizers that started lowest. Across these configurations, the gain from the shortest to the longest estimation window has a correlation of $-0.93$ with the Sharpe ratio at the $21$-day estimation window.
 
-The eigenvector explanation and the rival explanation make the same prediction for every configuration in the sweep. We therefore registered three configurations in advance and ran them, moving each from the default estimation window to the longest. For the first two configurations, the eigenvector explanation and the rival explanation make different predictions by construction. First, average linkage at
+The eigenvector explanation and the rival explanation make the same prediction for every configuration in these reruns. We therefore registered three configurations in advance and ran them, moving each from the default estimation window to the longest. For average linkage at $\K=10$ and the random control, the eigenvector explanation and the rival explanation make different predictions by construction. First, average linkage at
 $\K=10$ starts low, so the rival explanation predicts a large gain. The
 eigenvector explanation predicts almost no gain. The observed gain is $+0.04$. Second, the random
 control starts lowest of all, so the rival explanation must predict the largest
 gain in the design. However, the labels of the random control are drawn by a random number
-generator that does not use the estimation window. The observed gain is $-0.11$, negative at four of the five head seeds. Finally, PCA loadings at $\K=50$ uses eigenvectors, so both explanations predict a gain. The observed gain is $+0.33$. Overall, the results support the eigenvector explanation, because it predicts which configurations change and in which direction.
+generator that does not use the estimation window. The observed gain is $-0.11$. It is negative at four of the five head seeds. Finally, PCA loadings at $\K=50$ uses eigenvectors, so both explanations predict a gain. The observed gain is $+0.33$. Overall, the results support the eigenvector explanation, because it predicts which configurations change and in which direction.
 In particular, neither of the two configurations that do not use an eigenvector gains materially.
 
-However, the eigenvector explanation does not predict the sign of the interaction with $\K$. For PCA loadings, the same move from a 60-day to a $252$-day estimation window changes the Sharpe ratio by
-$+0.27$ at $\K=30$ and by $+0.33$ at $\K=50$. The effect of the estimation window therefore strengthens as the partition is refined. We have no explanation for this interaction.
+However, the eigenvector explanation does not predict how the effect of the estimation window depends on $\K$. For PCA loadings, the same move from a 60-day to a $252$-day estimation window changes the Sharpe ratio by
+$+0.27$ at $\K=30$ and by $+0.33$ at $\K=50$. The effect of the estimation window therefore strengthens as the partition is refined. We have no explanation for this dependence.
 
-\figref{fig:window_twin} shows the step from a $60$-day to a $21$-day estimation window in the same sweep, against the dispersion across head seeds. This step contains the only exception to the eigenvector explanation. Complete linkage uses the same correlation matrix as average linkage and does not use the eigenvectors of that matrix. Its Sharpe ratio nonetheless falls by $0.31$, outside its band across head seeds. We do not report a $p$-value for the responses to the estimation window, because a paired test across five head-seed runs has four degrees of freedom. Instead, we judge each step against the configuration's own band across head seeds. For average linkage, the Sharpe ratio changes by $0.00$ from the start of the sweep to its end (\secref{sec:window}) but peaks in between, at an estimation window of 120 days.
+\figref{fig:window_twin} shows the step from a $60$-day to a $21$-day estimation window in the same reruns, against the standard deviation across head seeds. This step contains the only exception to the eigenvector explanation. Complete linkage uses the same correlation matrix as average linkage and does not use the eigenvectors of that matrix. Its Sharpe ratio nonetheless falls by $0.31$, more than one standard deviation across head seeds. We do not rely on $p$-values for the changes across estimation windows, because a paired test across five head-seed runs has four degrees of freedom and little power. Instead, we examine each step against the configuration's own band across head seeds. For average linkage, the Sharpe ratio changes by $0.00$ from the shortest estimation window to the longest (\secref{sec:window}) but peaks in between, at an estimation window of 120 days.
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=.9\linewidth]{fig_window_twin}
-\caption{Changing the estimation window. This figure plots the per-seed Sharpe ratio in the trained component of each clusterizer that has a $21$-day variant, at the $60$-day estimation window (circles) and at the $21$-day estimation window (diamonds). The shaded band marks $\pm 1$ standard deviation across head seeds of the $60$-day configuration, and the horizontal lines mark the means across head seeds at the two estimation windows. All five $21$-day variants of \appref{app:names} are shown. PCA loadings and unsigned spectral clustering use individual eigenvector coordinates. The Sharpe ratio falls by $0.39$ for PCA loadings and by $0.36$ for unsigned spectral clustering. The loss is $2.4$ times the clusterizer's standard deviation across head seeds for PCA loadings and $2.6$ times for unsigned spectral clustering. The Sharpe ratio of complete linkage falls by $0.31$. The changes for $k$-means on returns ($-0.07$) and average linkage ($+0.11$) are inside their own bands.}
+\caption{Changing the estimation window. This figure plots, for each clusterizer that has a $21$-day variant, the per-seed Sharpe ratio under the neural trading head at the $60$-day estimation window (circles) and at the $21$-day estimation window (diamonds). The shaded band marks $\pm 1$ standard deviation across head seeds of the $60$-day configuration, and the horizontal lines mark the means across head seeds at the two estimation windows. All five $21$-day variants of \appref{app:names} are shown. PCA loadings and unsigned spectral clustering use individual eigenvector coordinates. The Sharpe ratio falls by $0.39$ for PCA loadings and by $0.36$ for unsigned spectral clustering. The decline is $2.4$ times the clusterizer's standard deviation across head seeds for PCA loadings and $2.6$ times for unsigned spectral clustering. The Sharpe ratio of complete linkage falls by $0.31$. The changes for $k$-means on residuals ($-0.07$) and average linkage ($+0.11$) are inside their own bands.}
 \label{fig:window_twin}
 \end{figure}
 
@@ -450,25 +434,24 @@ $+0.27$ at $\K=30$ and by $+0.33$ at $\K=50$. The effect of the estimation windo
 \label{app:lensrobust}
 
 The measurement in \secref{sec:lens} depends on the number of principal components projected
-out and on the degrees-of-freedom floor against which we judge its result. Because estimating
-the number of factors is a literature of its own \citep{bai2002determining,
+out and on the degrees-of-freedom floor against which we compare its result. Because estimating the number of factors is the subject of a separate literature \citep{bai2002determining,
 onatski2010determining, ahn2013eigenvalue}, we do not take it up here.
-The $k$-means-on-returns partition retains $83\%$ of its variance share when $m = 1$ principal component is projected out, $68\%$ when $m = 3$, and $50\%$ when $m = 10$. Every real partition keeps a variance share strictly above its floor at every $m$ tested. The sign of the result is therefore robust to $m$, although its magnitude depends on $m$. The floor must also be matched to the partition's own shape. Net of this floor, retention at five principal components ranges from $28\%$ to $49\%$ across the 12 clusterizers. On a $322$-stock universe, \textsc{gics} has 10 realized groups. Its floor is thus $0.028$, compared with the $0.060$ of \secref{sec:lens}. Subtracting the larger floor instead would make the net retention of \textsc{gics} at 10 principal components negative. The retention is also a ratio of two $R^2$ values with different denominators. The variance share after the projection is a share of the remaining variance, so it is not a variance decomposition of the original cross-section. In addition, the measurement here counts every group, including singletons. Each singleton fits its own member exactly. However, the trading convention of \secref{sec:methods} (\tabref{tab:methods}, note b) deletes singleton members. On the traded universe, the variance share of $k$-means on returns is $0.264$ with singletons counted (\secref{sec:mechanism}), against the $0.265$ measured here. Without the singletons, the variance share on the traded universe is $0.216$.
+The $k$-means-on-residuals partition retains $83\%$ of its variance share when $m = 1$ principal component is projected out, $68\%$ when $m = 3$, and $50\%$ when $m = 10$. Every real partition keeps a variance share strictly above its floor at every $m$ tested. The sign of the result is therefore robust to $m$, although its magnitude depends on $m$. The floor must also be matched to the partition's own shape. Net of this floor $f$, the retention at five principal components, $\sum_t(\mathrm{VS}^{\perp}_t - f)/\sum_t(\mathrm{VS}_t - f)$, ranges from $28\%$ to $49\%$ across the 12 clusterizers. On a $322$-stock universe, \textsc{gics} has 10 realized groups. Its floor is thus $2.8\%$, compared with the $5.97\%$ of \secref{sec:lens}. Subtracting the larger floor instead would make the net retention of \textsc{gics} at 10 principal components negative. The retention is also a ratio of two $R^2$ values with different denominators. The variance share after the projection is a share of the remaining variance, so it is not a decomposition of the original cross-sectional variance. In addition, the measurement here counts every group, including singletons. Each singleton fits its own member exactly. However, the trading convention of \secref{sec:methods} (\tabref{tab:methods}, note b) deletes singleton members. On the traded universe, the variance share of $k$-means on residuals is $26.4\%$ with singletons counted (\secref{sec:mechanism}), against the $26.5\%$ measured here. Without the singletons, the variance share on the traded universe is $21.6\%$.
 
 \subsection{Size of the Spanning Tests}
 \label{app:size}
 
-The $t$-statistics of the FF5+MOM block of \tabref{tab:spanning} are computed with a Newey--West long-run variance at $21$ lags. With heavy tails and serial dependence, a test of this form can reject more often than its nominal level. We measure the size of the test directly. For each of the 28 portfolios, we rebuild the null distribution from block-resampled regression residuals. The factor matrix stays at its sample values, and the betas are re-estimated in every replication. We use $21$-day blocks and $5{,}000$ replications per portfolio under each of four independent simulation seeds. The empirical size at nominal $5\%$ is $6.6\%$ pooled across the portfolios and $5.3\%$ to $7.6\%$ portfolio by portfolio. This spread comes from the denominator of the $t$-statistic. Dependence accumulated over the $21$ lags is about $1.7$ times as large in the trained portfolios as in the rule-based portfolios, so tests on the trained portfolios over-reject more. Even for the worst-behaved portfolio, correcting the size raises the critical value from $1.96$ to $2.2$ in $t$ units. The smallest $t$ is $4.1$ in that block and $2.5$ in the block with the reversal factor. The rejections are therefore not artifacts of heavy tails or serial dependence.
+The $t$-statistics of the FF5+MOM block of \tabref{tab:spanning} are computed with a Newey--West long-run variance at $21$ lags. With heavy tails and serial dependence, a test of this form can reject more often than its nominal level. We measure the size of the test directly. For each of the 28 portfolios, we rebuild the null distribution from block-resampled regression residuals. The factor matrix stays at its sample values, and the betas are re-estimated in every replication. We use $21$-day blocks and $5{,}000$ replications per portfolio under each of four independent simulation seeds. The empirical size at nominal $5\%$ is $6.6\%$ pooled across the portfolios and $5.3\%$ to $7.6\%$ portfolio by portfolio. This range comes from the denominator of the $t$-statistic. Dependence accumulated over the $21$ lags is about $1.7$ times as large under the neural trading head as under the fixed trading rule, so the tests over-reject more under the neural trading head. Even for the worst-behaved portfolio, correcting the size raises the critical value from $1.96$ to $2.2$ in $t$ units. The smallest $t$-statistic is $4.1$ in the FF5+MOM block and $2.5$ in the block with the reversal factor. The rejections are therefore not artifacts of heavy tails or serial dependence.
 
-\subsection{Distance to the Peer-Regression Portfolios and Performance}
+\subsection{Similarity to the Peer-Regression Portfolios and the Sharpe Ratio}
 \label{app:peerdist}
 
-The two peer-regression portfolios explain $0.52$ to $0.57$ of the variance of each clusterizer's payoff. Although this fraction is positively related to the clusterizer's Sharpe ratio, the relation falls just short of significance at the $5\%$ level (Spearman $\rho = 0.57$, $p = 0.051$). The position correlation between a clusterizer's portfolio and the peer-regression portfolios ranges from $0.43$ to $0.48$. This is $0.60$ to $0.65$ of the clusterizer's position correlation with its own head-seed rerun. The relation between this position correlation and the clusterizer's Sharpe ratio is also positive, although it does not reach significance at the $5\%$ level ($\rho = 0.56$, $p = 0.06$). The two peer-regression portfolios have a position correlation of $0.49$ with each other. This is about as high as the position correlation of either peer-regression portfolio with a clusterizer.
+The two peer-regression portfolios explain $52\%$ to $57\%$ of the variance of each clusterizer's portfolio return. Although this fraction is positively related to the clusterizer's Sharpe ratio, the relation falls just short of significance at the $5\%$ level (Spearman $\rho = 0.57$, $p = 0.051$). The correlation of portfolio weights between a clusterizer's portfolio and the peer-regression portfolios ranges from $0.43$ to $0.48$. This is $60\%$ to $65\%$ of the correlation between the clusterizer's portfolio weights and those of its own head-seed rerun. The relation between this correlation and the clusterizer's Sharpe ratio is also positive, although it does not reach significance at the $5\%$ level ($\rho = 0.56$, $p = 0.06$). The portfolio weights of the two peer-regression portfolios have a correlation of $0.49$ with each other. This is about as high as the correlation of portfolio weights between either peer-regression portfolio and a clusterizer's portfolio.
 
 \subsection{Transaction Costs in Detail}
 \label{app:costs}
 
-We charge costs on the positions that the runs held, so the turnover below is measured from those positions (\appref{app:head}). Since the $L^1$ normalization fixes the gross exposure of the portfolio at one (\secref{sec:components}), each position is a fraction of the portfolio. \tabref{tab:costs} reports turnover, the one-way cost at which each portfolio's annual return reaches zero, and net Sharpe ratios at three cost levels. The gross returns of the trained portfolios range from $6.3\%$ to $7.6\%$ a year. At five basis points one-way, the same portfolios incur costs of $9.6\%$ to $11.8\%$ a year. Because gross return and cost scale together, the break-even cost does not depend on leverage.
+We charge costs on the portfolio weights that the runs produced, so the turnover below is measured from those weights (\appref{app:head}). Since the $L^1$ normalization fixes the gross exposure of the portfolio at one (\secref{sec:components}), each portfolio weight is a fraction of the portfolio. \tabref{tab:costs} reports turnover, the one-way cost at which each portfolio's annual return reaches zero, and net Sharpe ratios at three cost levels. The gross returns of the portfolios of the neural trading head range from $6.3\%$ to $7.6\%$ a year. At five basis points one-way, the same portfolios incur costs of $9.6\%$ to $11.8\%$ a year. Because gross return and cost scale together, the break-even cost does not depend on the gross exposure.
 
 \begin{table}[tb]
 \centering
@@ -491,15 +474,15 @@ Random & $1.28$ & $6.25$ & $46.9$ & $2.66$ & $0.79$ & $0.31$ & $-1.15$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\small
-\item \emph{Notes.} This table reports each portfolio's gross Sharpe ratio, annual return, one-way turnover, break-even cost, and net Sharpe ratio at three cost levels. The portfolios are those of the trained component, at five head seeds. Each statistic is computed over the $6{,}913$-day sample of \secref{sec:panel} (July 1997 to December 2024) for each head seed and then averaged across the head seeds. Positions are the weight vectors the runs produced, at gross exposure one. Turnover is one-way, half of
+\item \emph{Notes.} This table reports each portfolio's gross Sharpe ratio, annual return, one-way turnover, break-even cost, and net Sharpe ratio at three cost levels. The portfolios are those of the neural trading head, at five head seeds. Each statistic is computed over the $6{,}913$-day sample of \secref{sec:panel} (July 1997 to December 2024) for each head seed and then averaged across the head seeds. The portfolio weights are those that the runs produced, at gross exposure one. Turnover is one-way, half of
 $\sum_i |\Delta w_{it}|$. The break-even and the net columns charge the
 full traded notional at the stated one-way rate. Break-even is the one-way rate, in basis points (bps), at which annual return reaches zero. All configurations use the common 60-day estimation window of \tabref{tab:methods}. The ranges cover the 12 clusterizers, and the two controls are reported on their own rows.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-The reordering reported in \secref{sec:costs} is not an artifact of the neural trading head. We run the same measurement on the rule-based component. The rule-based signal is rebuilt daily over its five-day signal window. On average across the clusterizers, the rule-based positions correlate with the positions of the previous day at $0.46$. From one day to the next, the position in $27\%$ of the stocks changes sign. Counted one-way, the rule-based portfolios turn over $23.1\%$ to $30.8\%$ of their exposure a day, against $38.2\%$ to $46.9\%$ for the trained portfolios. The rule-based portfolios earn $3.9\%$ to $4.6\%$ a year, against $6.3\%$ to $7.6\%$ for the trained portfolios. The trained portfolios trade $1.46$ times as much and earn $1.63$ times as much. The two ratios nearly offset each other in the break-even cost, which is $2.75$ to $3.74$ basis points in the rule-based component, against $2.66$ to $3.79$ in the trained component. The reordering is sharper in the rule-based component. At five basis points, the $\K=1$ control ranks first among the rule-based portfolios and ninth among the trained portfolios. The random control ranks third among the rule-based portfolios and thirteenth among the trained portfolios.
+The reordering reported in \secref{sec:costs} is not an artifact of the neural trading head. We run the same measurement on the fixed trading rule. The signal of the fixed trading rule is rebuilt daily over its five-day signal window. On average across the clusterizers, its portfolio weights correlate with those of the previous day at $0.46$. From one day to the next, the position in $27\%$ of the stocks changes sign. The one-way turnover is $23.1\%$ to $30.8\%$ of the exposure a day under the fixed trading rule and $38.2\%$ to $46.9\%$ under the neural trading head. The annual return is $3.9\%$ to $4.6\%$ under the fixed trading rule and $6.3\%$ to $7.6\%$ under the neural trading head. The neural trading head therefore trades $1.46$ times as much and earns $1.63$ times as much. The two ratios nearly offset each other in the break-even cost, which is $2.75$ to $3.74$ basis points under the fixed trading rule, against $2.66$ to $3.79$ under the neural trading head. The reordering is sharper under the fixed trading rule. At five basis points, the $\K=1$ control ranks first of the 14 portfolios under the fixed trading rule and ninth under the neural trading head. The random control ranks third under the fixed trading rule and thirteenth under the neural trading head.
 
 The nearest published study finds a much larger turnover reduction from clustering. We cannot reconcile its result with ours. \citet{brutti2026orthogonal}, who do not charge costs, report that clustering reduces turnover sharply in their setup, from $87.9\%$ to between $24.2\%$ and $24.4\%$. In contrast, our portfolios show a much smaller turnover reduction. The portfolio of the $\K=1$ control turns over $44.6\%$ a day, against $38.2\%$ to $43.8\%$ for the portfolios of the 12 clusterizers. Rebalancing frequency is the likely cause (our portfolios are rebuilt every day). However, we have not measured its effect, so we record the divergence as an open question.
 
-The cost calculation has the following limitations. First, the cost model is a proportional one-way charge with no market-impact term. Market impact would be largest for a portfolio that is rebuilt daily on 500 stocks. Second, we do not model borrow costs on the short side. Third, the panel consists of US large-capitalization stocks, the most liquid case available, so the break-even cost here is an upper bound for the same design on a broader universe. Fourth, the cost figures are computed at $\K=30$, and we have not measured whether the ordering above holds across the sweep over $\K$ in \appref{app:ksweep}. Finally, the portfolios are rebuilt daily. A longer holding period would lower turnover roughly in proportion. We leave the effect of a longer holding period on the break-even cost to future work.
+The cost calculation has the following limitations. First, the cost model is a proportional one-way charge with no market-impact term. Market impact grows with turnover, which is high for portfolios that are rebuilt daily. Second, we do not model borrow costs on the short side. Third, the panel consists of US large-capitalization stocks, the most liquid case available. On a broader universe, the same design would face higher trading costs. Fourth, the cost figures are computed at $\K=30$, and we have not measured whether the ordering above holds at the other values of $\K$ in \appref{app:ksweep}. Finally, the portfolios are rebuilt daily. A longer holding period would lower turnover roughly in proportion. We leave the effect of a longer holding period on the break-even cost to future work.

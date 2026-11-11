@@ -6675,3 +6675,133 @@ Printed values changed (old gross-2 → new gross-1; source): tab:moments rule v
 **(b) Verbal fractions → percentages (exact value; source).** §1 "about 40% … about a third less volatile" → 39%–42% / 33%–35% (tab:moments changes); §1 "loses at most about half" → 56% (lens_extras 1−min ret_5PC 0.562); §1 "reversal explains at most half" → 42% (strev max 1−α7/α6 = 0.419, rule K=1); §1 "two fifths to two thirds … less than a tenth" → 41%–68% / 8%–9% (k1_regressor α_on_k1/α6; random 9.3% rule, 7.5% trained); §3.7 fn "by about a third" → 36% (√(1+ρ̄) = 1.362, era_ratios SET19 ρ̄ 0.854); §4.2 "between a tenth and a quarter" → 11%–26% (10.8%–26.4%); §4.2 "about three quarters of the random-sign imbalance" → 71%–85% (server_package/e2e_plan/imbalance_seedable_v3.py, five seeds, logs/imbal_1_62461752.out: 0.707–0.847, GICS 1.225 excepted; NOT owned by the repo harness); §5.1 "half the gap" → 50% (0.4145/0.8251), "a fifth of the gap" → 20% (0.1682/0.8251); §5.2 "increases by three quarters" → 77% (0.3759/0.2128); §5.4 "about two thirds as similar" → 65% (ARI 0.193/0.296); tab:gradient note "about two thirds of the traded universe" → about 65% (1 − 0.348, ledger id 1846); §5.5 "more than two fifths of the gap" → 44% (0.3599/0.8251); §6.1/§6.2 "about half" absorbed → 39%–56%; §6.2 "about a quarter … about two fifths" → 20%–25% / 38%–42%, "fall by about a tenth" → 8%–13% (strev); §6.4 "about two fifths of their notional" → removed (38.2%–46.9% already printed), "about a third of the stocks" → about 35%; §7 "each absorb at most about half" → PCs at most 56%, FF at most 50% (lens_full_stages 1−min ret_FF6 0.500); A.10 caption "about two and a half times" → 2.4 (PCA loadings) and 2.6 (spectral) (loss/sd across head seeds of the 60-day configuration).
 **(c) Number check of the whole draft (kind: delta against the last audited render).** Numeric-token multiset of every SSRNv2 section against the audited JFEC snapshot (replication_repo/paper @ 7b3a7f2): 198 tokens gained, 84 lost; every one explained and recomputed (round-33/34 values above; explicit number–object mappings of N122-era language rounds re-checked against strev_spanning, split_v3, rule_sigw30, bet_corr_matrix, naive_turnover, turnover_v3_mean; "up to 0.36" holds over all five swept clusterizers incl. spectral −0.057; SHRCD {10,11,12} per data/build_panel.py; net retention 28.1%–49.2%; never-matched 0.19%–2.95%). Tokens not in the delta are unchanged from the audited render.
 **(d) Replication repo.** `paper/` re-snapshotted from ../SSRNv2 (plain article build; JFEC snapshot = commit 7b3a7f2; `make paper-sync` default now ../SSRNv2); standalone build text-identical to SSRNv2/main.pdf on 47 of 47 pages. `RULE_REPORT_SCALE` used by `audit/verify_printed.py` (old rule literals replaced, new checks for every value in (a) and the CSV-owned values in (b)), `audit/check_printed_5seed.py` (ruler 20%, window loss/sd 2.4/2.6), `audit/check_field_window_5seed.py` (50%, 44%), `audit/check_pseed_5ps.py` (77%), `analysis/print_tables.py` (rule rows at gross one; adds tab:moments, tab:k1span, tab:era; tab:peer now prints the 12 clusterizers — it still excluded spectral, a 3-seed leftover), `figures/scripts/fig_reversal_v3.py`, `fig_dose_v3.py` (+ book→portfolio labels in fig_alpha_vol / fig_select_vs_ew). Gates: verify_printed 128 PASS 0 FAIL; check_printed_5seed, check_pseed_5ps, check_field_window_5seed, check_note_maxw, check_pseed_flip_literals, check_seed_language, check_calendar_bypass 0 FAIL; check_figures_text 10/10 text-identical (fig_bet_corr unchanged, --all not run); fingerprint_3seed 31 vs 27 on the JFEC text — the 8 new matches are all seed-invariant gross-one rule values (coincidences), the 4 that vanished were old gross-2 values.
+
+### N124 (2026-11-10) — SSRNv2 §5.1: "paired dispersion" and "levels" renamed as standard deviations; new printed share 65%; fig_field_ruler label
+**User questions and ruling.** The user asked about these passages:
+- 05 "A gap in the ranking compares two portfolios, so …": "这句话有点confusion";
+- "Only this interaction changes the ranking.这又是啥意思";
+- "Measured on the levels instead啥是levels";
+- "dispersion … 可以说variation/variance之类的吗".
+
+Ruling: "都改！".
+
+**(a) New printed number.** §5.1 now reports all three parts of the variance decomposition of the 12×5 matrix of per-seed Sharpe ratios:
+- clusterizer means: 65% (65.49);
+- shared head-seed shift: 27% (26.87);
+- interaction: 8% (7.64).
+
+The source is the per-seed head books at paths.SEEDS. `audit/check_field_window_5seed.py` now asserts (65, 27, 8).
+
+A new sentence says "It is larger than 0.103 because it contains the shared shift". Check: once the seed means are removed, the pooled within-portfolio s.d. falls from 0.1682 to 0.0791.
+
+**(b) Terminology; no value changed.**
+- 0.103 is now "the pooled standard deviation of a gap across head seeds". It was "paired dispersion" and "pooled paired-difference standard deviation".
+- 0.168 is now "the pooled standard deviation of a single portfolio's Sharpe ratio". It was "measured on the levels" and "the dispersion of the levels".
+- Every other "dispersion" (01, 03, 04 ×3, 06, A ×2) became "standard deviation (across head seeds)" or "variation". Reason: in published finance writing "dispersion" means cross-sectional spread; all 21 hits in the 24-paper corpus use it that way.
+- 06: "their levels" → "their Sharpe ratios"; "The level for k-means on returns" → "The retention of 52% for k-means on returns".
+- A.2 "neither difference exceeds its own standard deviation across head seeds" was re-verified on the check_pseed_5ps inputs:
+  - Sharpe gap: mean −0.040, s.d. 0.098;
+  - volatility gap: mean 0.054 pp, s.d. 0.105.
+
+**(c) Figure.** The fig_field_ruler label "one paired-difference s.d. (0.103)" now reads "pooled s.d. of a gap across head seeds (0.103)".
+- `figures/scripts/fig_field_ruler_v3.py` changed in the label string only.
+- The unpatched script reproduces the previously shipped text layer exactly. The patched output differs from it only in the label tokens.
+- `audit/check_figures_text.py` will FAIL on fig_field_ruler until `make paper-sync` copies the new PDF into paper/figures. This is expected.
+
+**(d) Gates** (CSA_MANUSCRIPT_DIR=../SSRNv2):
+- verify_printed: 0 FAIL;
+- check_printed_5seed, check_pseed_5ps (20), check_field_window_5seed (8), check_seed_language, check_calendar_bypass, check_note_maxw, check_pseed_flip_literals: pass;
+- check_figures_text: fig_field_ruler waits for the sync (see (c)).
+
+### N125 (2026-11-10) — SSRNv2 terminology round: trading-model names, portfolio return, subperiod, Sharpe (EWMA), k-means on residuals; variance shares printed as percentages; eight figures relabeled
+**User rulings.** "neural trading head替换trained component吧" → "好"; "payoff、era改掉，你建议的也都改！（不过改之前复核一遍）".
+
+**(a) Names (text, tables, figure labels).**
+- rule-based component → fixed trading rule ("Fixed rule" in tables and figures).
+- trained component → neural trading head ("Neural head").
+- trading component → trading model.
+- payoff → portfolio return.
+- era → subperiod.
+- Sharpe (EW) → Sharpe (EWMA).
+- k-means on returns → k-means on residuals. Identifiers such as kmeans_ret and fv2a are unchanged.
+- §3.7: measurement error → standard error; "spread across configurations" → "standard deviation across configurations" (verified: the text measures the standard deviation of each moment across the 19 configurations).
+- Design Resolution → Statistical Precision of the Comparisons (label sec:resolution unchanged).
+- log-Sharpe gap where the decomposition is meant.
+- spread (best-minus-worst range) → range.
+- sweep → reruns.
+- Appendix: inference / each call / margin ranking / raw bet → plain terms.
+
+**(b) Printed numbers: format only, values unchanged.** §6 and A.10 variance shares are now printed as percentages with the same digits:
+- 0.265 → 26.5%; 0.160 → 16.0%;
+- 0.0600 / 0.0599 / 0.0597 → 6.00% / 5.99% / 5.97%;
+- 0.246 / 0.206 / 0.185 / 0.178 → 24.6% / 20.6% / 18.5% / 17.8%;
+- 0.13 → 13%;
+- 0.028 / 0.060 → 2.8% / 6.0%;
+- 0.264 / 0.265 / 0.216 → 26.4% / 26.5% / 21.6%.
+
+The A.12 fractions 0.52–0.57 and 0.60–0.65 are now 52%–57% and 60%–65%. The duplicate "0.0588, the 5.88%" became "the 5.88%". The verify_printed checks assert the same unrounded values; their labels still quote the decimals. Every other number is unchanged; the numeric-token diff in review_round38 contains only these conversions.
+
+**(c) Figures.** Labels were changed in `figures/scripts/` and nowhere else:
+- style.NAME: Sharpe (EWMA);
+- fig_field_ruler: k-means on residuals; "Sharpe ratio, neural trading head";
+- fig_pseed_flip: panel titles; "head seed fixed";
+- fig_rank_shift: "fixed rule" / "neural head";
+- fig_reversal: names and titles;
+- fig_window_twin: tick label and y-label;
+- fig_bet_corr: colorbar label, "correlation of portfolio weights" (N124 follow-up).
+
+Seven figures were redrawn into SSRNv2/figures, each differing from the previous PDF only in the label tokens: fig_field_ruler, fig_rank_shift, fig_reversal, fig_match_cost, fig_pseed_flip, fig_window_twin, fig_select_vs_ew. fig_bet_corr is being redrawn (about 30 minutes, user-approved). The TikZ fig_pipeline.tex was relabeled in the same way.
+
+**(d) Gates.** CSA_MANUSCRIPT_DIR=../SSRNv2:
+- verify_printed: 0 FAIL;
+- check_printed_5seed, check_pseed_5ps, check_field_window_5seed, check_note_maxw, check_seed_language, check_calendar_bypass: pass;
+- check_pseed_flip_literals: 2 FAIL (repository PDF older than the patched script, and not byte-identical to the manuscript PDF). check_figures_text: pending. Both clear after `make paper-sync`.
+
+**(e) Addendum, after the fig_bet_corr redraw and `make paper-sync`.**
+- fig_bet_corr: redrawn and installed. The recomputed matrix reproduces the shipped values (off-diagonal mean 0.6118, diagonal 0.7036, ratio 0.870). The text layer differs from the old PDF only in the labels (Sharpe (EWMA) twice; "correlation of portfolio weights").
+- The script also rewrote analysis/results/bet_corr_matrix_v3_12arm_cal6913.csv. It is identical to the committed file up to 2.2e-16, so it must be left out of any commit.
+- Gates on the synced paper/: all ten pass (verify_printed 0 FAIL; check_pseed_flip_literals 0 FAIL; check_figures_text 10 of 10).
+- The standalone build of paper/ matches SSRNv2/main.pdf on 48 of 48 pages.
+
+### N126 (2026-11-10) — SSRNv2 round 39 cold read: printed numbers changed in value or unit, claims corrected, new gate checks, Figure 1 text overflow
+**User ruling.** "最终冷读一遍，深入多方面多尺度思考每一句话的language是否合理"; edit directly and compare afterwards ("直接改，事后对照"). Pairs: SSRNv2/_revision/intro_lessons_pass_2026-11-07/review_round39/edits_round39.py and edits_round39_b35.py. Comparison: COMPARISON_round39.html in the same folder.
+
+**(a) Printed numbers that changed in value, unit or object.** Each was recomputed from the CSV or the code.
+- §6.1: the block-bootstrap standard errors "0.001 to 0.005" become "0.1 to 0.5 percentage points". The N125 conversion of variance shares to percentages had left them in decimal units, so they read as 0.001 percentage points. The values are unchanged (lens_extras se_* 0.0007–0.0053).
+- A.10: the random control's floor "6.0%" becomes "5.97%" (lens_extras dof_floor 0.0597). The GICS floor of 2.8% is unchanged.
+- §4.1: "about a percentage point above the top of this band" becomes "1.1 to 1.3 percentage points". Under the neural trading head, the K=1 control is 5.07 − 3.80 = 1.27 above the top and the random control 4.89 − 3.80 = 1.09.
+- §1: the random control's retained alpha "8% to 9%" becomes "9% under the fixed trading rule and 8% under the neural trading head". verify_printed already asserts both.
+- §5.4: new printed number 0.71, the correlation of portfolio weights between the two controls (bet_corr 0.7104), beside 0.55 and 0.51 against their own head-seed reruns (0.548, 0.513).
+- §3.7: the four periods are now named by year: 1997–2001, 2002–2009, 2010–2016, 2017–2024. The split is unchanged (era_ratios_v3).
+- §1: "rises by 0.88 … the same at both ends" becomes "+0.88" and "0.00", as in §5.5. check_field_window_5seed asserts +0.8800 and −0.0029.
+- A.2: "+0.24" becomes "0.24 percentage points". The per-seed gaps are −0.001 to +0.241.
+- Figure 1 caption: "478 eligible stocks" becomes "478 stocks that are in the universe on all 30 days". This follows signal_data.py:64 (JFEC_A_Manuscript/_reference), which keeps the stocks with a group-demeaned residual on all 30 days that are in the day-t universe. It answers the AUTHOR_ITEMS question about what "eligible" means.
+
+**(b) Claims corrected (no number changed).**
+- Table 1, SPONGE row: "unlike the row above" pointed at PCA loadings, which also uses the signed C. It now reads "unlike spectral (unsigned) clustering".
+- Figure 1 now says "every configuration that uses C receives the same C". The singleton sentence now says that s_it is zero in a group of size one.
+- GICS coverage is "54% to 73% … depending on the year" (item 11: 54.1%–72.9% by year), not "by subperiod".
+- §1, peer regressions: the unexplained part is the head's input. P&L is booked on raw returns, so the head does not "trade" it.
+- §1: the learned family (SSSNET) is not proposed here; Jin et al. combine an existing clusterizer with a strategy.
+- §6.2: the separation in market loadings is "consistent with" the volatility reduction, not the same quantity. The conclusion about the neural trading head now follows its own numbers.
+- A.13: "the break-even cost here is an upper bound" becomes "would face higher trading costs".
+- §5.3: "clearly separated in daily returns" becomes "the tests separate the clusterizers more clearly in daily returns than in 21-day returns". No adjacent pair is separated.
+- §1 restores the dropped conclusion as "End-to-end performance therefore cannot show what each stage contributes."
+- Two §6.4 author sentences deleted during the pass were restored: "Turnover is not a measure of clustering quality." verbatim, and the Brutti et al. clause.
+- The Brutti et al. clause was then verified on the user's request ("你复核") and reworded.
+  - Old: "Although our results for the fixed trading rule corroborate the no-clustering benchmark of Brutti et al. (2026), our portfolios do not show the turnover reduction that they report."
+  - New: "Under the fixed trading rule, every clusterizer's portfolio earns a higher gross Sharpe ratio than the portfolio of the K=1 control, 1.46 to 1.78 against 0.83. Brutti et al. (2026) also find that every clustering-based portfolio earns a higher Sharpe ratio than their no-clustering benchmark. However, our portfolios do not show the turnover reduction that they report."
+  - Their side (Table 2): Quantile MR, the same 20/20 rule applied to the whole cross-section, earns 0.534; GICS 0.578, K-Means 0.663 and Deviation 0.788.
+  - Our side: rule_book recomputed, equal to the naive_SR column to 2e-16. The 12 clusterizers earn 1.4557–1.7810, the K=1 control 0.8285 and the random control 0.8941.
+  - Turnover: under the fixed rule the K=1 control turns over 23.1% a day, the lowest of the 14, against 23.9%–30.8% for the clusterizers. Under the neural head it turns over 44.6%, against 38.2%–43.8%. Brutti et al. report a fall from 87.9% to 24.2%–24.4%.
+
+**(c) Gates.**
+- New checks:
+  - verify_printed: the SE band in percentage points; the A.10 floor of 5.97%; §5.4 weights (66 clusterizer pairs 0.581–0.657, mean 0.61; controls 0.71 with each other and 0.55/0.51 with their own rerun).
+  - check_printed_5seed: §4.1 controls 1.1/1.3 pp above the band top.
+  - verify_printed: §6.4 fixed-rule gross Sharpe 1.46–1.78 for the 12 clusterizers against 0.83 for the K=1 control.
+- All ten gates report 0 FAIL on CSA_MANUSCRIPT_DIR=../SSRNv2 and, after `make paper-sync`, on paper/.
+- fingerprint_3seed: 28 lines before and after, identical.
+- The standalone build of paper/ (pdflatex, bibtex, pdflatex ×2) has 48 pages, 0 errors and 0 overfull, and its text layer matches SSRNv2/main.pdf on 48 of 48 pages (pypdf).
+
+**(d) Figure 1 layout.** The round-38 relabeling ("the mean of the portfolio return"; "The portfolio return is earned on raw returns.") overflowed the μ box into σ(Z) and past the right frame. The estimand line had overflowed since before round 38. The three lines were shortened to "the mean return", "The portfolio earns raw returns." and "We report its two parts separately.". check_figures_text compares text only and cannot see overlap, so render the page after any TikZ text change (writing guide B.45 R71).

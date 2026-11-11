@@ -33,7 +33,7 @@ for a in TW:
     ax.plot([0, 1], [i, j], "-", color=col, lw=lw, zorder=3 if d >= 3 else 2); ax.plot([0, 1], [i, j], "o", color=col, ms=3.4, zorder=4)
     ax.text(-0.045, i, LAB[a], ha="right", va="center", fontsize=8.6, color=lab); ax.text(1.045, j, LAB[a], ha="left", va="center", fontsize=8.6, color=lab)
 ax.set_xlim(-0.62, 1.62); ax.set_ylim(len(TW) - 0.4, -1.15); ax.set_xticks([]); ax.set_yticks([])
-ax.text(0, -0.75, "rule-based", ha="center", fontsize=9.6); ax.text(1, -0.75, "trained", ha="center", fontsize=9.6)
+ax.text(0, -0.75, "fixed rule", ha="center", fontsize=9.6); ax.text(1, -0.75, "neural head", ha="center", fontsize=9.6)
 ax.annotate(r"Spearman $\rho = %.2f$" % rho, (0.5, len(TW) - 0.65), ha="center", fontsize=9.0)
 fig.tight_layout(); style.save(fig, "fig_rank_shift", dpi=160)
 mv = {a: rr.index(a) - tr.index(a) for a in TW}
