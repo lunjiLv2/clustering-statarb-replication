@@ -1,7 +1,9 @@
 %%=====================================================================
-%%  SSRN preprint build — plain article class.
-%%  Body = the JFEC submission of 2026-09-02 (sections/ copied verbatim
-%%  from JFEC_OUP/sections). Post-submission experiments are NOT included.
+%%  SSRN preprint, version 2 (November 2026) — plain article class.
+%%  Revises the first version (JFEC submission of 2026-09-02 = SSRN 7448198,
+%%  archived read-only in ../ARCHIVE_v1_first_version_2026-09/). The text was
+%%  revised throughout; no new experiments (every number comes from the v1
+%%  runs; fixed-trading-rule levels are reported at gross exposure one, N123).
 %%  Build: pdflatex main; bibtex main; pdflatex main; pdflatex main
 %%=====================================================================
 \documentclass[10pt]{article}
@@ -54,7 +56,7 @@ French data library
 (\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}).
 The derived data underlying the tables and figures are available on Zenodo at \href{https://doi.org/\ZenodoDOI}{\texttt{https://doi.org/\allowbreak\ZenodoDOI}} under a CC BY 4.0 license \citep{zhu2026replicationdata}. They include the daily return of every portfolio, the portfolio weights from the runs of the neural trading head, the partition caches, and the training logs. The code,
 with the checks that tie the printed values to these files, is available
-at \href{https://github.com/lzwbh/clustering-statarb-replication}{\texttt{https://github.com/lzwbh/\allowbreak clustering-statarb-replication}} under an
+at \href{https://github.com/lunjiLv2/clustering-statarb-replication}{\texttt{https://github.com/lunjiLv2/\allowbreak clustering-statarb-replication}} under an
 MIT license.
 
 \bibliographystyle{plainnat}

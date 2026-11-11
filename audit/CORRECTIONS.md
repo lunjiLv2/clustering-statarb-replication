@@ -6805,3 +6805,20 @@ Seven figures were redrawn into SSRNv2/figures, each differing from the previous
 - The standalone build of paper/ (pdflatex, bibtex, pdflatex ×2) has 48 pages, 0 errors and 0 overfull, and its text layer matches SSRNv2/main.pdf on 48 of 48 pages (pypdf).
 
 **(d) Figure 1 layout.** The round-38 relabeling ("the mean of the portfolio return"; "The portfolio return is earned on raw returns.") overflowed the μ box into σ(Z) and past the right frame. The estimand line had overflowed since before round 38. The three lines were shortened to "the mean return", "The portfolio earns raw returns." and "We report its two parts separately.". check_figures_text compares text only and cannot see overlap, so render the page after any TikZ text change (writing guide B.45 R71).
+
+### N127 (2026-11-10) — SSRN v2 final preparation: code URL moved to lunjiLv2; drafting macros removed; v1 archived
+**User rulings.** "1.把我们的第一版…完整存档，标明是第一版 2.为现在我们准备的updated SSRN准备最终定稿，检查这一稿的submission-readiness"; A1 "保持不变：v2 本来就不纳入投稿后的实验" / "ridge结果下一次再加"; A2 URL "改".
+- **Data availability (main.tex).** The printed code link is now `https://github.com/lunjiLv2/clustering-statarb-replication`, replacing `lzwbh/…`. GitHub reported the move on the 2026-11-10 push; the old address still redirects. Only page 35 changed, and both link annotations point to the new address.
+- **A1, kept.** The abstract, §1 and §6.3 still say that most clusterizers keep alpha against the two OLS peer-regression portfolios plus factors (8 of 12). The post-submission ridge peer book (0 of 12) goes into the next version, because v2 excludes post-submission experiments.
+- **Cleanup that leaves the PDF text unchanged.**
+  - Six unused drafting macros (`\TODO`, `\PH`, `\PENDGROSS`, `\PROVEN`, `\SKETCH`, `\CONJ`) were removed from preamble.tex.
+  - The header comment of main.tex now describes v2.
+- **v1 archive.** `ARCHIVE_v1_first_version_2026-09/` is read-only. It holds the JFEC submission (2026-09-02) and SSRN 7448198, with sources, the cover letter, `git archive 7b3a7f2` and SHA-256 for 552 files. Independent rebuilds match the archived PDFs on 41/41 and 46/46 pages. Local tag `v1-first-version` points to 7b3a7f2.
+- **Final PDF.** `SSRNv2/Zhu_He_Cucuringu_2026_Clustering_StatArb_SSRN_v2.pdf`: 48 pp, 0 errors, 0 overfull, 0 undefined; sha256 354c8aca…d1ee.
+  - Gates: 10 of 10 report 0 FAIL on SSRNv2 and on the synced paper/.
+  - The standalone build of paper/ matches the final PDF on 48 of 48 pages.
+  - Readiness report: `SSRNv2/_revision/final_v2_prep_2026-11-10/READINESS_v2.md`.
+- **Repository, same commit (user "好" to all three).**
+  - README.md and CITATION.cff now name `lunjiLv2`. Their release status, version (0.9.0) and date-released (2026-09-01) are unchanged.
+  - The commit that carries this entry is pushed to `ssrnv2-gross-one`, and remote `main` is fast-forwarded to it from 2e5e10f.
+  - The historical mentions of `lzwbh` (RELEASE_CHECKLIST.md; N95, inside its N91 addendum 2; N102) are kept.
