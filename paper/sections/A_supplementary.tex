@@ -91,7 +91,7 @@ differ in the objective and in the parameterization.
 the downside deviation.
 \emph{Sharpe (EWMA)} is a variant of \emph{Sharpe} that weights
 recent days exponentially, with a daily decay of $0.99$ over $252$ days. The
-oldest day therefore receives $8\%$ of the newest day's weight. It also differs from \emph{Sharpe} in its objective, which uses unnormalized portfolio weights and group means taken from the soft assignment, whereas \emph{Sharpe} uses portfolio weights normalized to gross exposure one and group means taken from the hard assignment. For this reason, the clean contrast between two objectives is \emph{Sharpe} against \emph{Sortino} (\tabref{tab:methods}, note d).
+oldest day therefore receives $8\%$ of the newest day's weight. It also differs from \emph{Sharpe} in its objective, which uses unnormalized portfolio weights and group means taken from the soft assignment, whereas \emph{Sharpe} uses portfolio weights normalized to gross exposure one and group means taken from the hard assignment. For this reason, we compare the two objectives using \emph{Sharpe} and \emph{Sortino}, which are otherwise the same (\tabref{tab:methods}, note d).
 \emph{Sharpe (graph)} produces the assignment with a signed-graph network in place of free logits, and it evaluates the objective with a 30-day signal window, the same signal window as the neural trading head.
 
 \paragraph{\textsc{gics}.} The \textsc{gics} clusterizer uses a static sector table from a single S\&P
@@ -198,7 +198,7 @@ sums of its group-demeaned residual of \eqnref{eq:relsig} over the 30-day signal
 %
 This input has a single channel of length 30. Three
 convolutions of kernel width $2$, $4$, and $8$ run in parallel over
-that path (the sense in which the convolution stage is multi-scale). A data-driven gate merges the branches. The gate averages the day's cross-sectional amplitude spectrum over stocks, splits it into three frequency bands, and passes the result through a softmax with a learned bias. The resulting gate weights pair the highest band with the narrowest kernel. The merged
+that path. We refer to this convolution stage as multi-scale. A data-driven gate merges the branches. The gate averages the day's cross-sectional amplitude spectrum over stocks, splits it into three frequency bands, and passes the result through a softmax with a learned bias. The resulting gate weights pair the highest band with the narrowest kernel. The merged
 output then passes to a long-convolution layer, which learns a kernel as long as
 the signal window, soft-thresholds it toward zero, applies it in the
 frequency domain, and adds a learned skip connection. The score is

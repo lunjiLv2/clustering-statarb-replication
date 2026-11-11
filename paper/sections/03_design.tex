@@ -158,7 +158,7 @@ The main claim of this article is that clustering changes the return volatility 
 
 We build the panel from daily CRSP data, obtained through WRDS and covering
 1990 to 2024. The traded universe is the 500 stocks
-with the largest market capitalization as of the \emph{previous} close,
+with the largest market capitalization as of the previous close,
 reselected daily. We restrict the universe in this way to keep the comparison among large and liquid stocks. The daily reselection uses information available at the previous close. The stocks must be common shares with a full history of market residuals over the clusterizers' estimation window.\footnote{CRSP share codes $10$, $11$, and $12$.} The return is CRSP's close-to-close return adjusted for splits and dividends.\footnote{The panel's date labels run one trading day ahead of the Fama--French calendar. We correct this offset before every regression on factor returns (\appref{app:calendar}). No statistic computed within the panel depends on it.} Every result in this article is computed on $6{,}913$ out-of-sample trading days, from 8 July 1997 to 27 December 2024. These days are shared by all 14 configurations of each trading model (the 12 clusterizers and the two controls). The neural trading head is pre-trained on the first $1{,}000$ days on which a portfolio can be
 formed, and the out-of-sample period starts on the trading day that follows this pre-training sample.
 
@@ -225,7 +225,7 @@ $k$-means on residuals & $\widetilde{\Rmat}$ directly & $60$
 Average linkage & $\Cmat$ & $60$
   & agglomerative clustering on $\Dmat = 1 - \Cmat$ \\
 Complete linkage & $\Cmat$ & $60$
-  & the same, complete rather than average linkage \\
+  & the same, with complete linkage \\
 \addlinespace
 \multicolumn{4}{@{}l}{\emph{Eigenstructure} \citep{macmahon2015community, cucuringu2019sponge}}\\
 Spectral (unsigned) & eigenvectors of $|\Cmat|$ & $60$
@@ -346,7 +346,7 @@ The portfolio return of \eqnref{eq:estimand} is the same function of the weights
   \pi_t \;=\; \sum_i w_{it}\, r_{i,t+1},
 \end{equation}
 %
-where the return on the right is the \emph{raw} return of \eqnref{eq:residual}.
+where the return on the right is the raw return of \eqnref{eq:residual}.
 
 
 %%---------------------------------------------------------------------
@@ -417,14 +417,14 @@ where the return on the right is the \emph{raw} return of \eqnref{eq:residual}.
 To measure what clustering contributes to trading performance, we compare every result below against two controls. The no-clustering control ($\K = 1$) puts all stocks in a single group, so each stock's market residual is demeaned against the average of all stocks. We use the $\K = 1$ control to assess whether clustering improves trading performance. The random-partition control assigns each stock to one of $\K$ groups uniformly at
 random, independently across stocks, and redraws the assignment every trading day.
 It does not use the panel of market residuals
-$\widetilde{\Rmat}$. The random control forms 30 groups, the same as every clusterizer except \textsc{gics} targets. It also uses the same demeaning within groups, the same trading models, and the same signal windows as the configurations of the clusterizers. Compared with those configurations, the random control lacks only the \emph{information} in their groups. It therefore separates the mechanical effect of demeaning within groups from the effect of the information in the groups. The random control differs from the placebo of \citet{brutti2026orthogonal}. Their placebo permutes long and short assignments within clusters, so it tests the signal for a fixed partition. In contrast, our random control keeps the signal and replaces the partition.
+$\widetilde{\Rmat}$. The random control forms 30 groups, the same number that every clusterizer except \textsc{gics} targets. It also uses the same demeaning within groups, the same trading models, and the same signal windows as the configurations of the clusterizers. Compared with those configurations, the random control lacks only the information in their groups. It therefore separates the mechanical effect of demeaning within groups from the effect of the information in the groups. The random control differs from the placebo of \citet{brutti2026orthogonal}. Their placebo permutes long and short assignments within clusters, so it tests the signal for a fixed partition. In contrast, our random control keeps the signal and replaces the partition.
 
 
 
 \subsection{The Seeds and Conventions}
 \label{sec:seeds}
 
-We train each configuration of the neural trading head with five head seeds, $\{1, 2, 3, 4, 5\}$. The head seed sets the initialization of the trading head, so the standard deviation across head seeds measures the variation of the fitted model for a fixed partition. Unless stated otherwise, every standard deviation of a per-run statistic, such as the Sharpe ratio, is computed across a configuration's own head-seed runs. This includes the pooled standard deviation of the Sharpe-ratio gap between two configurations across the five head seeds. In \secref{sec:invariance}, we compare the gaps in the ranking with this standard deviation.
+We train each configuration of the neural trading head with five random seeds, $\{1, 2, 3, 4, 5\}$. We refer to the seed of the neural trading head as the head seed throughout the paper. The head seed sets the initialization of the trading head, so the standard deviation across head seeds measures the variation of the fitted model for a fixed partition. Unless stated otherwise, every standard deviation of a per-run statistic, such as the Sharpe ratio, is computed across a configuration's own head-seed runs. This includes the pooled standard deviation of the Sharpe-ratio gap between two configurations across the five head seeds. In \secref{sec:invariance}, we compare the gaps in the ranking with this standard deviation.
 
 Nine of the 12 clusterizers are stochastic. The deterministic ones are average linkage, complete linkage, and \textsc{gics}. We generate the daily partitions of each stochastic clusterizer in advance and use the same partitions in all five head-seed runs, so a head seed changes only the fitted head. We redraw the partitions under other partition seeds for \secref{sec:pseed} and reuse those redraws in \secref{sec:gradient}.
 
@@ -655,7 +655,7 @@ We close this section by asking which differences between configurations the des
 %
 The volatility is therefore estimated more precisely than the mean. Its standard error is $1/\sqrt{2}$ times that of the mean. For each moment, we compare its standard deviation across configurations with its standard error.
 
-We use 19 configurations of the neural trading head (\appref{app:names}). Besides the 14 configurations of \tabref{tab:methods}, they include five variants that run average linkage, complete linkage, $k$-means on residuals, PCA loadings, and spectral (unsigned) with a 21-day estimation window. Because these configurations trade the same stocks on the same days, their seed-averaged returns are highly correlated, with an average pairwise correlation of $\bar\rho = 0.854$. When we compare two configurations, the estimation error that is common to both cancels. The standard error that we use below therefore measures only the remaining part.\footnote{The errors in estimated variances are correlated at the square of the correlation between the underlying series, so the errors in the estimated volatilities of two configurations are correlated at about $\bar\rho^{\,2} = 0.854^2 = 0.729$. Using $\bar\rho$ in place of $\bar\rho^{\,2}$ for the error in the estimated volatility would raise the ratios for volatility in the next paragraph by $36\%$. On single head-seed runs, it ranges from $0.757$ to $0.799$.}
+We use 19 configurations of the neural trading head (\appref{app:names}). Besides the 14 configurations of \tabref{tab:methods}, they include five variants that run average linkage, complete linkage, $k$-means on residuals, PCA loadings, and spectral (unsigned) with a 21-day estimation window. Because these configurations trade the same stocks on the same days, their seed-averaged returns are highly correlated, with an average pairwise correlation of $\bar\rho = 0.854$. When we compare two configurations, the estimation error that is common to both cancels. The standard error that we use below therefore measures only the remaining part.\footnote{The errors in estimated variances are correlated at the square of the correlation between the underlying series, so the errors in the estimated volatilities of two configurations are correlated at about $\bar\rho^{\,2} = 0.854^2 = 0.729$. Using $\bar\rho$ in place of $\bar\rho^{\,2}$ for the error in the estimated volatility would raise the ratios for volatility in the next paragraph by $36\%$. On single head-seed runs, the average pairwise correlation ranges from $0.757$ to $0.799$.}
 
 %%  ⚠ SUPERSEDED 2026-11-05. The provenance block below is the v2 panel (6,941 days).
 %%  The printed ratios are v3 (five head seeds, 6,913-day common calendar, SET19).
